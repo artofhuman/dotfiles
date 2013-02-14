@@ -449,8 +449,8 @@ let g:syntastic_quiet_warnings=0
 
 " === Tagbar =====================================
 let g:tagbar_iconchars = ['▾', '▸']
-
 nnoremap <Leader><Bs> :TagbarToggle<cr>
+let g:tagbar_ctags_bin = 'ctags'
 
 " === Python-mode ================================
 let g:pymode_syntax = 0
