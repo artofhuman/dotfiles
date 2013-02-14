@@ -268,8 +268,9 @@ map <C-s> <esc>:w<CR>
 imap <C-s> <esc>:w<CR>
 
 " Очистить подсветку последнего найденного выражения
-nmap <silent> <F3> :nohlsearch<CR>
-imap <F3> <Esc>:nohlsearch<CR>
+"nmap <silent> <F3> :nohlsearch<CR>
+"imap <F3> <Esc>:nohlsearch<CR>
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
 
 " Add a GUID to the current line
 imap <c-J>d <C-r>=substitute(system("uuidgen"), '.$', '', 'g')<CR>
@@ -283,6 +284,14 @@ imap <c-h> <c-o>h
 imap <c-j> <c-o>j
 imap <c-k> <c-o>k
 imap <c-l> <c-o>l
+
+" Перемещение строк
+" переместить одну строку
+nmap <C-S-k> ddkP
+nmap <C-S-j> ddp
+" переместить несколько выделенных строк http://www.vim.org/scripts/script.php?script_id=1590
+vmap <C-S-k> xkP'[V']
+vmap <C-S-j> xp'[V']
 
 nnoremap j gj
 nnoremap k gk
@@ -376,7 +385,7 @@ let g:NERDTreeWinSize = 30
 let NERDTreeShowHidden=1
 
 " Toggle the NERD Tree on an off
-nnoremap <F6> :NERDTreeToggle<CR>
+nnoremap <Bs> :NERDTreeToggle<CR>
 " Open the project tree and expose current file in the nerdtree with Ctrl-\
 nnoremap <silent> <C-\> :NERDTreeFind<CR>
 
