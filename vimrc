@@ -450,7 +450,7 @@ let g:syntastic_quiet_warnings=0
 " === Tagbar =====================================
 let g:tagbar_iconchars = ['▾', '▸']
 
-nnoremap <F5> :TagbarToggle<cr>
+nnoremap <Leader><Bs> :TagbarToggle<cr>
 
 " === Python-mode ================================
 let g:pymode_syntax = 0
@@ -465,5 +465,4 @@ let g:pymode_lint_cheker = "pylint,pep8"
 let g:jedi#popup_select_first = 0
 
 "=== ctags =====================================
-
 map <F7> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
