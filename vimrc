@@ -49,6 +49,9 @@ Bundle 'git://github.com/vim-scripts/matchit.zip'
 " Git ======================================
 Bundle 'git://github.com/tpope/vim-fugitive.git'
 
+" Debug ======================================
+Bundle 'joonty/vdebug.git'
+
 " Theme ======================================
 Bundle 'git://github.com/altercation/vim-colors-solarized.git'
 Bundle 'git://github.com/chriskempson/vim-tomorrow-theme.git'
