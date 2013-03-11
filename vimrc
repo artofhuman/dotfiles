@@ -1,19 +1,15 @@
 "
 set nocompatible
-filetype off
 
 " vundle init (github.com/gmarik/vundle)
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-" let Vundle manage Vundle, required! 
+" let Vundle manage Vundle, required!
 Bundle 'gmarik/vundle'
 
-" Custom bundles
+" Define bundles
 Bundle 'tpope/vim-fugitive'
-
-Bundle 'L9'
-Bundle 'FuzzyFinder'
 Bundle 'kien/ctrlp.vim'
 
 Bundle 'scrooloose/nerdtree'
@@ -24,11 +20,11 @@ Bundle 'neocomplcache'
 Bundle 'snipMate'
 Bundle 'honza/snipmate-snippets'
 
-Bundle 'matchit.zip'
 Bundle 'michaeljsmith/vim-indent-object'
+Bundle 'matchit.zip'
 "Bundle 'git://github.com/Townk/vim-autoclose.git'
-Bundle 'git://github.com/vim-scripts/mru.vim.git'
-Bundle 'git://github.com/Lokaltog/vim-powerline.git'
+Bundle 'vim-scripts/mru.vim.git'
+Bundle 'Lokaltog/vim-powerline.git'
 
 Bundle 'scrooloose/syntastic'
 
@@ -36,18 +32,20 @@ Bundle 'sukima/xmledit'
 Bundle 'pangloss/vim-javascript'
 
 " Python/Django ==============================
-"Bundle 'git://github.com/klen/python-mode.git'
-Bundle 'git://github.com/davidhalter/jedi-vim'
+Bundle 'git://github.com/klen/python-mode.git'
+"Bundle 'git://github.com/davidhalter/jedi-vim'
+
+" Ruby ======================================
+"Bundle 'git://github.com/astashov/vim-ruby-debugger.git'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'tpope/vim-rvm'
+Bundle 'tpope/vim-rails'
 
 " JSON ======================================
-Bundle 'git://github.com/leshill/vim-json.git'
+" Bundle 'git://github.com/leshill/vim-json.git'
 
 Bundle 'Tagbar'
-Bundle 'git://github.com/ervandew/supertab.git'
-Bundle 'git://github.com/vim-scripts/matchit.zip'
-
-" Git ======================================
-Bundle 'git://github.com/tpope/vim-fugitive.git'
+Bundle 'ervandew/supertab.git'
 
 " Debug ======================================
 Bundle 'joonty/vdebug.git'
@@ -55,6 +53,10 @@ Bundle 'joonty/vdebug.git'
 " Theme ======================================
 Bundle 'git://github.com/altercation/vim-colors-solarized.git'
 Bundle 'git://github.com/chriskempson/vim-tomorrow-theme.git'
+Bundle 'croaky/vim-colors-github'
+
+" Murkdown ===================================
+Bundle 'tpope/vim-markdown'
 
 " General options =============================================================
 
@@ -62,14 +64,16 @@ Bundle 'git://github.com/chriskempson/vim-tomorrow-theme.git'
 set visualbell " Use visual bell instead of beeping
 set t_vb=
 
-filetype plugin indent on
 syntax on
+filetype on
+filetype plugin on
+filetype indent on
+
 " Не показывать парную скобку
-let loaded_matchparen=1 " перестает прыгать на парную скобку, показывая где она. +100 к скорости
-set noshowmatch " Не показывать парные <> в HTML
+"let loaded_matchparen=1 " перестает прыгать на парную скобку, показывая где она. +100 к скорости
+"set noshowmatch " Не показывать парные <> в HTML
 
 set ttyfast
-
 set encoding=utf-8
 " Кодировка по-умолчанию
 set termencoding=utf-8
@@ -155,10 +159,9 @@ nmap <Leader><up>    :leftabove  new<CR>
 nmap <Leader><down>  :rightbelow new<CR>
 
 " Status line ==================================================================
-
 " Включаем отображение дополнительной информации в статусной строке
 set laststatus=2
-set statusline=%f%h\ %y\ %m\ %r\ %{&encoding}\ 
+set statusline=%f%h\ %y\ %m\ %r\ %{&encoding}\
 
 " The statusline flag for syntastic plugin
 set statusline+=%#warningmsg#
@@ -166,10 +169,9 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 set statusline+=%=Line:%l/%L[%p%%]\ Col:%c\ [%b][0x%B]
-set statusline+=\ Buf:%n\ 
+set statusline+=\ Buf:%n\
 
 " Search settings =============================================================
-
 " При поиске перескакивать на найденный текст в процессе набора строки
 set incsearch
 " Включаем подсветку выражения, которое ищется в тексте
@@ -180,19 +182,16 @@ set nowrapscan
 set ignorecase
 
 " Backups ======================================================================
-
 set nobackup
 set noswapfile
 set nowb
 
 " Folds ========================================================================
-
 set foldmethod=indent
 " dont fold by default
 set nofoldenable
 
 " Completion ===================================================================
-
 " Make cmdline tab completion similar to bash
 " enable <ctrl-n> and <ctrl-p> to scroll thru matches
 set wildmenu
@@ -202,32 +201,38 @@ set wildignore+=*DS_Store*
 set wildignore+=*.png,*.jpg,*.gif
 
 " Diff settings ================================================================
-
 " Add ignorance of whitespace to diff
 set diffopt=filler,iwhite,vertical,context:15
 let g:html_diff_one_file = 1
 
 " GUI ==========================================================================
-
 set background=dark
 
 " tell the term has 256 colors
 set t_Co=256
-
 if has('gui_running')
     colorscheme Tomorrow-Night
-    set cmdheight=2
+    "set background=dark
+    "colorscheme solarized
     set guifont=Menlo:h12
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
+
+    " Github theme
+    "colorscheme github
+    "highlight NonText guibg=#060606
+    "highlight Folded guibg=#0A0A0A guifg=#9090D0
+
 else
-    let g:solarized_termcolors=16
-    set background=dark
-    colorscheme solarized
-    " colorscheme Tomorrow-Night
-    " colorscheme codeschool
+    " let g:solarized_termcolors=16
+    " set background=dark
+    " colorscheme solarized
+    colorscheme Tomorrow-Night
     " colorscheme jellybeans
     " colorscheme distinguished
+    " colorscheme Mustang
+    "colorscheme Tomorrow-Night
+
 endif
 
 " Set up the gui cursor to look nice
@@ -265,7 +270,6 @@ endif
 set viminfo+=!
 
 " Keymaps ======================================================================
-
 " Ctrl+s
 map <C-s> <esc>:w<CR>
 imap <C-s> <esc>:w<CR>
@@ -322,8 +326,11 @@ map <C-T> <Esc>:tabnew<CR>
 " Return Visual select block after move left/right
 vnoremap < <gv
 vnoremap > >gv
-" Autocmds =====================================================================
 
+" Index ctags from any project, including those outside Rails
+map <Leader>ct :!ctags -R .<CR>
+
+" Autocmds =====================================================================
 " Auto change the directory to the current file I'm working on
 " autocmd BufEnter * lcd %:p:h
 
@@ -346,7 +353,6 @@ au BufNewFile,BufRead *.html set ft=htmldjango.html " For SnipMate and Zen codin
 au BufNewFile,BufRead *.html set foldmethod=syntax "
 
 " Custom functions =============================================================
-
 " via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
 " Strip trailing whitespace
 function! <SID>StripTrailingWhitespaces()
@@ -399,12 +405,7 @@ nnoremap <silent> <C-\> :NERDTreeFind<CR>
 let g:nerdtree_tabs_focus_on_files = 1
 
 " === NERD Commenter ============================
-if has("gui_macvim") && has("gui_running")
-    map <D-/> <plug>NERDCommenterToggle<CR>
-else
-    map <leader>/ <plug>NERDCommenterToggle<CR>
-endif
-
+map <leader>/ <plug>NERDCommenterToggle<CR>
 " === CtrlP ======================================
 let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$|debian$'
 
@@ -441,13 +442,14 @@ autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+"autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
 " Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+"let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 
 " === Syntastic ==================================
 " mark syntax errors with :signs
@@ -474,7 +476,24 @@ let g:pymode_indent = 0
 let g:pymode_lint_cheker = "pylint,pep8"
 
 "=== vim-jedi ===================================
-let g:jedi#popup_select_first = 0
+"let g:jedi#popup_select_first = 0
 
 "=== ctags =====================================
 map <F7> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+
+"=== Vdebug ====================================
+"let g:vdebug_option["break_on_open"] = 0
+
+"== Murkdown ==================================
+" Markdown files end in .md
+au BufRead,BufNewFile *.md set filetype=markdown
+
+" Enable spellchecking for Markdown
+au BufRead,BufNewFile *.md setlocal spell
+
+" Automatically wrap at 80 characters for Markdown
+au BufRead,BufNewFile *.md setlocal textwidth=80
+
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_rails = 1
