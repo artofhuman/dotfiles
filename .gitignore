@@ -1,5 +1,5 @@
 .DS_Store
 *.log
-vim/bundle/
+bundle/
 node_modules
 vim_phpdebug.sess

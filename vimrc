@@ -40,6 +40,7 @@ Bundle 'git://github.com/klen/python-mode.git'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-rvm'
 Bundle 'tpope/vim-rails'
+Bundle 'danchoi/ri.vim'
 
 " JSON ======================================
 " Bundle 'git://github.com/leshill/vim-json.git'
@@ -224,10 +225,10 @@ if has('gui_running')
     "highlight Folded guibg=#0A0A0A guifg=#9090D0
 
 else
-    " let g:solarized_termcolors=16
-    " set background=dark
-    " colorscheme solarized
-    colorscheme Tomorrow-Night
+     let g:solarized_termcolors=16
+     set background=dark
+     colorscheme solarized
+    " colorscheme Tomorrow-Night
     " colorscheme jellybeans
     " colorscheme distinguished
     " colorscheme Mustang
@@ -442,7 +443,7 @@ autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-"autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
 " Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
@@ -497,3 +498,19 @@ au BufRead,BufNewFile *.md setlocal textwidth=80
 let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_rails = 1
+
+" Ruby Hax {{{
+" Prawn files are includes for a pdf rendering library
+au BufNewFile,BufRead *.prawn set filetype=ruby
+
+" This is specific to rails apps, but I will not bind it to a particular
+" filetype
+function! TwoSpace()
+    setlocal ts=2
+    setlocal sw=2
+endfunction
+au FileType ruby call TwoSpace()
+au FileType coffee call TwoSpace()
+au FileType vim call TwoSpace()
+au BufNewFile,BufRead *.erb call TwoSpace()
+
