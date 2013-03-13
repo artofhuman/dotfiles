@@ -212,28 +212,16 @@ set background=dark
 " tell the term has 256 colors
 set t_Co=256
 if has('gui_running')
-    colorscheme Tomorrow-Night
-    "set background=dark
-    "colorscheme solarized
-    set guifont=Menlo:h12
+     let g:solarized_termcolors=256
+     set background=dark
+     colorscheme solarized
+    set guifont=Monaco:h12
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
-
-    " Github theme
-    "colorscheme github
-    "highlight NonText guibg=#060606
-    "highlight Folded guibg=#0A0A0A guifg=#9090D0
-
 else
      let g:solarized_termcolors=16
      set background=dark
      colorscheme solarized
-    " colorscheme Tomorrow-Night
-    " colorscheme jellybeans
-    " colorscheme distinguished
-    " colorscheme Mustang
-    "colorscheme Tomorrow-Night
-
 endif
 
 " Set up the gui cursor to look nice
@@ -328,8 +316,6 @@ map <C-T> <Esc>:tabnew<CR>
 vnoremap < <gv
 vnoremap > >gv
 
-" Index ctags from any project, including those outside Rails
-map <Leader>ct :!ctags -R .<CR>
 
 " Autocmds =====================================================================
 " Auto change the directory to the current file I'm working on
@@ -479,8 +465,6 @@ let g:pymode_lint_cheker = "pylint,pep8"
 "=== vim-jedi ===================================
 "let g:jedi#popup_select_first = 0
 
-"=== ctags =====================================
-map <F7> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 
 "=== Vdebug ====================================
 "let g:vdebug_option["break_on_open"] = 0
@@ -514,3 +498,11 @@ au FileType coffee call TwoSpace()
 au FileType vim call TwoSpace()
 au BufNewFile,BufRead *.erb call TwoSpace()
 
+" Index ctags from any project, including those outside Rails
+map <Leader>ct :!ctags -R .<CR>
+" Use it for ruby projects
+map <silent> <Leader>rt :!bundle list --paths=true \| xargs ctags --extra=+f --exclude=.git --exclude=log -R *<CR><CR>
+" Open tag in vertical split
+" map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+"=== ctags =====================================
+map <F7> :vsp<CR>:exec("tag ".expand("<cword>"))<CR>
