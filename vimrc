@@ -38,9 +38,14 @@ Bundle 'git://github.com/klen/python-mode.git'
 " Ruby ======================================
 "Bundle 'git://github.com/astashov/vim-ruby-debugger.git'
 Bundle 'vim-ruby/vim-ruby'
-Bundle 'tpope/vim-rvm'
+" Bundle 'tpope/vim-rvm'
 Bundle 'tpope/vim-rails'
-Bundle 'danchoi/ri.vim'
+Bundle 'astashov/vim-ruby-debugger'
+" Bundle 'danchoi/ri.vim'
+" Bundle 'duwanis/tomdoc.vim'
+
+" PHP =======================================
+Bundle 'shawncplus/phpcomplete.vim'
 
 " JSON ======================================
 " Bundle 'git://github.com/leshill/vim-json.git'
@@ -55,6 +60,9 @@ Bundle 'joonty/vdebug.git'
 Bundle 'git://github.com/altercation/vim-colors-solarized.git'
 Bundle 'git://github.com/chriskempson/vim-tomorrow-theme.git'
 Bundle 'croaky/vim-colors-github'
+Bundle 'tomasr/molokai'
+Bundle "daylerees/colour-schemes", { "rtp": "vim-themes/" }
+Bundle 'jpo/vim-railscasts-theme'
 
 " Murkdown ===================================
 Bundle 'tpope/vim-markdown'
@@ -214,14 +222,14 @@ set t_Co=256
 if has('gui_running')
      let g:solarized_termcolors=256
      set background=dark
-     colorscheme solarized
+     colorscheme railscasts
     set guifont=Monaco:h12
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
 else
      let g:solarized_termcolors=16
      set background=dark
-     colorscheme solarized
+      colorscheme Tomorrow-Night
 endif
 
 " Set up the gui cursor to look nice
@@ -436,7 +444,7 @@ if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
 "let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 
 " === Syntastic ==================================
 " mark syntax errors with :signs
@@ -506,3 +514,7 @@ map <silent> <Leader>rt :!bundle list --paths=true \| xargs ctags --extra=+f --e
 " map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 "=== ctags =====================================
 map <F7> :vsp<CR>:exec("tag ".expand("<cword>"))<CR>
+
+" Ruby debug
+let g:ruby_debugger_progname = 'mvim'
+let g:ruby_debugger_default_script = 'script/rails s'
