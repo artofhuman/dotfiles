@@ -22,6 +22,8 @@ Bundle 'honza/snipmate-snippets'
 
 Bundle 'michaeljsmith/vim-indent-object'
 Bundle 'matchit.zip'
+Bundle 'Raimondi/delimitMate'
+
 "Bundle 'git://github.com/Townk/vim-autoclose.git'
 Bundle 'vim-scripts/mru.vim.git'
 Bundle 'Lokaltog/vim-powerline.git'
@@ -55,6 +57,9 @@ Bundle 'ervandew/supertab.git'
 
 " Debug ======================================
 Bundle 'joonty/vdebug.git'
+
+" Search =====================================
+Bundle 'mileszs/ack.vim'
 
 " Theme ======================================
 Bundle 'git://github.com/altercation/vim-colors-solarized.git'
@@ -220,7 +225,7 @@ set background=dark
 " tell the term has 256 colors
 set t_Co=256
 if has('gui_running')
-     let g:solarized_termcolors=256
+     "let g:solarized_termcolors=256
      set background=dark
      colorscheme railscasts
     set guifont=Monaco:h12
