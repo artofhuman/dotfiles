@@ -10,15 +10,18 @@ Bundle 'gmarik/vundle'
 
 " Define bundles
 Bundle 'tpope/vim-fugitive'
+Bundle 'airblade/vim-gitgutter'
 Bundle 'kien/ctrlp.vim'
 
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'scrooloose/nerdcommenter'
 
-Bundle 'neocomplcache'
-Bundle 'snipMate'
-Bundle 'honza/snipmate-snippets'
+" Bundle 'neocomplcache'
+" Bundle 'snipMate'
+" Bundle 'honza/snipmate-snippets'
+Bundle 'SirVer/ultisnips'
+Bundle 'artofhuman/ultisnips-snippets'
 
 Bundle 'michaeljsmith/vim-indent-object'
 Bundle 'matchit.zip'
@@ -34,32 +37,42 @@ Bundle 'sukima/xmledit'
 Bundle 'pangloss/vim-javascript'
 
 " Python/Django ==============================
-Bundle 'git://github.com/klen/python-mode.git'
-"Bundle 'git://github.com/davidhalter/jedi-vim'
+" Bundle 'git://github.com/klen/python-mode.git'
+Bundle 'davidhalter/jedi-vim'
 
 " Ruby ======================================
-"Bundle 'git://github.com/astashov/vim-ruby-debugger.git'
-Bundle 'vim-ruby/vim-ruby'
-" Bundle 'tpope/vim-rvm'
-Bundle 'tpope/vim-rails'
-Bundle 'astashov/vim-ruby-debugger'
+Bundle 'tpope/vim-rvm'
+"Bundle 'vim-ruby/vim-ruby'
+"Bundle 'tpope/vim-rails'
+"Bundle 'tpope/vim-haml'
+"Bundle 'astashov/vim-ruby-debugger'
+
 " Bundle 'danchoi/ri.vim'
 " Bundle 'duwanis/tomdoc.vim'
 
 " PHP =======================================
 Bundle 'shawncplus/phpcomplete.vim'
+Bundle 'evidens/vim-twig'
+Bundle 'vexxor/phpdoc.vim'
 
 " JSON ======================================
 " Bundle 'git://github.com/leshill/vim-json.git'
 
 Bundle 'Tagbar'
-Bundle 'ervandew/supertab.git'
+"Bundle 'ervandew/supertab.git'
 
 " Debug ======================================
-Bundle 'joonty/vdebug.git'
+" Bundle 'joonty/vdebug.git'
 
 " Search =====================================
 Bundle 'mileszs/ack.vim'
+
+" Postgres && SQL  ===================================
+" Bundle 'ivalkeen/vim-postgres'
+" Bundle 'vim-scripts/SQLComplete.vim'
+
+" Complete
+Bundle 'Valloric/YouCompleteMe'
 
 " Theme ======================================
 Bundle 'git://github.com/altercation/vim-colors-solarized.git'
@@ -68,6 +81,7 @@ Bundle 'croaky/vim-colors-github'
 Bundle 'tomasr/molokai'
 Bundle "daylerees/colour-schemes", { "rtp": "vim-themes/" }
 Bundle 'jpo/vim-railscasts-theme'
+Bundle 'cschlueter/vim-wombat'
 
 " Murkdown ===================================
 Bundle 'tpope/vim-markdown'
@@ -225,16 +239,16 @@ set background=dark
 " tell the term has 256 colors
 set t_Co=256
 if has('gui_running')
-     "let g:solarized_termcolors=256
-     set background=dark
-     colorscheme railscasts
+    "let g:solarized_termcolors=256
+    set background=dark
+    colorscheme molokai
     set guifont=Monaco:h12
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
 else
      let g:solarized_termcolors=16
      set background=dark
-      colorscheme Tomorrow-Night
+     colorscheme Tomorrow-Night
 endif
 
 " Set up the gui cursor to look nice
@@ -262,6 +276,30 @@ if has("gui_macvim")
     set formatoptions-=tc
     let macvim_hig_shift_movement=1
     set gcr=n:blinkon0
+
+    " switch between tabs with cmd+1, cmd+2,..."
+    map <D-1> 1gt
+    map <D-2> 2gt
+    map <D-3> 3gt
+    map <D-4> 4gt
+    map <D-5> 5gt
+    map <D-6> 6gt
+    map <D-7> 7gt
+    map <D-8> 8gt
+    map <D-9> 9gt
+
+  " until we have default MacVim shortcuts this is the only way to use it in
+  " insert mode
+    imap <D-1> <esc>1gt
+    imap <D-2> <esc>2gt
+    imap <D-3> <esc>3gt
+    imap <D-4> <esc>4gt
+    imap <D-5> <esc>5gt
+    imap <D-6> <esc>6gt
+    imap <D-7> <esc>7gt
+    imap <D-8> <esc>8gt
+    imap <D-9> <esc>9gt
+
 endif
 
 if has("gui_win32") || has("gui_win32s")
@@ -402,7 +440,7 @@ nnoremap <silent> <C-\> :NERDTreeFind<CR>
 " Auto open nerd tree on startup
 "let g:nerdtree_tabs_open_on_gui_startup = 1
 " Focus in the main content window
-let g:nerdtree_tabs_focus_on_files = 1
+"let g:nerdtree_tabs_focus_on_files = 1
 
 " === NERD Commenter ============================
 map <leader>/ <plug>NERDCommenterToggle<CR>
@@ -414,21 +452,21 @@ nnoremap <leader>b :CtrlPBuffer<cr>
 
 " === Neocomplcache ==============================
 " A beter autocomplete system!
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_enable_smart_case = 1
+"let g:neocomplcache_enable_at_startup = 1
+"let g:neocomplcache_enable_camel_case_completion = 1
+"let g:neocomplcache_enable_underbar_completion = 1
+"let g:neocomplcache_enable_smart_case = 1
 
 " default # of completions is 100, that's crazy
-let g:neocomplcache_max_list = 5
+"let g:neocomplcache_max_list = 5
 
 " words less than 3 letters long aren't worth completing
-let g:neocomplcache_auto_completion_start_length = 3
+"let g:neocomplcache_auto_completion_start_length = 3
 
 " Map standard <Ctrl-N> completion to <Ctrl-Space>
-inoremap <C-Space> <C-n>
+"inoremap <C-Space> <C-n>
 
-let g:neocomplcache_force_overwrite_completefunc = 1
+"let g:neocomplcache_force_overwrite_completefunc = 1
 
 " Define keyword.
 if !exists('g:neocomplcache_keyword_patterns')
@@ -467,16 +505,16 @@ nnoremap <Leader><Bs> :TagbarToggle<cr>
 let g:tagbar_ctags_bin = 'ctags'
 
 " === Python-mode ================================
-let g:pymode_syntax = 0
-let g:pymode_rope_goto_def_newwin = "vnew"
-let g:pymode_rope_always_show_complete_menu = 1
-let g:pymode_virtualenv = 1
-let g:pymode_lint_cwindow = 0
-let g:pymode_indent = 0
-let g:pymode_lint_cheker = "pylint,pep8"
+"let g:pymode_syntax = 0
+"let g:pymode_rope_goto_def_newwin = "vnew"
+"let g:pymode_rope_always_show_complete_menu = 1
+"let g:pymode_virtualenv = 1
+"let g:pymode_lint_cwindow = 0
+"let g:pymode_indent = 0
+"let g:pymode_lint_cheker = "pylint,pep8"
 
 "=== vim-jedi ===================================
-"let g:jedi#popup_select_first = 0
+let g:jedi#popup_select_first = 0
 
 
 "=== Vdebug ====================================
@@ -523,3 +561,21 @@ map <F7> :vsp<CR>:exec("tag ".expand("<cword>"))<CR>
 " Ruby debug
 let g:ruby_debugger_progname = 'mvim'
 let g:ruby_debugger_default_script = 'script/rails s'
+let g:ruby_debugger_debug_mode = 1
+
+" YCM
+"let g:ycm_autoclose_preview_window_after_completion = 0
+"let g:ycm_autoclose_preview_window_after_insertion = 0
+let g:ycm_complete_in_comments_and_strings = 1
+
+" ==================== UltiSnips ====================
+"let g:ultisnips_python_style = "sphinx"
+let g:UltiSnipsSnippetDirectories = ["UltiSnips", "ultisnips-snippets"]
+let g:UltiSnipsDontReverseSearchPath=1
+let g:UltiSnipsExpandTrigger = '<C-k>'
+let g:UltiSnipsJumpForwardTrigger = '<C-d>'
+let g:UltiSnipsJumpBackwardTrigger = '<C-a>'
+
+noremap <leader>pd :call PhpDoc()<CR>
+
+let g:nerdtree_tabs_open_on_gui_startup = 0
