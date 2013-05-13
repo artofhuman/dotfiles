@@ -21,7 +21,7 @@ Bundle 'scrooloose/nerdcommenter'
 " Bundle 'snipMate'
 " Bundle 'honza/snipmate-snippets'
 Bundle 'SirVer/ultisnips'
-Bundle 'artofhuman/ultisnips-snippets'
+Bundle 'artofhuman/UltiSnips-Snippets'
 
 Bundle 'michaeljsmith/vim-indent-object'
 Bundle 'matchit.zip'
@@ -42,10 +42,10 @@ Bundle 'davidhalter/jedi-vim'
 
 " Ruby ======================================
 Bundle 'tpope/vim-rvm'
-"Bundle 'vim-ruby/vim-ruby'
-"Bundle 'tpope/vim-rails'
-"Bundle 'tpope/vim-haml'
-"Bundle 'astashov/vim-ruby-debugger'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-haml'
+Bundle 'astashov/vim-ruby-debugger'
 
 " Bundle 'danchoi/ri.vim'
 " Bundle 'duwanis/tomdoc.vim'
@@ -82,6 +82,7 @@ Bundle 'tomasr/molokai'
 Bundle "daylerees/colour-schemes", { "rtp": "vim-themes/" }
 Bundle 'jpo/vim-railscasts-theme'
 Bundle 'cschlueter/vim-wombat'
+Bundle 'sickill/vim-monokai'
 
 " Murkdown ===================================
 Bundle 'tpope/vim-markdown'
@@ -241,7 +242,7 @@ set t_Co=256
 if has('gui_running')
     "let g:solarized_termcolors=256
     set background=dark
-    colorscheme molokai
+    colorscheme Monokai
     set guifont=Monaco:h12
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
