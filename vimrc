@@ -10,12 +10,14 @@ Bundle 'gmarik/vundle'
 
 " Define bundles
 Bundle 'tpope/vim-fugitive'
-Bundle 'airblade/vim-gitgutter'
+"Bundle 'airblade/vim-gitgutter'
 Bundle 'kien/ctrlp.vim'
 
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'scrooloose/nerdcommenter'
+Bundle 'godlygeek/tabular'
+" Bundle 'xolox/vim-easytags'
 
 " Bundle 'neocomplcache'
 " Bundle 'snipMate'
@@ -26,9 +28,10 @@ Bundle 'artofhuman/UltiSnips-Snippets'
 Bundle 'michaeljsmith/vim-indent-object'
 Bundle 'matchit.zip'
 Bundle 'Raimondi/delimitMate'
+Bundle 'tpope/vim-surround'
 
 "Bundle 'git://github.com/Townk/vim-autoclose.git'
-Bundle 'vim-scripts/mru.vim.git'
+"Bundle 'vim-scripts/mru.vim.git'
 Bundle 'Lokaltog/vim-powerline.git'
 
 Bundle 'scrooloose/syntastic'
@@ -38,14 +41,14 @@ Bundle 'pangloss/vim-javascript'
 
 " Python/Django ==============================
 " Bundle 'git://github.com/klen/python-mode.git'
-Bundle 'davidhalter/jedi-vim'
+" Bundle 'davidhalter/jedi-vim'
 
 " Ruby ======================================
-Bundle 'tpope/vim-rvm'
+" Bundle 'tpope/vim-rvm'
 Bundle 'vim-ruby/vim-ruby'
-Bundle 'tpope/vim-rails'
+" Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-haml'
-Bundle 'astashov/vim-ruby-debugger'
+" Bundle 'astashov/vim-ruby-debugger'
 
 " Bundle 'danchoi/ri.vim'
 " Bundle 'duwanis/tomdoc.vim'
@@ -240,9 +243,9 @@ set background=dark
 " tell the term has 256 colors
 set t_Co=256
 if has('gui_running')
-    "let g:solarized_termcolors=256
+    let g:solarized_termcolors=256
     set background=dark
-    colorscheme Monokai
+    colorscheme solarized
     set guifont=Monaco:h12
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
@@ -312,8 +315,8 @@ set viminfo+=!
 
 " Keymaps ======================================================================
 " Ctrl+s
-map <C-s> <esc>:w<CR>
-imap <C-s> <esc>:w<CR>
+"map <C-s> <esc>:w<CR>
+"imap <C-s> <esc>:w<CR>
 
 " Очистить подсветку последнего найденного выражения
 "nmap <silent> <F3> :nohlsearch<CR>
@@ -553,21 +556,22 @@ au BufNewFile,BufRead *.erb call TwoSpace()
 " Index ctags from any project, including those outside Rails
 map <Leader>ct :!ctags -R .<CR>
 " Use it for ruby projects
-map <silent> <Leader>rt :!bundle list --paths=true \| xargs ctags --extra=+f --exclude=.git --exclude=log -R *<CR><CR>
+map <silent> <Leader>rt :!bundle list --paths=true \| xargs ctags --fields=+l --extra=+f --exclude=.git --exclude=log -R *<CR><CR>
 " Open tag in vertical split
 " map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 "=== ctags =====================================
 map <F7> :vsp<CR>:exec("tag ".expand("<cword>"))<CR>
 
 " Ruby debug
-let g:ruby_debugger_progname = 'mvim'
-let g:ruby_debugger_default_script = 'script/rails s'
-let g:ruby_debugger_debug_mode = 1
+"let g:ruby_debugger_progname = 'mvim'
+"let g:ruby_debugger_default_script = 'script/rails s'
+"let g:ruby_debugger_debug_mode = 1
 
 " YCM
-"let g:ycm_autoclose_preview_window_after_completion = 0
+let g:ycm_autoclose_preview_window_after_completion = 1
 "let g:ycm_autoclose_preview_window_after_insertion = 0
 let g:ycm_complete_in_comments_and_strings = 1
+let g:ycm_collect_identifiers_from_tags_files = 1
 
 " ==================== UltiSnips ====================
 "let g:ultisnips_python_style = "sphinx"
@@ -580,3 +584,4 @@ let g:UltiSnipsJumpBackwardTrigger = '<C-a>'
 noremap <leader>pd :call PhpDoc()<CR>
 
 let g:nerdtree_tabs_open_on_gui_startup = 0
+let g:easytags_cmd = '/usr/local/bin/ctags'
