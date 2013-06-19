@@ -1,4 +1,3 @@
-"
 set nocompatible
 
 " vundle init (github.com/gmarik/vundle)
@@ -46,7 +45,7 @@ Bundle 'pangloss/vim-javascript'
 " Ruby ======================================
 " Bundle 'tpope/vim-rvm'
 Bundle 'vim-ruby/vim-ruby'
-" Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-haml'
 " Bundle 'astashov/vim-ruby-debugger'
 
@@ -59,7 +58,7 @@ Bundle 'evidens/vim-twig'
 Bundle 'vexxor/phpdoc.vim'
 
 " JSON ======================================
-" Bundle 'git://github.com/leshill/vim-json.git'
+Bundle 'git://github.com/leshill/vim-json.git'
 
 Bundle 'Tagbar'
 "Bundle 'ervandew/supertab.git'
@@ -86,6 +85,7 @@ Bundle "daylerees/colour-schemes", { "rtp": "vim-themes/" }
 Bundle 'jpo/vim-railscasts-theme'
 Bundle 'cschlueter/vim-wombat'
 Bundle 'sickill/vim-monokai'
+Bundle 'morhetz/gruvbox'
 
 " Murkdown ===================================
 Bundle 'tpope/vim-markdown'
@@ -94,6 +94,7 @@ Bundle 'tpope/vim-markdown'
 
 " Не бибикать!
 set visualbell " Use visual bell instead of beeping
+set vb
 set t_vb=
 
 syntax on
@@ -245,7 +246,7 @@ set t_Co=256
 if has('gui_running')
     let g:solarized_termcolors=256
     set background=dark
-    colorscheme solarized
+    colorscheme gruvbox
     set guifont=Monaco:h12
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
@@ -371,7 +372,6 @@ map <C-T> <Esc>:tabnew<CR>
 vnoremap < <gv
 vnoremap > >gv
 
-
 " Autocmds =====================================================================
 " Auto change the directory to the current file I'm working on
 " autocmd BufEnter * lcd %:p:h
@@ -440,43 +440,27 @@ nnoremap <Bs> :NERDTreeToggle<CR>
 " Open the project tree and expose current file in the nerdtree with Ctrl-\
 nnoremap <silent> <C-\> :NERDTreeFind<CR>
 
-" === NERD Tree tabs ============================
-" Auto open nerd tree on startup
-"let g:nerdtree_tabs_open_on_gui_startup = 1
-" Focus in the main content window
-"let g:nerdtree_tabs_focus_on_files = 1
-
 " === NERD Commenter ============================
 map <leader>/ <plug>NERDCommenterToggle<CR>
 " === CtrlP ======================================
-let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$|debian$'
+"let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$|debian$'
+let g:ctrlp_cmd = 'CtrlPMixed'	" search anything (in files, buffers and MRU files at the same time.)
+let g:ctrlp_working_path_mode = 'ra'	" search for nearest ancestor like .git, .hg, and the directory of the current file
+let g:ctrlp_match_window_bottom = 0	" show the match window at the top of the screen
+let g:ctrlp_max_height = 10	" maxiumum height of match window
+let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
+let g:ctrlp_use_caching = 1	" enable caching
+let g:ctrlp_clear_cache_on_exit=0 " speed up by not removing clearing cache evertime
+let g:ctrlp_mruf_max = 250 " number of recently opened files
+let g:ctrlp_custom_ignore = {
+  \ 'dir': '\v[\/]\.(git|hg|svn|build)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+  \ }
+
 
 " Additional mapping for buffer search
 nnoremap <leader>b :CtrlPBuffer<cr>
-
-" === Neocomplcache ==============================
-" A beter autocomplete system!
-"let g:neocomplcache_enable_at_startup = 1
-"let g:neocomplcache_enable_camel_case_completion = 1
-"let g:neocomplcache_enable_underbar_completion = 1
-"let g:neocomplcache_enable_smart_case = 1
-
-" default # of completions is 100, that's crazy
-"let g:neocomplcache_max_list = 5
-
-" words less than 3 letters long aren't worth completing
-"let g:neocomplcache_auto_completion_start_length = 3
-
-" Map standard <Ctrl-N> completion to <Ctrl-Space>
-"inoremap <C-Space> <C-n>
-
-"let g:neocomplcache_force_overwrite_completefunc = 1
-
-" Define keyword.
-if !exists('g:neocomplcache_keyword_patterns')
-  let g:neocomplcache_keyword_patterns = {}
-endif
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -485,13 +469,6 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-
-" Enable heavy omni completion.
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
-endif
-"let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-"let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 
 " === Syntastic ==================================
 " mark syntax errors with :signs
@@ -508,18 +485,8 @@ let g:tagbar_iconchars = ['▾', '▸']
 nnoremap <Leader><Bs> :TagbarToggle<cr>
 let g:tagbar_ctags_bin = 'ctags'
 
-" === Python-mode ================================
-"let g:pymode_syntax = 0
-"let g:pymode_rope_goto_def_newwin = "vnew"
-"let g:pymode_rope_always_show_complete_menu = 1
-"let g:pymode_virtualenv = 1
-"let g:pymode_lint_cwindow = 0
-"let g:pymode_indent = 0
-"let g:pymode_lint_cheker = "pylint,pep8"
-
 "=== vim-jedi ===================================
 let g:jedi#popup_select_first = 0
-
 
 "=== Vdebug ====================================
 "let g:vdebug_option["break_on_open"] = 0
@@ -554,7 +521,7 @@ au FileType vim call TwoSpace()
 au BufNewFile,BufRead *.erb call TwoSpace()
 
 " Index ctags from any project, including those outside Rails
-map <Leader>ct :!ctags -R .<CR>
+map <Leader>ct :!ctags --fields=+l --extra=+f --exclude=.git -R .<CR>
 " Use it for ruby projects
 map <silent> <Leader>rt :!bundle list --paths=true \| xargs ctags --fields=+l --extra=+f --exclude=.git --exclude=log -R *<CR><CR>
 " Open tag in vertical split
