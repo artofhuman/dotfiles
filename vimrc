@@ -44,7 +44,8 @@ Bundle 'pangloss/vim-javascript'
 
 " Ruby ======================================
 " Bundle 'tpope/vim-rvm'
-Bundle 'vim-ruby/vim-ruby'
+"Bundle 'vim-ruby/vim-ruby'
+Bundle 'vim-ruby/vim-ruby.git'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-haml'
 " Bundle 'astashov/vim-ruby-debugger'
@@ -58,7 +59,7 @@ Bundle 'evidens/vim-twig'
 Bundle 'vexxor/phpdoc.vim'
 
 " JSON ======================================
-Bundle 'git://github.com/leshill/vim-json.git'
+"Bundle 'git://github.com/leshill/vim-json.git'
 
 Bundle 'Tagbar'
 "Bundle 'ervandew/supertab.git'
@@ -248,6 +249,15 @@ if has('gui_running')
     set background=dark
     colorscheme gruvbox
     set guifont=Monaco:h12
+
+    if has("gui_gtk2")
+      set guifont=Inconsolata\ 9
+    elseif has("gui_macvim")
+        set guifont=Consolas:h12
+    elseif has("gui_win32")
+        set guifont=Consolas:h11
+    end
+
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
 else
@@ -501,9 +511,9 @@ au BufRead,BufNewFile *.md setlocal spell
 " Automatically wrap at 80 characters for Markdown
 au BufRead,BufNewFile *.md setlocal textwidth=80
 
-let g:rubycomplete_classes_in_global = 1
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_rails = 1
+"let g:rubycomplete_classes_in_global = 1
+"let g:rubycomplete_buffer_loading = 1
+"let g:rubycomplete_rails = 1
 
 " Ruby Hax {{{
 " Prawn files are includes for a pdf rendering library
