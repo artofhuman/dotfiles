@@ -9,18 +9,14 @@ Bundle 'gmarik/vundle'
 
 " Define bundles
 Bundle 'tpope/vim-fugitive'
-"Bundle 'airblade/vim-gitgutter'
+Bundle 'airblade/vim-gitgutter'
 Bundle 'kien/ctrlp.vim'
 
 Bundle 'scrooloose/nerdtree'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'godlygeek/tabular'
-" Bundle 'xolox/vim-easytags'
 
-" Bundle 'neocomplcache'
-" Bundle 'snipMate'
-" Bundle 'honza/snipmate-snippets'
 Bundle 'SirVer/ultisnips'
 Bundle 'artofhuman/UltiSnips-Snippets'
 
@@ -29,10 +25,7 @@ Bundle 'matchit.zip'
 Bundle 'Raimondi/delimitMate'
 Bundle 'tpope/vim-surround'
 
-"Bundle 'git://github.com/Townk/vim-autoclose.git'
-"Bundle 'vim-scripts/mru.vim.git'
 Bundle 'Lokaltog/vim-powerline.git'
-
 Bundle 'scrooloose/syntastic'
 
 Bundle 'sukima/xmledit'
@@ -43,36 +36,20 @@ Bundle 'pangloss/vim-javascript'
 " Bundle 'davidhalter/jedi-vim'
 
 " Ruby ======================================
-" Bundle 'tpope/vim-rvm'
-"Bundle 'vim-ruby/vim-ruby'
-Bundle 'vim-ruby/vim-ruby.git'
+Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-haml'
-" Bundle 'astashov/vim-ruby-debugger'
-
-" Bundle 'danchoi/ri.vim'
-" Bundle 'duwanis/tomdoc.vim'
+Bundle 'slim-template/vim-slim'
 
 " PHP =======================================
 Bundle 'shawncplus/phpcomplete.vim'
 Bundle 'evidens/vim-twig'
 Bundle 'vexxor/phpdoc.vim'
 
-" JSON ======================================
-"Bundle 'git://github.com/leshill/vim-json.git'
-
 Bundle 'Tagbar'
-"Bundle 'ervandew/supertab.git'
-
-" Debug ======================================
-" Bundle 'joonty/vdebug.git'
 
 " Search =====================================
 Bundle 'mileszs/ack.vim'
-
-" Postgres && SQL  ===================================
-" Bundle 'ivalkeen/vim-postgres'
-" Bundle 'vim-scripts/SQLComplete.vim'
 
 " Complete
 Bundle 'Valloric/YouCompleteMe'
@@ -94,20 +71,12 @@ Bundle 'tpope/vim-markdown'
 " General options =============================================================
 
 " Не бибикать!
-set visualbell " Use visual bell instead of beeping
-set vb
-set t_vb=
 
+filetype plugin indent on
 syntax on
-filetype on
-filetype plugin on
-filetype indent on
 
-" Не показывать парную скобку
-"let loaded_matchparen=1 " перестает прыгать на парную скобку, показывая где она. +100 к скорости
-"set noshowmatch " Не показывать парные <> в HTML
-
-set ttyfast
+set novisualbell
+set ttyfast             " Optimize for fast terminal connections
 set encoding=utf-8
 " Кодировка по-умолчанию
 set termencoding=utf-8
@@ -263,7 +232,7 @@ if has('gui_running')
 else
      let g:solarized_termcolors=16
      set background=dark
-     colorscheme Tomorrow-Night
+     colorscheme solarized
 endif
 
 " Set up the gui cursor to look nice
@@ -326,8 +295,8 @@ set viminfo+=!
 
 " Keymaps ======================================================================
 " Ctrl+s
-"map <C-s> <esc>:w<CR>
-"imap <C-s> <esc>:w<CR>
+nmap <leader>s :w<cr>
+imap <leader>s <esc>:w<cr>
 
 " Очистить подсветку последнего найденного выражения
 "nmap <silent> <F3> :nohlsearch<CR>
@@ -562,3 +531,4 @@ noremap <leader>pd :call PhpDoc()<CR>
 
 let g:nerdtree_tabs_open_on_gui_startup = 0
 let g:easytags_cmd = '/usr/local/bin/ctags'
+
