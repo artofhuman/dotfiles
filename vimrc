@@ -7,7 +7,6 @@ call vundle#rc()
 " let Vundle manage Vundle, required!
 Bundle 'gmarik/vundle'
 
-" Define bundles
 Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'kien/ctrlp.vim'
@@ -31,30 +30,30 @@ Bundle 'scrooloose/syntastic'
 Bundle 'sukima/xmledit'
 Bundle 'pangloss/vim-javascript'
 
-" Python/Django ==============================
+" Python/Django
 " Bundle 'git://github.com/klen/python-mode.git'
 " Bundle 'davidhalter/jedi-vim'
 
-" Ruby ======================================
+" Ruby
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-haml'
 Bundle 'slim-template/vim-slim'
 
-" PHP =======================================
+" PHP
 Bundle 'shawncplus/phpcomplete.vim'
 Bundle 'evidens/vim-twig'
 Bundle 'vexxor/phpdoc.vim'
 
 Bundle 'Tagbar'
 
-" Search =====================================
+" Search
 Bundle 'mileszs/ack.vim'
 
 " Complete
 Bundle 'Valloric/YouCompleteMe'
 
-" Theme ======================================
+" Theme
 Bundle 'git://github.com/altercation/vim-colors-solarized.git'
 Bundle 'git://github.com/chriskempson/vim-tomorrow-theme.git'
 Bundle 'croaky/vim-colors-github'
@@ -65,34 +64,36 @@ Bundle 'cschlueter/vim-wombat'
 Bundle 'sickill/vim-monokai'
 Bundle 'morhetz/gruvbox'
 
-" Murkdown ===================================
+" Murkdown
 Bundle 'tpope/vim-markdown'
 
-" General options =============================================================
-
-" Не бибикать!
-
+" GENERAL OPTIONS
 filetype plugin indent on
 syntax on
 
-set novisualbell
-set ttyfast             " Optimize for fast terminal connections
-set encoding=utf-8
-" Кодировка по-умолчанию
-set termencoding=utf-8
-" Список кодировок файлов для автоопределения
-set fileencodings=utf-8,cp1251,koi8-r,cp866
-" Список форматов файлов
-set fileformats=unix,dos,mac
+" BUFFER OPTIONS
+set hidden              " hide buffers when they are abandoned"
+set autoread            " auto reload changed files
 
-" Reload files changed outside vim
-set autoread
+" DISPLAY OPTIONS
+set title               " show file name in window title"
+set novisualbell        " mute error bell
+
+set list                " show unprintable chars
+set listchars=tab:·\ ,trail:·,extends:»,precedes:«
+set ttyfast             " Optimize for fast terminal connections
+set cursorline          " show visual line
+set number
+set numberwidth=3
+set ruler
+set nolazyredraw
+set shortmess=atI " Don’t show the intro message when starting Vim
 
 set backspace=indent,eol,start
 set history=1000
 set undolevels=100
 
-" Indentation
+" INDENTATION OPTIONS
 set autoindent
 set smartindent
 set smarttab
@@ -101,10 +102,18 @@ set softtabstop=4
 set shiftwidth=4
 set shiftround
 set expandtab
-
-" Выключаем перенос строк
+" Turn off line breaks
 set nowrap
 set nolinebreak
+
+" LOCALIZATION
+set langmenu=none               " always use English menu"
+set encoding=utf-8
+set termencoding=utf-8          " default encoding
+set fileencodings=utf-8,cp1251,koi8-r,cp866 " list encodings for completion
+set fileformats=unix,dos,mac    " list file formats
+set spell
+set spelllang=en,ru
 
 " Jump N lines when running out of the screen
 set scrolljump=7
@@ -112,26 +121,13 @@ set scrolloff=10
 set sidescrolloff=10
 set sidescroll=1
 
-set cursorline
-set number
-set numberwidth=3
-set ruler
-set nolazyredraw
-
 set splitright
 set splitbelow
-
-" Hide buffers when not displayed
-set hidden
 
 " Show incomplete cmds down the bottom
 set showcmd
 " Show current mode down the bottom
 set showmode
-
-" Включить подсветку невидимых символов
-set list
-set listchars=tab:·\ ,trail:·,extends:»,precedes:«
 
 " Использовать <,> в качестве <leader>-кнопки
 let mapleader = ","
@@ -153,8 +149,8 @@ set pastetoggle=<leader>p
 if has('unnamedplus')
     set clipboard=unnamedplus
 endif
-" Splits ===============================
 
+" SPLITS
 " Создаем пустой сплит относительно текущего
 nmap <Leader><left>  :leftabove  vnew<CR>
 nmap <Leader><right> :rightbelow vnew<CR>
@@ -189,10 +185,12 @@ set nobackup
 set noswapfile
 set nowb
 
-" Folds ========================================================================
+" FOLDING OPTIONS
 set foldmethod=indent
-" dont fold by default
-set nofoldenable
+set nofoldenable                " don't fold by default
+set foldlevel=99
+" toggle folds with space
+nmap <space> za
 
 " Completion ===================================================================
 " Make cmdline tab completion similar to bash
@@ -233,6 +231,10 @@ else
      let g:solarized_termcolors=16
      set background=dark
      colorscheme solarized
+
+     " set think cursor in insert mode like in gui vim
+     let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
 " Set up the gui cursor to look nice
@@ -242,10 +244,6 @@ set guicursor+=o:hor50-Cursor
 set guicursor+=i-ci:ver25-Cursor
 set guicursor+=r-cr:hor20-Cursor
 set guicursor+=sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
-" Turn off any bells
-set novisualbell
-set t_vb=
-set gcr=a:blinkon0
 
 " Disable the scrollbars (NERDTree)
 set guioptions-=r
