@@ -39,6 +39,7 @@ Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-haml'
 Bundle 'slim-template/vim-slim'
+Bundle 'thoughtbot/vim-rspec'
 
 " PHP
 Bundle 'shawncplus/phpcomplete.vim'
@@ -529,4 +530,11 @@ noremap <leader>pd :call PhpDoc()<CR>
 
 let g:nerdtree_tabs_open_on_gui_startup = 0
 let g:easytags_cmd = '/usr/local/bin/ctags'
+
+" Rspec keymaps
+
+map <Leader>t :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
 
