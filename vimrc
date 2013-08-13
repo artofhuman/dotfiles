@@ -40,6 +40,7 @@ Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-haml'
 Bundle 'slim-template/vim-slim'
 Bundle 'thoughtbot/vim-rspec'
+Bundle 'tpope/vim-dispatch'
 
 " PHP
 Bundle 'shawncplus/phpcomplete.vim'
