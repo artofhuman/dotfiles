@@ -459,16 +459,15 @@ let g:syntastic_auto_loc_list=0
 " don't care about warnings
 let g:syntastic_quiet_warnings=0
 
-" === Tagbar =====================================
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"                   tagbar                        "
+"""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:tagbar_iconchars = ['▾', '▸']
-nnoremap <Leader><Bs> :TagbarToggle<cr>
 let g:tagbar_ctags_bin = 'ctags'
+nnoremap <F4> :TagbarToggle<cr><c-w>=
 
 "=== vim-jedi ===================================
 let g:jedi#popup_select_first = 0
-
-"=== Vdebug ====================================
-"let g:vdebug_option["break_on_open"] = 0
 
 "== Murkdown ==================================
 " Markdown files end in .md
