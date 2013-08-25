@@ -63,6 +63,7 @@ Bundle 'jpo/vim-railscasts-theme'
 Bundle 'cschlueter/vim-wombat'
 Bundle 'sickill/vim-monokai'
 Bundle 'morhetz/gruvbox'
+Bundle 'w0ng/vim-hybrid'
 
 " Murkdown
 Bundle 'tpope/vim-markdown'
@@ -228,6 +229,7 @@ if has('gui_running')
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
 else
+    syntax enable
      let g:solarized_termcolors=16
      set background=dark
      colorscheme solarized
@@ -506,16 +508,17 @@ map <silent> <Leader>rt :!bundle list --paths=true \| xargs ctags --fields=+l --
 "=== ctags =====================================
 map <F7> :vsp<CR>:exec("tag ".expand("<cword>"))<CR>
 
-" Ruby debug
-"let g:ruby_debugger_progname = 'mvim'
-"let g:ruby_debugger_default_script = 'script/rails s'
-"let g:ruby_debugger_debug_mode = 1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               YouCompleteMe                             "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" YCM
-let g:ycm_autoclose_preview_window_after_completion = 1
-"let g:ycm_autoclose_preview_window_after_insertion = 0
 let g:ycm_complete_in_comments_and_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+nnoremap <leader>pg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
+
 
 " ==================== UltiSnips ====================
 "let g:ultisnips_python_style = "sphinx"
@@ -525,7 +528,7 @@ let g:UltiSnipsExpandTrigger = '<C-k>'
 let g:UltiSnipsJumpForwardTrigger = '<C-d>'
 let g:UltiSnipsJumpBackwardTrigger = '<C-a>'
 
-noremap <leader>pd :call PhpDoc()<CR>
+noremap <leader>pdd :call PhpDoc()<CR>
 
 let g:nerdtree_tabs_open_on_gui_startup = 0
 let g:easytags_cmd = '/usr/local/bin/ctags'
