@@ -234,7 +234,7 @@ else
     syntax enable
      let g:solarized_termcolors=16
      set background=dark
-     colorscheme solarized
+     colorscheme hybrid
 
      " set think cursor in insert mode like in gui vim
      let &t_SI = "\<Esc>]50;CursorShape=1\x7"
