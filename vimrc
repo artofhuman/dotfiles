@@ -234,7 +234,7 @@ else
     syntax enable
      let g:solarized_termcolors=16
      set background=dark
-     colorscheme hybrid
+     colorscheme solarized
 
      " set think cursor in insert mode like in gui vim
      let &t_SI = "\<Esc>]50;CursorShape=1\x7"
@@ -451,21 +451,29 @@ autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
-" === Syntastic ==================================
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+"                   Syntastic                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_python_checkers = ['pyflakes']
+" NOTE: Test for deprecation
 " mark syntax errors with :signs
-let g:syntastic_enable_signs=1
+" let g:syntastic_enable_signs=1
 " automatically jump to the error when saving the file
-let g:syntastic_auto_jump=0
+" let g:syntastic_auto_jump=0
 " show the error list automatically
-let g:syntastic_auto_loc_list=0
+" let g:syntastic_auto_loc_list=0
 " don't care about warnings
-let g:syntastic_quiet_warnings=0
+" let g:syntastic_quiet_warnings=0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""
 "                   tagbar                        "
 """""""""""""""""""""""""""""""""""""""""""""""""""
 let g:tagbar_iconchars = ['▾', '▸']
 let g:tagbar_ctags_bin = 'ctags'
+let g:tagbar_sort = 0
 nnoremap <F4> :TagbarToggle<cr><c-w>=
 
 "=== vim-jedi ===================================
