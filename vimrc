@@ -542,10 +542,16 @@ noremap <leader>pdd :call PhpDoc()<CR>
 let g:nerdtree_tabs_open_on_gui_startup = 0
 let g:easytags_cmd = '/usr/local/bin/ctags'
 
-" Rspec keymaps
-
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Rspec                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <Leader>t :call RunCurrentSpecFile()<CR>
 map <Leader>c :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
 
+"let g:rspec_command = 'call Send_to_Tmux("rspec {spec}\n")'
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Dispatch                                  "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:rspec_command = "Dispatch rspec {spec}\n"
