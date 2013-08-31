@@ -251,10 +251,13 @@ if has('gui_running')
     " Automatically resize splits when resizing MacVim window
     autocmd VimResized * wincmd =
 else
-    syntax enable
+     syntax enable
      let g:solarized_termcolors=16
+     let g:solarized_contrast='high'
+     let g:solarized_termtrans=0
      set background=dark
      colorscheme solarized
+     call togglebg#map("<F5>")
 
      " set think cursor in insert mode like in gui vim
      let &t_SI = "\<Esc>]50;CursorShape=1\x7"
