@@ -79,6 +79,7 @@ Bundle 'cschlueter/vim-wombat'
 Bundle 'sickill/vim-monokai'
 Bundle 'morhetz/gruvbox'
 Bundle 'w0ng/vim-hybrid'
+Bundle 'zeis/vim-kolor'
 
 " Installing plugins
 if iCanHazVundle == 0
@@ -135,8 +136,8 @@ set encoding=utf-8
 set termencoding=utf-8          " default encoding
 set fileencodings=utf-8,cp1251,koi8-r,cp866 " list encodings for completion
 set fileformats=unix,dos,mac    " list file formats
-set spell
-set spelllang=en,ru
+"set spell
+"set spelllang=en,ru
 
 " Jump N lines when running out of the screen
 set scrolljump=7
@@ -229,55 +230,14 @@ set wildignore+=*.png,*.jpg,*.gif
 set diffopt=filler,iwhite,vertical,context:15
 let g:html_diff_one_file = 1
 
-" GUI ==========================================================================
-set background=dark
-
-" tell the term has 256 colors
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Colorscheme                               "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set t_Co=256
-if has('gui_running')
-    let g:solarized_termcolors=256
-    set background=dark
-    colorscheme gruvbox
-    set guifont=Monaco:h12
-
-    if has("gui_gtk2")
-      set guifont=Inconsolata\ 9
-    elseif has("gui_macvim")
-        set guifont=Consolas:h12
-    elseif has("gui_win32")
-        set guifont=Consolas:h11
-    end
-
-    " Automatically resize splits when resizing MacVim window
-    autocmd VimResized * wincmd =
-else
-     syntax enable
-     let g:solarized_termcolors=16
-     let g:solarized_contrast='high'
-     let g:solarized_termtrans=0
-     set background=dark
-     colorscheme solarized
-     call togglebg#map("<F5>")
-
-     " set think cursor in insert mode like in gui vim
-     let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
-
-" Set up the gui cursor to look nice
-set guicursor=n-v-c:block-Cursor-blinkon0
-set guicursor+=ve:ver35-Cursor
-set guicursor+=o:hor50-Cursor
-set guicursor+=i-ci:ver25-Cursor
-set guicursor+=r-cr:hor20-Cursor
-set guicursor+=sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
-
-" Disable the scrollbars (NERDTree)
-set guioptions-=r
-set guioptions-=L
-
-" Disable the macvim toolbar
-set guioptions-=T
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+set background=dark
+colorscheme hybrid
 
 " Macvim settings
 if has("gui_macvim")
@@ -481,15 +441,6 @@ let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_python_checkers = ['pyflakes']
-" NOTE: Test for deprecation
-" mark syntax errors with :signs
-" let g:syntastic_enable_signs=1
-" automatically jump to the error when saving the file
-" let g:syntastic_auto_jump=0
-" show the error list automatically
-" let g:syntastic_auto_loc_list=0
-" don't care about warnings
-" let g:syntastic_quiet_warnings=0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""
 "                   tagbar                        "
@@ -550,7 +501,6 @@ let g:ycm_autoclose_preview_window_after_completion = 1
 nnoremap <leader>pg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
-
 
 " ==================== UltiSnips ====================
 "let g:ultisnips_python_style = "sphinx"
