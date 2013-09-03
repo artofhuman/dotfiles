@@ -1,0 +1,32 @@
+set -g default-terminal "screen-256color"
+
+unbind C-b
+set -g prefix C-a
+
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+
+set-window-option -g window-status-current-bg red
+
+set -g mouse-resize-pane on
+set -g mode-mouse on
+set -g mouse-select-pane on
+set -g mouse-select-window on
+
+# Toggle mouse on with ^B m
+bind m \
+  set -g mode-mouse on \;\
+  set -g mouse-resize-pane on \;\
+  set -g mouse-select-pane on \;\
+  set -g mouse-select-window on \;\
+  display 'Mouse: ON'
+
+# Toggle mouse off with ^B M
+bind M \
+  set -g mode-mouse off \;\
+  set -g mouse-resize-pane off \;\
+  set -g mouse-select-pane off \;\
+  set -g mouse-select-window off \;\
+  display 'Mouse: OFF'
