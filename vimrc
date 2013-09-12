@@ -69,7 +69,8 @@ Bundle 'mileszs/ack.vim'
 Bundle 'Valloric/YouCompleteMe'
 
 " Theme
-Bundle 'git://github.com/altercation/vim-colors-solarized.git'
+"Bundle 'git://github.com/altercation/vim-colors-solarized.git'
+Bundle 'jumski/vim-colors-solarized'
 Bundle 'git://github.com/chriskempson/vim-tomorrow-theme.git'
 Bundle 'croaky/vim-colors-github'
 Bundle 'tomasr/molokai'
@@ -237,7 +238,7 @@ set t_Co=256
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 set background=dark
-colorscheme hybrid
+colorscheme solarized
 
 " Macvim settings
 if has("gui_macvim")
