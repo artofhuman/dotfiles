@@ -238,7 +238,9 @@ set t_Co=256
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 set background=dark
-colorscheme solarized
+colorscheme molokai
+let g:molokai_original = 1
+let g:rehash256 = 1
 
 " Macvim settings
 if has("gui_macvim")
@@ -529,3 +531,4 @@ map <Leader>a :call RunAllSpecs()<CR>
 "                               Dispatch                                  "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:rspec_command = "Dispatch rspec {spec}\n"
+
