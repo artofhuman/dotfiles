@@ -42,6 +42,7 @@ Bundle 'scrooloose/syntastic'
 
 Bundle 'sukima/xmledit'
 Bundle 'pangloss/vim-javascript'
+Bundle 'kchmck/vim-coffee-script'
 
 " Python/Django
 " Bundle 'git://github.com/klen/python-mode.git'
@@ -238,9 +239,9 @@ set t_Co=256
 let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 set background=dark
-colorscheme molokai
 let g:molokai_original = 1
 let g:rehash256 = 1
+colorscheme molokai
 
 " Macvim settings
 if has("gui_macvim")
