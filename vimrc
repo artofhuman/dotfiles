@@ -55,6 +55,7 @@ Bundle 'tpope/vim-haml'
 Bundle 'slim-template/vim-slim'
 Bundle 'thoughtbot/vim-rspec'
 Bundle 'tpope/vim-dispatch'
+Bundle 'tpope/vim-endwise'
 
 " PHP
 Bundle 'shawncplus/phpcomplete.vim'
