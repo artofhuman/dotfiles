@@ -138,8 +138,9 @@ set encoding=utf-8
 set termencoding=utf-8          " default encoding
 set fileencodings=utf-8,cp1251,koi8-r,cp866 " list encodings for completion
 set fileformats=unix,dos,mac    " list file formats
-"set spell
-"set spelllang=en,ru
+set spell
+set spelllang=en,ru
+set spellfile=$HOME/.vim/spell/en.utf-8.add
 
 " Jump N lines when running out of the screen
 set scrolljump=7
