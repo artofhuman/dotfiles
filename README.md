@@ -30,3 +30,7 @@ Like this vim config? Follow the repository on
 
  
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/artofhuman/vim/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/artofhuman/vim/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
