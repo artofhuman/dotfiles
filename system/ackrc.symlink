@@ -1,9 +1,21 @@
 # Search unknown file-types
---type-set=coffee=.coffee
---type-set=cucumber=.feature
---type-set=haml=.haml
---type-set=sass=.sass,.scss
+#--type-set=coffee=.coffee
+#--type-set=cucumber=.feature
+#--type-set=haml=.haml
+#--type-set=sass=.sass,.scss
+#--type-set
+#ignorables=.log,.tmp,.pdf,.png,.jpg,.jpeg,.ico
 
 # Do not search these directories for quicker lookup
---ignore-dir=log,tags,tmp
+#--ignore-dir=log,tmp,doc,coverage,images,img,.git
+#--ignore-file=is:tags
+
+--type-add
+html=.html.erb,.html.haml,.haml
+--type-set
+ignorables=.log,.tmp,.pdf
+--ignore-dir=log
+--ignore-dir=tmp
+--ignore-dir=doc
+--ignore-dir=coverage
 --ignore-file=is:tags
