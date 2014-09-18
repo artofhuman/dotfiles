@@ -17,3 +17,6 @@
 --regex-CoffeeScript=/^[ \t]*([A-Za-z.]+)[ \t]+=.*[-=]>.*$/\1/f,function/
 
 --exclude=tags
+--exclude=.svn
+--exclude=log
+--exclude=.git
