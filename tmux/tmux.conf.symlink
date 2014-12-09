@@ -1,30 +1,29 @@
 # use UTF8
-set -g utf8
-set-window-option -g utf8 on
-
-# make tmux display things in 256 colors
-set -g default-terminal "screen-256color"
-
-# set scrollback history to 10000 (10k)
-set -g history-limit 10000
+#set -g utf8
+#set-window-option -g utf8 on
 
 # set Ctrl-a as the default prefix key combination
 # and unbind C-b to free it up
 unbind C-b
 set -g prefix C-a
 
-# use vim keybindings in copy mode
-setw -g mode-keys vi
-
-bind -n M-Left select-pane -L
-bind -n M-Right select-pane -R
-bind -n M-Up select-pane -U
-bind -n M-Down select-pane -D
-
 set -g mouse-resize-pane on
 set -g mode-mouse on
 set -g mouse-select-pane on
 set -g mouse-select-window on
+
+# make tmux display things in 256 colors
+set -g default-terminal "screen-256color"
+
+# make delay minimal
+set -sg escape-time 0
+
+# use vim keybindings in copy mode
+setw -g mode-keys vi
+
+# better pane splitting
+bind | split-window -h
+bind - split-window -v
 
 # http://robots.thoughtbot.com/post/53022241323/seamlessly-navigate-vim-and-tmux-splits
 # smart pane switching with awareness of vim splits
@@ -34,30 +33,21 @@ bind -n C-k run "(tmux display-message -p '#{pane_current_command}' | grep -iq v
 bind -n C-l run "(tmux display-message -p '#{pane_current_command}' | grep -iq vim && tmux send-keys C-l) || tmux select-pane -R"
 bind -n C-\ run "(tmux display-message -p '#{pane_current_command}' | grep -iq vim && tmux send-keys 'C-\\') || tmux select-pane -l"
 
-# better pane splitting
-bind | split-window -h
-bind - split-window -v
+# this will renumber windows automatically when one gets deleted
+set-option -g renumber-windows on
 
-# Toggle mouse on with ^B m
-bind m \
-  set -g mode-mouse on \;\
-  set -g mouse-resize-pane on \;\
-  set -g mouse-select-pane on \;\
-  set -g mouse-select-window on \;\
-  display 'Mouse: ON'
+# color status bar
+set -g status-bg colour235
+set -g status-fg white
 
-# Toggle mouse off with ^B M
-bind M \
-  set -g mode-mouse off \;\
-  set -g mouse-resize-pane off \;\
-  set -g mouse-select-pane off \;\
-  set -g mouse-select-window off \;\
-  display 'Mouse: OFF'
+# highlight current window
+set-window-option -g window-status-current-fg black
+set-window-option -g window-status-current-bg white
 
-# ----------------------
-# set some pretty colors
-# ----------------------
-# set pane colors - hilight the active pane
+#----------------------
+#set some pretty colors
+#----------------------
+#set pane colors - hilight the active pane
 set-option -g pane-border-fg colour235 #base02
 set-option -g pane-active-border-fg colour240 #base01
 
@@ -70,9 +60,6 @@ set-option -g message-fg brightred #orange
 # -----------------------
 set-option -g status on                # turn the status bar on
 set -g status-utf8 on                  # set utf-8 for the status bar
-set -g status-interval 5               # set update frequencey (default 15 seconds)
-set -g status-justify centre           # center window list for clarity
-# set-option -g status-position top    # position the status bar at top of screen
 
 # visual notification of activity in other windows
 setw -g monitor-activity on
@@ -81,13 +68,14 @@ set -g visual-activity on
 # set color for status bar
 set-option -g status-bg colour235 #base02
 set-option -g status-fg yellow #yellow
-set-option -g status-attr dim 
+set-option -g status-attr dim
 
 # set window list colors - red for active and cyan for inactive
 set-window-option -g window-status-fg brightblue #base0
-set-window-option -g window-status-bg colour236 
+set-window-option -g window-status-bg colour236
 set-window-option -g window-status-attr dim
 
 set-window-option -g window-status-current-fg brightred #orange
-set-window-option -g window-status-current-bg colour236 
+set-window-option -g window-status-current-bg colour236
 set-window-option -g window-status-current-attr bright
+
