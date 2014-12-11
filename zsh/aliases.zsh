@@ -16,3 +16,8 @@ alias rwrails='ssh -L 3000:localhost:3000 artofhuman@ssh.railsc.ru -p 22017'
 alias c='cd ~/code'
 alias pc='cd ~/code/python'
 alias rc='cd ~/code/ruby'
+
+# ruby and rails
+alias be="bundle exec"
+alias bi="bundle install"
+alias rk="bundle exec rake"
