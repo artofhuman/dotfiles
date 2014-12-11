@@ -5,3 +5,4 @@
 *.rbc
 Gemfile.local
 Gemfile.local.lock
+.rvmrc
