@@ -21,3 +21,4 @@ alias rc='cd ~/code/ruby'
 alias be="bundle exec"
 alias bi="bundle install"
 alias rk="bundle exec rake"
+alias rs="rails s"
