@@ -4,6 +4,7 @@
 /javascripts/
 /stylesheets/
 /tmp/
+tmp/*
 /vendor/
 *.sql
 *.tags*
