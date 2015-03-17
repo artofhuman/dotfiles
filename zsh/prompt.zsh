@@ -55,7 +55,13 @@ rb_prompt(){
 
     echo "%{$fg_bold[yellow]%}$version%{$reset_color%}"
   else
-    echo ""
+    if (( $+commands[rvm] ))
+    then
+      version=$($HOME/.rvm/bin/rvm-prompt)
+      echo "%{$fg_bold[yellow]%}$version%{$reset_color%}"
+    else
+       echo ""
+    fi
   fi
 }
 
