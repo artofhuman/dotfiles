@@ -53,3 +53,4 @@ rvim()
     (unset GEM_PATH GEM_HOME; command vim "$@")
 }
 
+cd ..;cd -
