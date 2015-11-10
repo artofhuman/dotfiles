@@ -10,3 +10,5 @@ tags
 .ruby-version
 .ruby-gemset
 *.pyc
+_projectnotes.txt
+Makefile.local
