@@ -1,4 +1,4 @@
-## My dotfiles based on hofman dotfiles
+## My dotfiles based on holman dotfiles
 
 ## install
 
