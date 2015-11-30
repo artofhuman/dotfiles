@@ -1,0 +1,5 @@
+alias be="bundle exec"
+alias bi="bundle install"
+alias rk="bundle exec rake"
+alias rs="rails s -b 0.0.0.0"
+alias rtag="rm tags && bundle list --paths=true | xargs ctags --fields=+l --extra=+f --exclude=.git --exclude=log -R *"
