@@ -1,0 +1,534 @@
+set nocompatible
+filetype off
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'kien/ctrlp.vim'
+
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
+Plug 'bogado/file-line'
+
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+Plug 'michaeljsmith/vim-indent-object'
+Plug 'matchit.zip'
+Plug 'Raimondi/delimitMate'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-fugitive'
+Plug 'AndrewRadev/switch.vim'
+Plug 'christoomey/vim-tmux-navigator'
+
+Plug 'pangloss/vim-javascript'
+Plug 'kchmck/vim-coffee-script'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'benmills/vimux'
+"Plug 'jszakmeister/vim-togglecursor'
+
+" Ruby
+Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-haml'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-endwise'
+Plug 'slim-template/vim-slim'
+Plug 'thoughtbot/vim-rspec'
+Plug 'ngmy/vim-rubocop'
+
+Plug 'Tagbar'
+
+" Search
+Plug 'rking/ag.vim'
+
+" Complete
+Plug 'Valloric/YouCompleteMe'
+
+" Theme
+Plug 'jumski/vim-colors-solarized'
+Plug 'w0ng/vim-hybrid'
+
+" Murkdown
+Plug 'tpope/vim-markdown'
+call plug#end()
+
+filetype plugin indent on
+syntax on
+
+
+"let g:python_host_prog='/usr/bin/python'
+"let [interp, errors] = provider#pythonx#Detect(2)
+"echo interp
+"echo errors
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Colorscheme                               "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if $COLORTERM == 'gnome-terminal'
+  set t_Co=256
+endif
+
+set background=dark
+
+"let g:use_cursor_shapes = 1
+"if exists("g:use_cursor_shapes") && g:use_cursor_shapes
+  "let &t_SI .= "\<Esc>[6 q"
+  "let &t_EI .= "\<Esc>[2 q"
+"endif
+
+if has('nvim')
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  tnoremap <Esc> <c-\><c-n>
+  tnoremap <C-[> <c-\><c-n>
+
+  highlight TermCursor ctermfg=red guifg=red
+endif
+
+if exists('$TMUX')
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
+" for using the Solarized light theme
+set background=dark
+colorscheme solarized
+
+
+" highlight the cursor line and don't underscore it
+set cursorline
+set colorcolumn=80
+
+set viminfo+=! " Support for yankring
+
+" (Hopefully) removes the delay when hitting esc in insert mode
+set ttimeout
+set ttimeoutlen=1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Buffer options                            "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set hidden              " hide buffers when they are abandoned"
+set autoread            " auto reload changed files
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Display options                           "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set title               " show file name in window title"
+set novisualbell        " mute error bell
+
+set list                " show unprintable chars
+set listchars=tab:·\ ,trail:·,extends:»,precedes:«
+set relativenumber
+set number
+set ruler
+set nolazyredraw
+
+set backspace=indent,eol,start
+set history=1000
+set undolevels=100
+
+" Indicates a fast terminal connection.  More characters will be sent to
+" the screen for redrawing, instead of using insert/delete line
+" commands.  Improves smoothness of redrawing when there are multiple
+" windows and the terminal does not support a scrolling region.
+" Also enables the extra writing of characters at the end of each screen
+" line for lines that wrap.  This helps when using copy/paste with the
+" mouse in an xterm and other terminals.
+set ttyfast
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Indention                                 "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set autoindent
+set smartindent
+set smarttab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set shiftround
+set expandtab
+" Turn off line breaks
+set nowrap
+set nolinebreak
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Localiztion                               "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set langmenu=none               " always use English menu"
+set encoding=utf-8
+set termencoding=utf-8          " default encoding
+set fileencodings=utf-8,cp1251,koi8-r,cp866 " list encodings for completion
+set fileformats=unix,dos,mac    " list file formats
+
+" Jump N lines when running out of the screen
+set scrolljump=7
+set scrolloff=10
+set sidescrolloff=10
+set sidescroll=1
+
+set splitright
+set splitbelow
+
+" Map leader to ,
+let mapleader = ","
+
+" Paste mode toggle on <,p>
+set pastetoggle=<leader>p
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Status Line                               "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set laststatus=2
+set statusline=%f%h\ %y\ %m\ %r\ %{&encoding}\
+
+set statusline+=%=Line:%l/%L[%p%%]\ Col:%c\ [%b][0x%B]
+set statusline+=\ Buf:%n\
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Search settings                           "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" При поиске перескакивать на найденный текст в процессе набора строки
+set incsearch
+" Включаем подсветку выражения, которое ищется в тексте
+set hlsearch
+" Останавливать поиск при достижении конца файла
+set nowrapscan
+" Игнорировать регистр букв при поиске
+set ignorecase
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Backups                                   "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nobackup
+set noswapfile
+set nowb
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Folding                                   "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set foldmethod=indent
+set nofoldenable                " don't fold by default
+set foldlevel=99
+" toggle folds with space
+nmap <space> za
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Completion                                "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Make cmdline tab completion similar to bash
+" enable <ctrl-n> and <ctrl-p> to scroll thru matches
+set wildmenu
+set wildmode=list:longest
+set wildignore=*.o,*.obj,*~,*.pyc,*.pyo,*.bak
+set wildignore+=*DS_Store*
+set wildignore+=*.png,*.jpg,*.gif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Diff settings                             "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Add ignorance of whitespace to diff
+set diffopt=filler,iwhite,vertical,context:15
+let g:html_diff_one_file = 1
+
+" When editing a file, always jump to the last known cursor position.
+autocmd BufReadPost *
+  \ if line("'\"") > 0 && line("'\"") <= line("$") |
+  \   exe "normal g`\"" |
+  \ endif
+augroup END
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Keymaps                                   "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Edit another file in the same directory as the current file
+" uses expression to extract path from current file's path
+map <Leader>e :e <C-R>=expand("%:p:h") . '/'<CR>
+map <Leader>s :split <C-R>=expand("%:p:h") . '/'<CR>
+map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
+
+" Save
+nmap <leader>s :w<cr>
+imap <leader>s <esc>:w<cr>
+map <C-s> <esc>:w<CR>
+imap <C-s> <esc>:w<CR>
+
+" Clear search results
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
+
+" copy current filename into system clipboard - mnemonic: (c)urrent(f)ilename
+nnoremap <silent> ,cf :let @* = expand("%:~")<CR>
+nnoremap <silent> ,cn :let @* = expand("%:t")<CR>
+
+" Make posible move cursor in insert mode with pressed CTRL
+imap <c-h> <c-o>h
+imap <c-j> <c-o>j
+imap <c-k> <c-o>k
+imap <c-l> <c-o>l
+
+" Перемещение строк
+" переместить одну строку
+nmap <C-S-k> ddkP
+nmap <C-S-j> ddp
+" переместить несколько выделенных строк http://www.vim.org/scripts/script.php?script_id=1590
+vmap <C-S-k> xkP'[V']
+vmap <C-S-j> xp'[V']
+
+nnoremap j gj
+nnoremap k gk
+
+" Resize windows with arrow keys
+nnoremap <D-Up> <C-w>+
+nnoremap <D-Down> <C-w>-
+nnoremap <D-Left> <C-w><
+nnoremap <D-Right>  <C-w>>
+
+" Window movement
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" This allows us to save a file as root with the :w!! command, if we have sudo
+" privileges, when we're not currently useing vim as root
+cmap w!! w !sudo tee % >/dev/null
+
+" Diff this
+nnoremap <leader>dd :windo diffthis<CR>
+
+map <Leader>d obinding.pry #NOTE: debugger<esc>:w<cr>
+
+map <C-T> <Esc>:tabnew<CR>
+" Return Visual select block after move left/right
+vnoremap < <gv
+vnoremap > >gv
+
+" Customisations based on filetype
+autocmd BufNewFile,BufRead *.rss.*.atom setfiletype xml
+
+" For all text files set 'textwidth' to 80 characters.
+autocmd FileType text,txt setlocal tw=80
+
+autocmd BufRead,BufNewFile *.md         set ft=mkd tw=80 ts=2 sw=2 expandtab
+autocmd BufRead,BufNewFile *.markdown   set ft=mkd tw=80 ts=2 sw=2 expandtab
+autocmd BufRead,BufNewFile *.wiki       set ft=wiki tw=80 ts=2 sw=2 expandtab
+
+autocmd Filetype gitcommit set tw=68  spell
+
+autocmd FileType python set ft=python.django " For SnipMate
+autocmd FileType html set ft=htmldjango.html " For SnipMate
+
+au BufNewFile,BufRead *.html set ft=htmldjango.html " For SnipMate and Zen coding
+au BufNewFile,BufRead *.html set foldmethod=syntax "
+
+" Custom functions =============================================================
+" via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
+" Strip trailing whitespace
+function! <SID>StripTrailingWhitespaces()
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Do the business:
+    %s/\s\+$//e
+    " Clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction
+command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
+nmap ,w :StripTrailingWhitespaces<CR>
+
+"from https://github.com/jackfranklin/dotfiles/blob/master/vim/vimrc
+function! OpenProjectNotes()
+  let directory = getcwd()
+  let filename = '_projectnotes.txt'
+  exec ':vsplit ' . directory . '/' . filename
+endfunction
+nnoremap <leader>pn :call OpenProjectNotes()<cr>
+
+" Show also matching html parenthesis
+set matchpairs+=<:>
+
+" Python heightlight
+let python_highlight_all = 1 " Подвсветка
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Vundle                                    "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:vundle_default_git_proto = 'git'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               NERD Tree                                 "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Don't display these kinds of files
+let NERDTreeIgnore=['\.pyc$', '\~$']
+
+" Make nerdtree look nice
+" Disables display of the 'Bookmarks' label and 'Press ? for help' text
+let NERDTreeMinimalUI = 1
+" Tells the NERD tree to use arrows instead of + ~ chars when displaying directories
+let NERDTreeDirArrows = 1
+let g:NERDTreeWinSize = 30
+
+let NERDTreeShowHidden=1
+
+" Toggle the NERD Tree on an off
+nnoremap <Bs> :NERDTreeToggle<CR>
+" Open the project tree and expose current file in the nerdtree with Ctrl-\
+nnoremap <silent> <C-e> :NERDTreeFind<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               NERD Commenter                            "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <leader>/ <plug>NERDCommenterToggle<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               CtrlP                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$|debian$'
+"let g:ctrlp_cmd = 'CtrlPMixed'	" search anything (in files, buffers and MRU files at the same time.)
+"let g:ctrlp_working_path_mode = 'ra'	" search for nearest ancestor like .git, .hg, and the directory of the current file
+"let g:ctrlp_match_window_bottom = 0	" show the match window at the top of the screen
+"let g:ctrlp_max_height = 10	" maxiumum height of match window
+"let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
+"let g:ctrlp_use_caching = 1	" enable caching
+"let g:ctrlp_clear_cache_on_exit=0 " speed up by not removing clearing cache evertime
+"let g:ctrlp_mruf_max = 250 " number of recently opened files
+let g:ctrlp_custom_ignore = {
+  \ 'dir': '\v[\/]\.(git|hg|svn|build)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+  \ }
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_extensions = ['tag']
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+" Additional mapping for buffer search
+nnoremap <leader>b :CtrlPBuffer<cr>
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               TagBar                                    "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:tagbar_iconchars = ['▾', '▸']
+let g:tagbar_ctags_bin = 'ctags'
+let g:tagbar_sort = 0
+nnoremap <F4> :TagbarToggle<cr><c-w>=
+
+"=== vim-jedi ===================================
+let g:jedi#popup_select_first = 0
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Murkdown                                  "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Markdown files end in .md
+au BufRead,BufNewFile *.md set filetype=markdown
+
+" Enable spellchecking for Markdown
+au BufRead,BufNewFile *.md setlocal spell
+
+" Automatically wrap at 80 characters for Markdown
+au BufRead,BufNewFile *.md setlocal textwidth=80
+
+" Ruby Hax {{{
+" Prawn files are includes for a pdf rendering library
+au BufNewFile,BufRead *.prawn set filetype=ruby
+
+" This is specific to rails apps, but I will not bind it to a particular
+" filetype
+function! TwoSpace()
+    setlocal ts=2
+    setlocal sw=2
+endfunction
+au FileType ruby call TwoSpace()
+au FileType coffee call TwoSpace()
+au FileType vim call TwoSpace()
+au BufNewFile,BufRead *.erb call TwoSpace()
+
+" Index ctags from any project, including those outside Rails
+map <Leader>tt :!ctags --fields=+l --extra=+f --exclude=.git -R .<CR>
+" Use it for ruby projects
+map <silent> <Leader>ct :!bundle list --paths=true \| xargs ctags --fields=+l --extra=+f --exclude=.git --exclude=log -R *<CR><CR>
+" Open tags
+map <F7> :vsp<CR>:exec("tag ".expand("<cword>"))<CR>
+map <F8> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               YouCompleteMe                             "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:ycm_complete_in_comments_and_strings = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+nnoremap <leader>pg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               UltiSnips                                 "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:UltiSnipsDontReverseSearchPath=1
+let g:UltiSnipsExpandTrigger = '<C-k>'
+let g:UltiSnipsJumpForwardTrigger = '<C-d>'
+let g:UltiSnipsJumpBackwardTrigger = '<C-a>'
+
+let g:nerdtree_tabs_open_on_gui_startup = 0
+let g:easytags_cmd = '/usr/local/bin/ctags'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Rspec                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+map <Leader>rt :call RunCurrentSpecFile()<CR>
+map <Leader>rs :call RunNearestSpec()<CR>
+map <Leader>rl :call RunLastSpec()<CR>
+map <Leader>ra :call RunAllSpecs()<CR>
+
+let g:rspec_command = 'call VimuxRunCommand("clear; bundle exec rspec {spec}")'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               Switch                                    "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap - :Switch<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"                               RuboCop                                   "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:vimrubocop_keymap = 0
+nmap <Leader>r :RuboCop<CR>
+
+autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
+autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
+
+
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
+
+nnoremap <silent> <c-w> :exe "tabn ".g:lasttab<cr>
+vnoremap <silent> <c-w> :exe "tabn ".g:lasttab<cr>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Allow to copy/paste between VIM instances
+" "copy the current visual selection to ~/.vbuf
+vmap <Leader>y :w! ~/.vbuf<CR>
+" "copy the current line to the buffer file if no visual selection
+nmap <Leader>y :.w! ~/.vbuf<CR>
+" "paste the contents of the buffer file
+nmap <Leader>p :r ~/.vbuf<CR>
