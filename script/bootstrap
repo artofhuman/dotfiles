@@ -42,6 +42,12 @@ info 'setup gitconfig'
   fi
 }
 
+install_vim () {
+  rm -rf "$HOME/.vim"
+  link_files "$DOTFILES_ROOT/vim" "$HOME/.vim"
+  vim +PlugInstall +qall
+}
+
 link_files () {
   ln -s $1 $2
   success "linked $1 to $2"
@@ -116,6 +122,7 @@ done
 
 setup_gitconfig
 install_dotfiles
+install_vim
 
 # If we are on a mac, lets install and setup homebrew
 if [ "$(uname -s)" == "Darwin" ]
