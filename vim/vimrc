@@ -95,7 +95,7 @@ endif
 
 " for using the Solarized light theme
 set background=dark
-colorscheme solarized
+colorscheme hybrid
 
 
 " highlight the cursor line and don't underscore it
