@@ -48,6 +48,7 @@ Plug 'Valloric/YouCompleteMe'
 " Theme
 Plug 'jumski/vim-colors-solarized'
 Plug 'w0ng/vim-hybrid'
+Plug 'joshdick/onedark.vim'
 
 " Murkdown
 Plug 'tpope/vim-markdown'
@@ -95,7 +96,9 @@ endif
 
 " for using the Solarized light theme
 set background=dark
-colorscheme hybrid
+let g:onedark_termcolors=16
+let g:onedark_terminal_italics=1
+colorscheme onedark
 
 
 " highlight the cursor line and don't underscore it
