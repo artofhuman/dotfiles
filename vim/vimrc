@@ -96,8 +96,8 @@ endif
 
 " for using the Solarized light theme
 set background=dark
-let g:onedark_termcolors=16
-colorscheme onedark
+"let g:onedark_termcolors=16
+colorscheme solarized
 
 
 " highlight the cursor line and don't underscore it
