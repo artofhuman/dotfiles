@@ -3,9 +3,7 @@
 ### installation
 
 ```sh
-git clone https://github.com/artofhuman/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles
-script/bootstrap
+git clone https://github.com/artofhuman/dotfiles.git ~/.dotfiles && cd ~/.dotfiles && script/bootstrap
 ```
 
 ### ZSH installation
