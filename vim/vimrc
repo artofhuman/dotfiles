@@ -74,8 +74,6 @@ if $COLORTERM == 'gnome-terminal'
   set t_Co=256
 endif
 
-set background=dark
-
 "let g:use_cursor_shapes = 1
 "if exists("g:use_cursor_shapes") && g:use_cursor_shapes
   "let &t_SI .= "\<Esc>[6 q"
@@ -101,7 +99,7 @@ endif
 " for using the Solarized light theme
 set background=dark
 let g:onedark_termcolors=16
-colorscheme jellybeans
+colorscheme onedark
 
 " highlight the cursor line and don't underscore it
 set cursorline
