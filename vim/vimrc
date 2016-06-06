@@ -99,7 +99,7 @@ endif
 " for using the Solarized light theme
 set background=dark
 let g:onedark_termcolors=16
-colorscheme onedark
+colorscheme jellybeans
 
 " highlight the cursor line and don't underscore it
 set cursorline
