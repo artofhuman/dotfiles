@@ -13,7 +13,6 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'bogado/file-line'
 
 Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
 
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'matchit.zip'
