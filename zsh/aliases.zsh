@@ -16,3 +16,5 @@ alias rwrails='ssh -L 3000:localhost:3000 artofhuman@ssh.railsc.ru -p 22017'
 alias c='cd ~/code'
 alias pc='cd ~/code/python'
 alias rc='cd ~/code/ruby'
+
+alias drun='docker-compose run --rm'
