@@ -4,7 +4,7 @@
 [user]
         name = Semyon Pupkov
         email = mail@semyonpupkov.com
-	    signingkey = 7C419D7A
+        signingkey = 7C419D7A
 
 [credential]
         helper = GIT_CREDENTIAL_HELPER
