@@ -98,7 +98,7 @@ endif
 " Colorsheme
 set background=dark
 let g:onedark_termcolors=16
-colorscheme jellybeans
+colorscheme onedark
 
 " highlight the cursor line and don't underscore it
 set cursorline
