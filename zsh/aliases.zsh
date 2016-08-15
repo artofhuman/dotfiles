@@ -17,4 +17,4 @@ alias c='cd ~/code'
 alias pc='cd ~/code/python'
 alias rc='cd ~/code/ruby'
 
-alias drun='docker-compose run --rm'
+alias drun='docker-compose run --service-ports --rm'
