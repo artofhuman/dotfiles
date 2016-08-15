@@ -4,6 +4,7 @@
 [user]
         name = Semyon Pupkov
         email = mail@semyonpupkov.com
+        signingkey = 7C419D7A
 
 [credential]
         helper = GIT_CREDENTIAL_HELPER
@@ -24,6 +25,7 @@
 [core]
         excludesfile = ~/.gitignore
         editor = vim
+	;pager = diff-so-fancy | less --tabs=4 -RFX
 
 [apply]
         whitespace = nowarn
@@ -44,5 +46,9 @@
         # Setting to git 2.0 default to surpress warning message
         default = simple
 
+[commit]
+      gpgsign = true
 
 # brew install gpg
+[gpg]
+      program = /usr/local/bin/gpg
