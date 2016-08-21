@@ -39,6 +39,9 @@ Plug 'slim-template/vim-slim'
 Plug 'thoughtbot/vim-rspec'
 Plug 'ngmy/vim-rubocop'
 
+"Lisp
+Plug 'vim-scripts/paredit.vim'
+
 Plug 'Tagbar'
 
 " Search
