@@ -12,7 +12,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'bogado/file-line'
 
-Plug 'SirVer/ultisnips'
+"Plug 'SirVer/ultisnips'
 
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'matchit.zip'
