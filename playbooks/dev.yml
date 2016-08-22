@@ -1,0 +1,40 @@
+---
+- apt_repository: repo='deb https://apt.dockerproject.org/repo ubuntu-trusty main' state=present
+- apt_repository: repo='ppa:git-core/ppa'
+
+- name: apt update
+  apt: update_cache=yes
+
+- name: install dev tools
+  apt: name={{ item }} state=present force=yes
+  with_items:
+    - git
+    - curl
+    - exuberant-ctags
+    - silversearcher-ag
+    - tmux
+
+
+- name: python tools
+  apt: name={{ item }} state=present
+  with_items:
+    - python-apt
+    - python-dev
+    - python-setuptools
+  tags: python
+
+- name: install pip
+  easy_install: name=pip
+  tags: python, pip
+
+
+- name: install docker
+  apt: name=docker-engine state=present force=yes
+
+- name: install Docker Compose via PIP
+  pip: name=docker-compose
+
+- group: name=docker state=present
+- user: name=vagrant group=docker append=yes
+
+- service: name=docker state=started
