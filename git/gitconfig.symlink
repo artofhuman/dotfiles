@@ -6,9 +6,6 @@
         email = mail@semyonpupkov.com
         signingkey = 7C419D7A
 
-[credential]
-        helper = GIT_CREDENTIAL_HELPER
-
 [alias]
         co = checkout
         promote = !$ZSH/bin/git-promote
