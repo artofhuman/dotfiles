@@ -27,7 +27,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'kchmck/vim-coffee-script'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'benmills/vimux'
-"Plug 'jszakmeister/vim-togglecursor'
 
 " Ruby
 Plug 'vim-ruby/vim-ruby'
@@ -63,7 +62,6 @@ call plug#end()
 filetype plugin indent on
 syntax on
 
-
 "let g:python_host_prog='/usr/bin/python'
 "let [interp, errors] = provider#pythonx#Detect(2)
 "echo interp
@@ -75,12 +73,6 @@ syntax on
 if $COLORTERM == 'gnome-terminal'
   set t_Co=256
 endif
-
-"let g:use_cursor_shapes = 1
-"if exists("g:use_cursor_shapes") && g:use_cursor_shapes
-  "let &t_SI .= "\<Esc>[6 q"
-  "let &t_EI .= "\<Esc>[2 q"
-"endif
 
 if has('nvim')
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
