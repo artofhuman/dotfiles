@@ -12,6 +12,8 @@
         wtf     = !$ZSH/bin/git-wtf
         rank-contributers = !$ZSH/bin/git-rank-contributers
         count   = !git shortlog -sn
+        pr = "!f() { git fetch origin refs/pull/$1/head:pr/$1; } ; f"
+        upr = "!f() { git fetch upstream refs/pull/$1/head:pr/$1; } ; f"
 
 [color]
         diff = auto
