@@ -30,9 +30,9 @@ Plug 'benmills/vimux'
 
 " Ruby
 Plug 'vim-ruby/vim-ruby'
+Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-haml'
-Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'slim-template/vim-slim'
 Plug 'thoughtbot/vim-rspec'
@@ -41,6 +41,7 @@ Plug 'ngmy/vim-rubocop'
 "Lisp
 Plug 'vim-scripts/paredit.vim'
 
+" Crystal
 Plug 'rhysd/vim-crystal'
 
 Plug 'Tagbar'
@@ -52,10 +53,7 @@ Plug 'rking/ag.vim'
 Plug 'Valloric/YouCompleteMe'
 
 " Theme
-Plug 'jumski/vim-colors-solarized'
-Plug 'w0ng/vim-hybrid'
 Plug 'joshdick/onedark.vim'
-Plug 'nanotech/jellybeans.vim'
 
 " Murkdown
 Plug 'tpope/vim-markdown'
