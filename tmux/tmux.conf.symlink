@@ -55,7 +55,7 @@ set-option -g message-fg brightred #orange
 # ----------------------
 # Status Bar
 # -----------------------
-set-option -g status on                # turn the status bar on
+set-option -g status on
 
 # visual notification of activity in other windows
 setw -g monitor-activity on
@@ -75,3 +75,7 @@ set-window-option -g window-status-current-fg brightred #orange
 set-window-option -g window-status-current-bg colour236
 set-window-option -g window-status-current-attr bright
 
+set-option -g status-right '%H:%M %d/%m/%y'
+
+set -g status-left-length 40
+set -g status-justify centre
