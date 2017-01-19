@@ -1,3 +1,5 @@
+set -o vi
+
 # shortcut to this dotfiles path is $ZSH
 stty stop undef
 export ZSH=$HOME/.dotfiles
