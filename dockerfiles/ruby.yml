@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  app:
+    image: 'ruby:2.3-slim'
+    volumes:
+      - '.:/app'
+      - ssh-data:/ssh:ro
+      - bundler-data:/usr/local/bundle
+
+volumes:
+  ssh-data:
+    external:
+      name: ssh_data
+
+  bundler-data:
+    external:
+      name: bundler_data
