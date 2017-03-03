@@ -14,7 +14,7 @@ Plug 'bogado/file-line'
 
 "Plug 'SirVer/ultisnips'
 
-Plug 'michaeljsmith/vim-indent-object'
+"Plug 'michaeljsmith/vim-indent-object'
 Plug 'matchit.zip'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
@@ -23,26 +23,26 @@ Plug 'tpope/vim-fugitive'
 Plug 'AndrewRadev/switch.vim'
 Plug 'christoomey/vim-tmux-navigator'
 
-Plug 'pangloss/vim-javascript'
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 Plug 'kchmck/vim-coffee-script'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'benmills/vimux'
 
 " Ruby
-Plug 'vim-ruby/vim-ruby'
-Plug 'tpope/vim-bundler'
-Plug 'tpope/vim-rails'
-Plug 'tpope/vim-haml'
-Plug 'tpope/vim-endwise'
-Plug 'slim-template/vim-slim'
-Plug 'thoughtbot/vim-rspec'
-Plug 'ngmy/vim-rubocop'
+Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
+Plug 'tpope/vim-bundler',       { 'for': 'ruby' }
+Plug 'tpope/vim-rails',         { 'for': 'ruby' }
+Plug 'tpope/vim-haml',          { 'for': 'ruby' }
+Plug 'tpope/vim-endwise',       { 'for': 'ruby' }
+Plug 'slim-template/vim-slim',  { 'for': 'ruby' }
+Plug 'thoughtbot/vim-rspec',    { 'for': 'ruby' }
+Plug 'ngmy/vim-rubocop',        { 'for': 'ruby' }
 
 "Lisp
 Plug 'vim-scripts/paredit.vim'
 
 " Crystal
-Plug 'rhysd/vim-crystal'
+Plug 'rhysd/vim-crystal',       { 'for': 'crystal' }
 
 Plug 'Tagbar'
 
@@ -453,6 +453,7 @@ endfunction
 au FileType ruby call TwoSpace()
 au FileType coffee call TwoSpace()
 au FileType vim call TwoSpace()
+au FileType yml call TwoSpace()
 au BufNewFile,BufRead *.erb call TwoSpace()
 
 " Index ctags from any project, including those outside Rails
@@ -505,9 +506,9 @@ nnoremap - :Switch<cr>
 let g:vimrubocop_keymap = 0
 nmap <Leader>r :RuboCop<CR>
 
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
-autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
-autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
+"autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
+"autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+"autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
 
 noremap <leader>1 1gt
