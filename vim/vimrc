@@ -493,7 +493,11 @@ map <Leader>rs :call RunNearestSpec()<CR>
 map <Leader>rl :call RunLastSpec()<CR>
 map <Leader>ra :call RunAllSpecs()<CR>
 
-let g:rspec_command = 'call VimuxRunCommand("clear; dip rspec {spec}")'
+if filereadable("dip.yml")
+  let g:rspec_command = 'call VimuxRunCommand("clear; dip bundle exec rspec {spec}")'
+else
+  let g:rspec_command = 'call VimuxRunCommand("clear; bundle exec rspec {spec}")'
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Switch                                    "
@@ -533,3 +537,5 @@ vmap <Leader>y :w! ~/.vbuf<CR>
 nmap <Leader>y :.w! ~/.vbuf<CR>
 " "paste the contents of the buffer file
 nmap <Leader>p :r ~/.vbuf<CR>
+
+let g:syntastic_javascript_checkers = ['eslint']
