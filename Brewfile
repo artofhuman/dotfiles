@@ -2,6 +2,7 @@ brew 'zsh'
 brew 'tmux'
 brew 'ansible'
 brew 'rbenv'
+brew 'cmake'
 
 cask 'google-chrome'
 cask 'firefox'
