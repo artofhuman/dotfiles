@@ -6,13 +6,6 @@
 git clone https://github.com/artofhuman/dotfiles.git ~/.dotfiles && cd ~/.dotfiles && script/bootstrap
 ```
 
-### ZSH installation
-
-``` sh
-sudo apt-get install zsh
-chsh -s /bin/zsh
-```
-
 ### Vim YouCompleteMe
 
 After setup dotfiles you should compile YouCompleteMe
@@ -24,3 +17,10 @@ cd ~/.vim/plugged/YouCompleteMe
 ```
 
 ## Enjoy you terminal life ;)
+
+
+## Mac applications
+
+```sh
+brew bundle
+```
