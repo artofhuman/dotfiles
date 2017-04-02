@@ -3,6 +3,7 @@ brew 'tmux'
 brew 'ansible'
 brew 'rbenv'
 brew 'cmake'
+brew 'vim'
 
 cask 'google-chrome'
 cask 'firefox'
