@@ -4,6 +4,7 @@ brew 'ansible'
 brew 'rbenv'
 brew 'cmake'
 brew 'vim'
+brew 'ag-silversearch'
 
 brew 'docker'
 brew 'docker-compose'
