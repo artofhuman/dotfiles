@@ -5,6 +5,9 @@ brew 'rbenv'
 brew 'cmake'
 brew 'vim'
 
+brew 'docker'
+brew 'docker-compose'
+
 cask 'google-chrome'
 cask 'firefox'
 cask 'flux'
