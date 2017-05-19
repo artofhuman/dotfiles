@@ -15,7 +15,7 @@ Plug 'bogado/file-line'
 "Plug 'SirVer/ultisnips'
 
 "Plug 'michaeljsmith/vim-indent-object'
-Plug 'matchit.zip'
+Plug 'vim-scripts/matchit.zip'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
@@ -44,7 +44,7 @@ Plug 'vim-scripts/paredit.vim'
 " Crystal
 Plug 'rhysd/vim-crystal',       { 'for': 'crystal' }
 
-Plug 'Tagbar'
+Plug 'vim-scripts/Tagbar'
 
 " Search
 Plug 'rking/ag.vim'
