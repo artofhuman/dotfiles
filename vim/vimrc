@@ -50,7 +50,10 @@ Plug 'vim-scripts/Tagbar'
 Plug 'rking/ag.vim'
 
 " Complete
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
+"pip3 install neovim
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-jedi', {'for': 'python'}
 
 " Theme
 Plug 'joshdick/onedark.vim'
@@ -510,7 +513,7 @@ nnoremap - :Switch<cr>
 let g:vimrubocop_keymap = 0
 nmap <Leader>r :RuboCop<CR>
 
-"autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
+"autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
 "autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 "autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
@@ -539,3 +542,18 @@ nmap <Leader>y :.w! ~/.vbuf<CR>
 nmap <Leader>p :r ~/.vbuf<CR>
 
 let g:syntastic_javascript_checkers = ['eslint']
+
+" omnifuncs
+augroup omnifuncs
+  autocmd!
+  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+augroup end
+
+set completeopt-=preview
+let g:deoplete#enable_at_startup = 1
+" deoplete tab-complete
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
