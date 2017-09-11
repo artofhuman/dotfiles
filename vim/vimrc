@@ -359,11 +359,6 @@ set matchpairs+=<:>
 let python_highlight_all = 1 " Подвсветка
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Vundle                                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:vundle_default_git_proto = 'git'
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               NERD Tree                                 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Don't display these kinds of files
@@ -457,6 +452,8 @@ au FileType ruby call TwoSpace()
 au FileType coffee call TwoSpace()
 au FileType vim call TwoSpace()
 au FileType yml call TwoSpace()
+au FileType scss call TwoSpace()
+au FileType yaml call TwoSpace()
 au BufNewFile,BufRead *.erb call TwoSpace()
 
 " Index ctags from any project, including those outside Rails
