@@ -454,6 +454,7 @@ au FileType vim call TwoSpace()
 au FileType yml call TwoSpace()
 au FileType scss call TwoSpace()
 au FileType yaml call TwoSpace()
+au FileType javascript call TwoSpace()
 au BufNewFile,BufRead *.erb call TwoSpace()
 
 " Index ctags from any project, including those outside Rails
