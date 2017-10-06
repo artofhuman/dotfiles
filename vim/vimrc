@@ -11,6 +11,7 @@ Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'bogado/file-line'
+Plug 'Yggdroot/indentLine'
 
 "Plug 'SirVer/ultisnips'
 
@@ -39,7 +40,7 @@ Plug 'thoughtbot/vim-rspec',    { 'for': 'ruby' }
 Plug 'ngmy/vim-rubocop',        { 'for': 'ruby' }
 
 "Lisp
-Plug 'vim-scripts/paredit.vim'
+"Plug 'vim-scripts/paredit.vim'
 
 " Crystal
 Plug 'rhysd/vim-crystal',       { 'for': 'crystal' }
@@ -56,7 +57,8 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi', {'for': 'python'}
 
 " Theme
-Plug 'joshdick/onedark.vim'
+"Plug 'joshdick/onedark.vim'
+Plug 'robertmeta/nofrils'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
@@ -98,8 +100,15 @@ endif
 
 " Colorsheme
 set background=dark
-let g:onedark_termcolors=16
-colorscheme onedark
+"let g:onedark_termcolors=16
+"colorscheme onedark
+colorscheme nofrils-dark
+
+let g:indentLine_color_term = 239
+let g:indentLine_char = '¦'
+
+let g:ruby_indent_access_modifier_style = 'outdent'
+let ruby_operators = 1
 
 " highlight the cursor line and don't underscore it
 set cursorline
