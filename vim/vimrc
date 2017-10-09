@@ -12,6 +12,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'bogado/file-line'
 Plug 'Yggdroot/indentLine'
+Plug 'vim-syntastic/syntastic'
 
 "Plug 'SirVer/ultisnips'
 
@@ -25,7 +26,7 @@ Plug 'AndrewRadev/switch.vim'
 Plug 'christoomey/vim-tmux-navigator'
 
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
-Plug 'kchmck/vim-coffee-script'
+Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'benmills/vimux'
 
@@ -62,8 +63,6 @@ Plug 'robertmeta/nofrils'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
-
-Plug 'vim-syntastic/syntastic'
 
 call plug#end()
 
@@ -478,19 +477,19 @@ map <F8> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 "                               YouCompleteMe                             "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let g:ycm_complete_in_comments_and_strings = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
-nnoremap <leader>pg :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
+"let g:ycm_complete_in_comments_and_strings = 1
+"let g:ycm_autoclose_preview_window_after_completion = 1
+"nnoremap <leader>pg :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
+"nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               UltiSnips                                 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:UltiSnipsDontReverseSearchPath=1
-let g:UltiSnipsExpandTrigger = '<C-k>'
-let g:UltiSnipsJumpForwardTrigger = '<C-d>'
-let g:UltiSnipsJumpBackwardTrigger = '<C-a>'
+"let g:UltiSnipsDontReverseSearchPath=1
+"let g:UltiSnipsExpandTrigger = '<C-d>'
+"let g:UltiSnipsJumpForwardTrigger = '<C-d>'
+"let g:UltiSnipsJumpBackwardTrigger = '<C-a>'
 
 let g:nerdtree_tabs_open_on_gui_startup = 0
 let g:easytags_cmd = '/usr/local/bin/ctags'
