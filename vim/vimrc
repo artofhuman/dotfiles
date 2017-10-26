@@ -12,9 +12,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'bogado/file-line'
 Plug 'Yggdroot/indentLine'
-Plug 'vim-syntastic/syntastic'
-
-"Plug 'SirVer/ultisnips'
+Plug 'neomake/neomake'
 
 "Plug 'michaeljsmith/vim-indent-object'
 Plug 'vim-scripts/matchit.zip'
@@ -25,15 +23,15 @@ Plug 'tpope/vim-fugitive'
 Plug 'AndrewRadev/switch.vim'
 Plug 'christoomey/vim-tmux-navigator'
 
-Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'benmills/vimux'
 
 " Ruby
 Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
-Plug 'tpope/vim-bundler',       { 'for': 'ruby' }
 Plug 'tpope/vim-rails',         { 'for': 'ruby' }
+Plug 'tpope/vim-bundler',       { 'for': 'ruby' }
 Plug 'tpope/vim-endwise',       { 'for': ['ruby', 'crystal'] }
 Plug 'tpope/vim-haml',          { 'for': 'haml' }
 Plug 'slim-template/vim-slim',  { 'for': 'slim' }
@@ -55,7 +53,7 @@ Plug 'rking/ag.vim'
 "Plug 'Valloric/YouCompleteMe'
 "pip3 install neovim
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi', {'for': 'python'}
+Plug 'zchee/deoplete-jedi',  {'for': 'python'}
 
 " Theme
 "Plug 'joshdick/onedark.vim'
@@ -563,3 +561,7 @@ set completeopt-=preview
 let g:deoplete#enable_at_startup = 1
 " deoplete tab-complete
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+" Neomake
+" Run NeoMake on read and write operations
+autocmd! BufReadPost,BufWritePost * Neomake
