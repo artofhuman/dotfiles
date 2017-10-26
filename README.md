@@ -1,4 +1,8 @@
-## My dotfiles
+<p align="center">
+  <img width="350px" src="console.jpg" />
+</p>
+
+## Dotfiles
 
 ### installation
 
@@ -16,11 +20,10 @@ cd ~/.vim/plugged/YouCompleteMe
 ./install.py
 ```
 
-## Enjoy you terminal life ;)
-
-
 ## Mac applications
 
 ```sh
 brew bundle
 ```
+
+## Enjoy you console life ;)
