@@ -26,11 +26,17 @@ fail () {
   exit
 }
 
+install_neovim () {
+  mkdir -p "$HOME/.config/nvim"
+  link_files "$DOTFILES_ROOT/vim/vimrc" "$HOME/.config/nvim/init.vim"
+}
+
 install_vim () {
   rm -rf "$HOME/.vim"
   link_files "$DOTFILES_ROOT/vim" "$HOME/.vim"
   vim +PlugInstall +qall
 }
+
 
 link_files () {
   ln -s $1 $2
@@ -105,6 +111,7 @@ done
 }
 
 install_dotfiles
+install_neovim
 install_vim
 
 echo ''
