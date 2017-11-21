@@ -7,6 +7,7 @@ brew 'rbenv'
 brew 'cmake'
 brew 'vim'
 brew 'neovim'
+brew 'hub'
 
 brew 'docker'
 brew 'docker-compose'
