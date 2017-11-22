@@ -8,6 +8,7 @@ brew 'cmake'
 brew 'vim'
 brew 'neovim'
 brew 'hub'
+brew 'ctags'
 
 brew 'docker'
 brew 'docker-compose'

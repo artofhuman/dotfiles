@@ -10,3 +10,4 @@ then
 fi
 
 alias qq="exit"
+alias ctags="`brew --prefix`/bin/ctags"
