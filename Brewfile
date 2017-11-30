@@ -9,6 +9,7 @@ brew 'vim'
 brew 'neovim'
 brew 'hub'
 brew 'ctags'
+brew 'ripgrep'
 
 brew 'docker'
 brew 'docker-compose'
