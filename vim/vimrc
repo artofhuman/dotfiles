@@ -13,6 +13,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'bogado/file-line'
 Plug 'Yggdroot/indentLine'
 Plug 'neomake/neomake'
+Plug '907th/vim-auto-save'
 
 "Plug 'michaeljsmith/vim-indent-object'
 Plug 'vim-scripts/matchit.zip'
@@ -574,3 +575,4 @@ inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 autocmd! BufReadPost,BufWritePost * Neomake
 
 let g:neomake_ruby_enabled_makers = ['mri']
+let g:auto_save = 1
