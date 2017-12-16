@@ -508,11 +508,7 @@ map <Leader>rs :call RunNearestSpec()<CR>
 map <Leader>rl :call RunLastSpec()<CR>
 map <Leader>ra :call RunAllSpecs()<CR>
 
-if filereadable("dip.yml")
-  let g:rspec_command = 'call VimuxRunCommand("clear; dip rspec {spec}")'
-else
-  let g:rspec_command = 'call VimuxRunCommand("clear; bundle exec rspec {spec}")'
-endif
+let g:rspec_command = 'call VimuxRunCommand("clear; bundle exec rspec {spec}")'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Switch                                    "
