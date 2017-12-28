@@ -1,13 +1,9 @@
 set nocompatible
-filetype off
-
-scriptencoding utf-8
-set encoding=utf-8
 
 call plug#begin('~/.vim/plugged')
+Plug 'tpope/vim-sensible'
 
 Plug 'kien/ctrlp.vim'
-
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'bogado/file-line'
@@ -115,10 +111,6 @@ set colorcolumn=80
 
 set viminfo+=! " Support for yankring
 
-" (Hopefully) removes the delay when hitting esc in insert mode
-set ttimeout
-set ttimeoutlen=1
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Buffer options                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -135,11 +127,9 @@ set list                " show unprintable chars
 set listchars=tab:·\ ,trail:·,extends:»,precedes:«
 set relativenumber
 set number
-set ruler
 set nolazyredraw
 
 set backspace=indent,eol,start
-set history=1000
 set undolevels=100
 
 " Indicates a fast terminal connection.  More characters will be sent to
@@ -150,13 +140,12 @@ set undolevels=100
 " line for lines that wrap.  This helps when using copy/paste with the
 " mouse in an xterm and other terminals.
 set ttyfast
+"set lazyredraw
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Indention                                 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set autoindent
 set smartindent
-set smarttab
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
@@ -170,7 +159,6 @@ set nolinebreak
 "                               Localiztion                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set langmenu=none               " always use English menu"
-set encoding=utf-8
 set termencoding=utf-8          " default encoding
 set fileencodings=utf-8,cp1251,koi8-r,cp866 " list encodings for completion
 set fileformats=unix,dos,mac    " list file formats
@@ -193,7 +181,6 @@ set pastetoggle=<leader>p
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Status Line                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set laststatus=2
 set statusline=%f%h\ %y\ %m\ %r\ %{&encoding}\
 
 set statusline+=%=Line:%l/%L[%p%%]\ Col:%c\ [%b][0x%B]
@@ -202,8 +189,6 @@ set statusline+=\ Buf:%n\
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Search settings                           "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" При поиске перескакивать на найденный текст в процессе набора строки
-set incsearch
 " Включаем подсветку выражения, которое ищется в тексте
 set hlsearch
 " Останавливать поиск при достижении конца файла
@@ -232,7 +217,6 @@ nmap <space> za
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Make cmdline tab completion similar to bash
 " enable <ctrl-n> and <ctrl-p> to scroll thru matches
-set wildmenu
 set wildmode=list:longest
 set wildignore=*.o,*.obj,*~,*.pyc,*.pyo,*.bak
 set wildignore+=*DS_Store*
@@ -569,7 +553,7 @@ inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Neomake
 " Run NeoMake on read and write operations
-autocmd! BufReadPost,BufWritePost * Neomake
+"autocmd! BufReadPost,BufWritePost * Neomake
 
 "let g:neomake_ruby_enabled_makers = ['mri']
 "let g:auto_save = 1
