@@ -11,7 +11,6 @@ Plug 'Yggdroot/indentLine'
 Plug 'w0rp/ale'
 "Plug 'neomake/neomake'
 "Plug '907th/vim-auto-save'
-Plug 'jlanzarotta/bufexplorer'
 
 "Plug 'michaeljsmith/vim-indent-object'
 Plug 'vim-scripts/matchit.zip'
@@ -21,6 +20,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'
 Plug 'AndrewRadev/switch.vim'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'editorconfig/editorconfig-vim'
 
 Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
@@ -38,7 +38,7 @@ Plug 'thoughtbot/vim-rspec',    { 'for': 'ruby' }
 Plug 'ngmy/vim-rubocop',        { 'for': 'ruby' }
 
 "Lisp
-Plug 'vim-scripts/paredit.vim', { 'for': ['scheme'] }
+"Plug 'vim-scripts/paredit.vim', { 'for': ['scheme'] }
 
 " Crystal
 Plug 'rhysd/vim-crystal',       { 'for': 'crystal' }
@@ -405,7 +405,7 @@ endif
 
 
 " Additional mapping for buffer search
-"nnoremap <leader>b :CtrlPBuffer<cr>
+nnoremap <leader>b :CtrlPBuffer<cr>
 
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -559,9 +559,9 @@ inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 "let g:neomake_ruby_enabled_makers = ['mri']
 "let g:auto_save = 1
 
-nnoremap <leader>b :BufExplorer<CR>
-let g:bufExplorerDisableDefaultKeyMapping=1
-let g:bufExplorerShowRelativePath=1
+"nnoremap <leader>b :BufExplorer<CR>
+"let g:bufExplorerDisableDefaultKeyMapping=1
+"let g:bufExplorerShowRelativePath=1
 
 " ALE
 let g:ale_lint_on_text_changed = 'never'
