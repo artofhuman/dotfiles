@@ -20,7 +20,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'
 Plug 'AndrewRadev/switch.vim'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'editorconfig/editorconfig-vim'
+"Plug 'editorconfig/editorconfig-vim'
 
 Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
@@ -30,7 +30,7 @@ Plug 'benmills/vimux'
 " Ruby
 Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
 Plug 'tpope/vim-rails',         { 'for': 'ruby' }
-Plug 'tpope/vim-bundler',       { 'for': 'ruby' }
+"Plug 'tpope/vim-bundler',       { 'for': 'ruby' }
 Plug 'tpope/vim-endwise',       { 'for': ['ruby', 'crystal'] }
 Plug 'tpope/vim-haml',          { 'for': 'haml' }
 Plug 'slim-template/vim-slim',  { 'for': 'slim' }
@@ -43,7 +43,7 @@ Plug 'ngmy/vim-rubocop',        { 'for': 'ruby' }
 " Crystal
 Plug 'rhysd/vim-crystal',       { 'for': 'crystal' }
 
-Plug 'vim-scripts/Tagbar'
+"Plug 'vim-scripts/Tagbar'
 
 " Search
 Plug 'jremmen/vim-ripgrep'
@@ -55,7 +55,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi',  {'for': 'python'}
 
 " Theme
-"Plug 'joshdick/onedark.vim'
+Plug 'joshdick/onedark.vim'
 Plug 'robertmeta/nofrils'
 
 " Murkdown
@@ -96,15 +96,16 @@ endif
 
 " Colorsheme
 set background=dark
-"let g:onedark_termcolors=16
-"colorscheme onedark
-colorscheme nofrils-dark
+let g:onedark_termcolors=16
+colorscheme onedark
+"colorscheme nofrils-dark
+
 
 let g:indentLine_color_term = 239
 let g:indentLine_char = '¦'
 
 let g:ruby_indent_access_modifier_style = 'outdent'
-let ruby_operators = 1
+"let ruby_operators = 1
 
 " highlight the cursor line and don't underscore it
 set cursorline
