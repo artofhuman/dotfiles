@@ -1,15 +1,13 @@
 set nocompatible
 
 call plug#begin('~/.vim/plugged')
-Plug 'tpope/vim-sensible'
-
-Plug 'kien/ctrlp.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
-Plug 'bogado/file-line'
+Plug 'tpope/vim-sensible'               " Vim community settings
+Plug 'kien/ctrlp.vim'                   " Fuzzy search by ctrl+p
+Plug 'scrooloose/nerdtree'              " Files explorer
+Plug 'scrooloose/nerdcommenter'         " Code comments
+Plug 'bogado/file-line'                 " Open file and go to number line posiotion
 Plug 'Yggdroot/indentLine'
-Plug 'w0rp/ale'
-"Plug 'neomake/neomake'
+Plug 'w0rp/ale'                         " Linters
 "Plug '907th/vim-auto-save'
 
 "Plug 'michaeljsmith/vim-indent-object'
@@ -17,15 +15,17 @@ Plug 'vim-scripts/matchit.zip'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-fugitive'
-Plug 'AndrewRadev/switch.vim'
-Plug 'christoomey/vim-tmux-navigator'
+Plug 'tpope/vim-fugitive'               " Support git
+Plug 'AndrewRadev/switch.vim'           " Fast switch between true/false -/+, etc
+Plug 'christoomey/vim-tmux-navigator'   " Support for tmux
 "Plug 'editorconfig/editorconfig-vim'
 
 Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'benmills/vimux'
+
+Plug 'leshill/vim-json'
 
 " Ruby
 Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
@@ -43,6 +43,10 @@ Plug 'ngmy/vim-rubocop',        { 'for': 'ruby' }
 " Crystal
 Plug 'rhysd/vim-crystal',       { 'for': 'crystal' }
 
+Plug 'elixir-editors/vim-elixir',   { 'for': 'elixir' }
+Plug 'c-brenn/phoenix.vim',         { 'for': 'elixir' }
+Plug 'slashmili/alchemist.vim',     { 'for': 'elixir' }
+
 "Plug 'vim-scripts/Tagbar'
 
 " Search
@@ -52,7 +56,7 @@ Plug 'jremmen/vim-ripgrep'
 "Plug 'Valloric/YouCompleteMe'
 "pip3 install neovim
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi',  {'for': 'python'}
+Plug 'zchee/deoplete-jedi',  { 'for': 'python'}
 
 " Theme
 Plug 'joshdick/onedark.vim'
