@@ -50,6 +50,7 @@ Plug 'slashmili/alchemist.vim',     { 'for': 'elixir' }
 " Golang
 
 Plug 'fatih/vim-go',                { 'for': 'go' }
+Plug 'zchee/deoplete-go',           { 'for': 'go' }
 
 "Plug 'vim-scripts/Tagbar'
 
@@ -574,3 +575,27 @@ inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " ALE
 let g:ale_lint_on_text_changed = 'never'
+
+"" Run Go
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage)
+
+au FileType go nmap <leader>rt <Plug>(go-run-tab)
+au FileType go nmap <Leader>rs <Plug>(go-run-split)
+au FileType go nmap <Leader>rv <Plug>(go-run-vertical)
+
+"" Go docs
+au FileType go nmap <leader>ds <Plug>(go-def-split)
+au FileType go nmap <leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <leader>dt <Plug>(go-def-tab)
+
+au FileType go nmap <leader>gd <Plug>(go-doc)
+au FileType go nmap <leader>gv <Plug>(go-doc-vertical)
+
+au FileType go nmap <leader>gb <Plug>(go-doc-browser)
+
+"" Go types
+au FileType go nmap <leader>s <Plug>(go-implements)
+au FileType go nmap <leader>i <Plug>(go-info)
