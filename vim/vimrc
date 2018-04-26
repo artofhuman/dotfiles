@@ -16,6 +16,7 @@ Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'               " Support git
+Plug 'tpope/vim-rhubarb'                " Allow open code on github
 Plug 'AndrewRadev/switch.vim'           " Fast switch between true/false -/+, etc
 Plug 'christoomey/vim-tmux-navigator'   " Support for tmux
 "Plug 'editorconfig/editorconfig-vim'
