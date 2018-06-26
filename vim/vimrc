@@ -39,7 +39,7 @@ Plug 'thoughtbot/vim-rspec',    { 'for': 'ruby' }
 Plug 'ngmy/vim-rubocop',        { 'for': 'ruby' }
 
 "Lisp
-"Plug 'vim-scripts/paredit.vim', { 'for': ['scheme'] }
+Plug 'vim-scripts/paredit.vim', { 'for': ['scheme'] }
 
 " Crystal
 Plug 'rhysd/vim-crystal',       { 'for': 'crystal' }
