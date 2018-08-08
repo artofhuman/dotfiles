@@ -306,6 +306,7 @@ cmap w!! w !sudo tee % >/dev/null
 " Diff this
 nnoremap <leader>dd :windo diffthis<CR>
 
+au FileType python.django map <Leader>d oimport pdb; pdb.set_trace()<esc>:w<cr>
 map <Leader>d obinding.pry #NOTE: debugger<esc>:w<cr>
 
 map <C-T> <Esc>:tabnew<CR>
@@ -436,6 +437,7 @@ nnoremap <F4> :TagbarToggle<cr><c-w>=
 
 "=== vim-jedi ===================================
 let g:jedi#popup_select_first = 0
+let g:jedi#goto_definitions_command = "<leader>g"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Murkdown                                  "
