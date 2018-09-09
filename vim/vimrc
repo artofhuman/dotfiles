@@ -31,11 +31,9 @@ Plug 'leshill/vim-json'
 " Ruby
 Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
 Plug 'tpope/vim-rails',         { 'for': 'ruby' }
-"Plug 'tpope/vim-bundler',       { 'for': 'ruby' }
 Plug 'tpope/vim-endwise',       { 'for': ['ruby', 'crystal'] }
 Plug 'tpope/vim-haml',          { 'for': 'haml' }
 Plug 'slim-template/vim-slim',  { 'for': 'slim' }
-Plug 'thoughtbot/vim-rspec',    { 'for': 'ruby' }
 Plug 'ngmy/vim-rubocop',        { 'for': 'ruby' }
 
 "Lisp
@@ -70,6 +68,8 @@ Plug 'robertmeta/nofrils'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
+
+Plug 'janko-m/vim-test'
 
 call plug#end()
 
@@ -500,14 +500,23 @@ let g:nerdtree_tabs_open_on_gui_startup = 0
 let g:easytags_cmd = '/usr/local/bin/ctags'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Rspec                                     "
+"                               Vim test
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <Leader>rt :call RunCurrentSpecFile()<CR>
-map <Leader>rs :call RunNearestSpec()<CR>
-map <Leader>rl :call RunLastSpec()<CR>
-map <Leader>ra :call RunAllSpecs()<CR>
+"map <Leader>rt :call RunCurrentSpecFile()<CR>
+"map <Leader>rs :call RunNearestSpec()<CR>
+"map <Leader>rl :call RunLastSpec()<CR>
+"map <Leader>ra :call RunAllSpecs()<CR>
 
-let g:rspec_command = 'call VimuxRunCommand("clear; bundle exec rspec {spec}")'
+"let g:rspec_command = 'call VimuxRunCommand("clear; bundle exec rspec {spec}")'
+
+map <Leader>rs :TestNearest<CR>
+map <Leader>rt :TestFile<CR>
+map <Leader>rl :TestLast<CR>
+"nmap <silent> t<C-s> :TestSuite<CR>   " t Ctrl+s
+"nmap <silent> t<C-g> :TestVisit<CR>   " t Ctrl+g
+
+let test#python#runner = 'pytest'
+let test#strategy = "vimux"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Switch                                    "
@@ -602,3 +611,6 @@ au FileType go nmap <leader>gb <Plug>(go-doc-browser)
 "" Go types
 au FileType go nmap <leader>s <Plug>(go-implements)
 au FileType go nmap <leader>i <Plug>(go-info)
+
+
+let g:ale_python_flake8_executable = "/usr/local/bin/flake8"
