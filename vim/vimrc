@@ -36,6 +36,10 @@ Plug 'tpope/vim-haml',          { 'for': 'haml' }
 Plug 'slim-template/vim-slim',  { 'for': 'slim' }
 Plug 'ngmy/vim-rubocop',        { 'for': 'ruby' }
 
+
+" Python
+Plug 'ambv/black',              { 'for': 'python' }
+
 "Lisp
 Plug 'vim-scripts/paredit.vim', { 'for': ['scheme'] }
 
