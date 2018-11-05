@@ -6,11 +6,9 @@ Plug 'kien/ctrlp.vim'                   " Fuzzy search by ctrl+p
 Plug 'scrooloose/nerdtree'              " Files explorer
 Plug 'scrooloose/nerdcommenter'         " Code comments
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
-Plug 'Yggdroot/indentLine'
+"Plug 'Yggdroot/indentLine'
 Plug 'w0rp/ale'                         " Linters
-"Plug '907th/vim-auto-save'
 
-"Plug 'michaeljsmith/vim-indent-object'
 Plug 'vim-scripts/matchit.zip'
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
@@ -38,20 +36,19 @@ Plug 'ngmy/vim-rubocop',        { 'for': 'ruby' }
 
 
 " Python
-Plug 'ambv/black',              { 'for': 'python' }
+Plug 'ambv/black',                  { 'for': 'python' }
 
 "Lisp
-Plug 'vim-scripts/paredit.vim', { 'for': ['scheme'] }
+Plug 'vim-scripts/paredit.vim',     { 'for': ['scheme'] }
 
 " Crystal
-Plug 'rhysd/vim-crystal',       { 'for': 'crystal' }
+Plug 'rhysd/vim-crystal',           { 'for': 'crystal' }
 
 Plug 'elixir-editors/vim-elixir',   { 'for': 'elixir' }
 Plug 'c-brenn/phoenix.vim',         { 'for': 'elixir' }
 Plug 'slashmili/alchemist.vim',     { 'for': 'elixir' }
 
 " Golang
-
 Plug 'fatih/vim-go',                { 'for': 'go' }
 Plug 'zchee/deoplete-go',           { 'for': 'go' }
 
@@ -61,14 +58,13 @@ Plug 'zchee/deoplete-go',           { 'for': 'go' }
 Plug 'jremmen/vim-ripgrep'
 
 " Complete
-"Plug 'Valloric/YouCompleteMe'
 "pip3 install neovim
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi',  { 'for': 'python'}
 
 " Theme
 Plug 'joshdick/onedark.vim'
-Plug 'robertmeta/nofrils'
+"Plug 'robertmeta/nofrils'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
@@ -92,33 +88,16 @@ if $COLORTERM == 'gnome-terminal'
   set t_Co=256
 endif
 
-if has('nvim')
-  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-  tnoremap <Esc> <c-\><c-n>
-  tnoremap <C-[> <c-\><c-n>
-
-  highlight TermCursor ctermfg=red guifg=red
-endif
-
-if exists('$TMUX')
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
-
 " Colorsheme
 set background=dark
 let g:onedark_termcolors=16
 colorscheme onedark
-"colorscheme nofrils-dark
 
 
-let g:indentLine_color_term = 239
-let g:indentLine_char = '¦'
+"let g:indentLine_color_term = 239
+"let g:indentLine_char = '¦'
 
-let g:ruby_indent_access_modifier_style = 'outdent'
+"let g:ruby_indent_access_modifier_style = 'outdent'
 "let ruby_operators = 1
 
 " highlight the cursor line and don't underscore it
