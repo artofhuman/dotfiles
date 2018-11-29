@@ -9,10 +9,8 @@ Plug 'bogado/file-line'                 " Open file and go to number line posiot
 "Plug 'Yggdroot/indentLine'
 Plug 'w0rp/ale'                         " Linters
 
-" Completion
-"pip3 install neovim
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"Plug 'zchee/deoplete-jedi',  { 'for': 'python'}
+" Completion (LSP)
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 
 Plug 'vim-scripts/matchit.zip'
 Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc
@@ -297,12 +295,6 @@ autocmd BufRead,BufNewFile *.wiki       set ft=wiki tw=80 ts=2 sw=2 expandtab
 
 autocmd Filetype gitcommit set tw=68  spell
 
-autocmd FileType python set ft=python.django " For SnipMate
-autocmd FileType html set ft=htmldjango.html " For SnipMate
-
-au BufNewFile,BufRead *.html set ft=htmldjango.html " For SnipMate and Zen coding
-au BufNewFile,BufRead *.html set foldmethod=syntax "
-
 " Custom functions =============================================================
 " via: http://rails-bestpractices.com/posts/60-remove-trailing-whitespace
 " Strip trailing whitespace
@@ -502,7 +494,7 @@ augroup omnifuncs
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 augroup end
 
-set completeopt-=preview
+"set completeopt-=preview
 let g:deoplete#enable_at_startup = 1
 " deoplete tab-complete
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
