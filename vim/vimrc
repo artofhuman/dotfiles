@@ -1,4 +1,4 @@
-set nocompatible
+" set nocompatible
 
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'               " Vim community settings
@@ -9,8 +9,13 @@ Plug 'bogado/file-line'                 " Open file and go to number line posiot
 "Plug 'Yggdroot/indentLine'
 Plug 'w0rp/ale'                         " Linters
 
+" Completion
+"pip3 install neovim
+"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"Plug 'zchee/deoplete-jedi',  { 'for': 'python'}
+
 Plug 'vim-scripts/matchit.zip'
-Plug 'Raimondi/delimitMate'
+Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'               " Support git
@@ -57,11 +62,6 @@ Plug 'zchee/deoplete-go',           { 'for': 'go' }
 " Search
 Plug 'jremmen/vim-ripgrep'
 
-" Complete
-"pip3 install neovim
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi',  { 'for': 'python'}
-
 " Theme
 Plug 'joshdick/onedark.vim'
 "Plug 'robertmeta/nofrils'
@@ -69,17 +69,12 @@ Plug 'joshdick/onedark.vim'
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
 
-Plug 'janko-m/vim-test'
+Plug 'janko-m/vim-test'         " Run tests from vim
 
 call plug#end()
 
 filetype plugin indent on
 syntax on
-
-"let g:python_host_prog='/usr/bin/python'
-"let [interp, errors] = provider#pythonx#Detect(2)
-"echo interp
-"echo errors
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Colorscheme                               "
@@ -92,13 +87,6 @@ endif
 set background=dark
 let g:onedark_termcolors=16
 colorscheme onedark
-
-
-"let g:indentLine_color_term = 239
-"let g:indentLine_char = '¦'
-
-"let g:ruby_indent_access_modifier_style = 'outdent'
-"let ruby_operators = 1
 
 " highlight the cursor line and don't underscore it
 set cursorline
@@ -374,15 +362,6 @@ map <leader>/ <plug>NERDCommenterToggle<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               CtrlP                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$|debian$'
-"let g:ctrlp_cmd = 'CtrlPMixed'	" search anything (in files, buffers and MRU files at the same time.)
-"let g:ctrlp_working_path_mode = 'ra'	" search for nearest ancestor like .git, .hg, and the directory of the current file
-"let g:ctrlp_match_window_bottom = 0	" show the match window at the top of the screen
-"let g:ctrlp_max_height = 10	" maxiumum height of match window
-"let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
-"let g:ctrlp_use_caching = 1	" enable caching
-"let g:ctrlp_clear_cache_on_exit=0 " speed up by not removing clearing cache evertime
-"let g:ctrlp_mruf_max = 250 " number of recently opened files
 let g:ctrlp_custom_ignore = {
   \ 'dir': '\v[\/]\.(git|hg|svn|build)$',
   \ 'file': '\v\.(exe|so|dll)$',
@@ -410,20 +389,12 @@ autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               TagBar                                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:tagbar_iconchars = ['▾', '▸']
-let g:tagbar_ctags_bin = 'ctags'
-let g:tagbar_sort = 0
-nnoremap <F4> :TagbarToggle<cr><c-w>=
-
 "=== vim-jedi ===================================
 let g:jedi#popup_select_first = 0
 let g:jedi#goto_definitions_command = "<leader>g"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Murkdown                                  "
+"                               Markdown                                  "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Markdown files end in .md
 au BufRead,BufNewFile *.md set filetype=markdown
@@ -462,16 +433,6 @@ map <F7> :vsp<CR>:exec("tag ".expand("<cword>"))<CR>
 map <F8> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               YouCompleteMe                             "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"let g:ycm_complete_in_comments_and_strings = 1
-"let g:ycm_autoclose_preview_window_after_completion = 1
-"nnoremap <leader>pg :YcmCompleter GoToDefinitionElseDeclaration<CR>
-"nnoremap <leader>pd :YcmCompleter GoToDefinition<CR>
-"nnoremap <leader>pc :YcmCompleter GoToDeclaration<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               UltiSnips                                 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "let g:UltiSnipsDontReverseSearchPath=1
@@ -485,12 +446,6 @@ let g:easytags_cmd = '/usr/local/bin/ctags'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Vim test
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"map <Leader>rt :call RunCurrentSpecFile()<CR>
-"map <Leader>rs :call RunNearestSpec()<CR>
-"map <Leader>rl :call RunLastSpec()<CR>
-"map <Leader>ra :call RunAllSpecs()<CR>
-
-"let g:rspec_command = 'call VimuxRunCommand("clear; bundle exec rspec {spec}")'
 
 map <Leader>rs :TestNearest<CR>
 map <Leader>rt :TestFile<CR>
@@ -511,11 +466,6 @@ nnoremap - :Switch<cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:vimrubocop_keymap = 0
 nmap <Leader>r :RuboCop<CR>
-
-"autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
-"autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
-"autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
-
 
 noremap <leader>1 1gt
 noremap <leader>2 2gt
@@ -556,17 +506,6 @@ set completeopt-=preview
 let g:deoplete#enable_at_startup = 1
 " deoplete tab-complete
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-
-" Neomake
-" Run NeoMake on read and write operations
-"autocmd! BufReadPost,BufWritePost * Neomake
-
-"let g:neomake_ruby_enabled_makers = ['mri']
-"let g:auto_save = 1
-
-"nnoremap <leader>b :BufExplorer<CR>
-"let g:bufExplorerDisableDefaultKeyMapping=1
-"let g:bufExplorerShowRelativePath=1
 
 " ALE
 let g:ale_lint_on_text_changed = 'never'
