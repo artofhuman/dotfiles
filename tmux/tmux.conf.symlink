@@ -9,9 +9,6 @@ set -g prefix C-a
 
 set -g mouse on
 
-# make tmux display things in 256 colors
-set -g default-terminal "screen-256color"
-
 # make delay minimal
 set -sg escape-time 0
 
@@ -33,24 +30,17 @@ bind -n C-\ run "(tmux display-message -p '#{pane_current_command}' | grep -iq v
 # this will renumber windows automatically when one gets deleted
 set-option -g renumber-windows on
 
-# color status bar
-set -g status-bg colour235
-set -g status-fg white
-
 # highlight current window
-set-window-option -g window-status-current-fg black
-set-window-option -g window-status-current-bg white
+set-window-option -g window-status-style 'fg=black bg=white'
 
 #----------------------
 #set some pretty colors
 #----------------------
 #set pane colors - hilight the active pane
-set-option -g pane-border-fg colour235 #base02
-set-option -g pane-active-border-fg colour240 #base01
+set-option -g pane-border-style 'fg=colour235 fg=colour240'
 
 # colorize messages in the command line
-set-option -g message-bg black #base02
-set-option -g message-fg brightred #orange
+set-option -g message-style 'bg=black fg=brightred' #base02
 
 # ----------------------
 # Status Bar
@@ -62,20 +52,27 @@ setw -g monitor-activity on
 set -g visual-activity on
 
 # set color for status bar
-set-option -g status-bg colour235 #base02
-set-option -g status-fg yellow #yellow
-set-option -g status-attr dim
+set-option -g status-style 'bg=colour235 fg=yellow' #base02
+#set-option -g status-attr dim
 
-# set window list colors - red for active and cyan for inactive
-set-window-option -g window-status-fg brightblue #base0
-set-window-option -g window-status-bg colour236
-set-window-option -g window-status-attr dim
-
-set-window-option -g window-status-current-fg brightred #orange
-set-window-option -g window-status-current-bg colour236
-set-window-option -g window-status-current-attr bright
+set-window-option -g window-status-current-style 'fg=brightred bg=colour236'
 
 set-option -g status-right '%H:%M %d/%m/%y'
 
 set -g status-left-length 40
 set -g status-justify centre
+
+set-option -g default-terminal "screen-256color-bce"
+set -g history-limit 5000
+setw -g xterm-keys on
+
+# resize panes using vi keys
+#bind -r H resize-pane -L 5
+#bind -r J resize-pane -D 6
+#bind -r K resize-pane -U 5
+#bind -r L resize-pane -R 5
+
+#bind-key -r J resize-pane -D 5
+#bind-key -r K resize-pane -U 5
+#bind-key -r H resize-pane -L 5
+#bind-key -r L resize-pane -R 5
