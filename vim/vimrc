@@ -7,7 +7,6 @@ Plug 'scrooloose/nerdtree'              " Files explorer
 Plug 'scrooloose/nerdcommenter'         " Code comments
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
 "Plug 'Yggdroot/indentLine'
-Plug 'w0rp/ale'                         " Linters
 
 " Completion (LSP)
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -62,7 +61,7 @@ Plug 'jremmen/vim-ripgrep'
 
 " Theme
 Plug 'joshdick/onedark.vim'
-"Plug 'robertmeta/nofrils'
+Plug 'robertmeta/nofrils'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
@@ -74,12 +73,11 @@ call plug#end()
 filetype plugin indent on
 syntax on
 
+set signcolumn=yes
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Colorscheme                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if $COLORTERM == 'gnome-terminal'
-  set t_Co=256
-endif
 
 " Colorsheme
 set background=dark
@@ -106,7 +104,7 @@ set novisualbell        " mute error bell
 
 set list                " show unprintable chars
 set listchars=tab:·\ ,trail:·,extends:»,precedes:«
-set relativenumber
+"set relativenumber
 set number
 set nolazyredraw
 
@@ -275,7 +273,7 @@ cmap w!! w !sudo tee % >/dev/null
 " Diff this
 nnoremap <leader>dd :windo diffthis<CR>
 
-au FileType python.django map <Leader>d oimport pdb; pdb.set_trace()<esc>:w<cr>
+au FileType python map <Leader>d oimport pdb; pdb.set_trace()<esc>:w<cr>
 map <Leader>d obinding.pry #NOTE: debugger<esc>:w<cr>
 
 map <C-T> <Esc>:tabnew<CR>
@@ -369,6 +367,7 @@ else
   let g:ctrlp_clear_cache_on_exit = 0
 endif
 
+let g:ctrlp_switch_buffer = 0 " disable
 
 " Additional mapping for buffer search
 nnoremap <leader>b :CtrlPBuffer<cr>
@@ -528,3 +527,22 @@ au FileType go nmap <leader>i <Plug>(go-info)
 
 
 let g:ale_python_flake8_executable = "/usr/local/bin/flake8"
+
+
+" Coc
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+ " Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
