@@ -68,12 +68,18 @@ Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
 
 Plug 'janko-m/vim-test'         " Run tests from vim
 
+Plug 'Shougo/echodoc.vim'       " Show parameter doc.
+
 call plug#end()
 
 filetype plugin indent on
 syntax on
 
 set signcolumn=yes
+
+" https://github.com/Shougo/echodoc.vim
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'virtual'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Colorscheme                               "
