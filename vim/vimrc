@@ -9,7 +9,7 @@ Plug 'bogado/file-line'                 " Open file and go to number line posiot
 "Plug 'Yggdroot/indentLine'
 
 " Completion (LSP)
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 Plug 'vim-scripts/matchit.zip'
 Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc
@@ -62,6 +62,7 @@ Plug 'jremmen/vim-ripgrep'
 " Theme
 Plug 'joshdick/onedark.vim'
 Plug 'robertmeta/nofrils'
+Plug 'rakr/vim-one'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
@@ -85,10 +86,14 @@ let g:echodoc#type = 'virtual'
 "                               Colorscheme                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+if (has("termguicolors"))
+  set termguicolors
+endif
+
 " Colorsheme
 set background=dark
-let g:onedark_termcolors=16
-colorscheme onedark
+"let g:onedark_termcolors=16
+colorscheme one
 
 " highlight the cursor line and don't underscore it
 set cursorline
@@ -552,3 +557,9 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+let g:coc_global_extensions = [
+      \ 'coc-solargraph',
+      \ 'coc-python',
+      \ 'coc-docker',
+      \]
