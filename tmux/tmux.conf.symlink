@@ -62,7 +62,9 @@ set-option -g status-right '%H:%M %d/%m/%y'
 set -g status-left-length 40
 set -g status-justify centre
 
-set-option -g default-terminal "screen-256color-bce"
+set -g default-terminal "xterm-256color"
+set -ga terminal-overrides ",*256col*:Tc"
+
 set -g history-limit 5000
 setw -g xterm-keys on
 
