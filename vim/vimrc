@@ -14,7 +14,6 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'vim-scripts/matchit.zip'
 Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
 Plug 'AndrewRadev/switch.vim'           " Fast switch between true/false -/+, etc
@@ -566,4 +565,5 @@ let g:coc_global_extensions = [
       \ 'coc-solargraph',
       \ 'coc-python',
       \ 'coc-docker',
+      \ 'coc-pairs',
       \]
