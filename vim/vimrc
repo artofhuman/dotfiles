@@ -62,7 +62,7 @@ Plug 'jremmen/vim-ripgrep'
 " Theme
 Plug 'joshdick/onedark.vim'
 Plug 'robertmeta/nofrils'
-Plug 'rakr/vim-one'
+Plug 'VonHeikemen/rubber-themes.vim'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
@@ -70,7 +70,7 @@ Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
 Plug 'janko-m/vim-test'         " Run tests from vim
 
 Plug 'Shougo/echodoc.vim'       " Show parameter doc.
-
+Plug 'airblade/vim-gitgutter'
 call plug#end()
 
 filetype plugin indent on
@@ -79,8 +79,8 @@ syntax on
 set signcolumn=yes
 
 " https://github.com/Shougo/echodoc.vim
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'virtual'
+"let g:echodoc#enable_at_startup = 1
+"let g:echodoc#type = 'virtual'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Colorscheme                               "
@@ -91,9 +91,13 @@ if (has("termguicolors"))
 endif
 
 " Colorsheme
-set background=dark
+set t_Co=256   " This is may or may not needed.
+
+"set background=dark
 "let g:onedark_termcolors=16
-colorscheme one
+
+syntax enable
+colorscheme rubber
 
 " highlight the cursor line and don't underscore it
 set cursorline
