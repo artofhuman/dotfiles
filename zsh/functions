@@ -1,3 +1,0 @@
-function new-tmux-from-dir-name {
-    tmux new-session -As `basename $PWD`
-}
