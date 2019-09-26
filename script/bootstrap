@@ -29,6 +29,7 @@ fail () {
 install_neovim () {
   mkdir -p "$HOME/.config/nvim"
   link_files "$DOTFILES_ROOT/vim/vimrc" "$HOME/.config/nvim/init.vim"
+  link_files "$DOTFILES_ROOT/vim/coc-settings.json" "$HOME/.config/nvim/coc-settings.json"
 }
 
 install_vim () {
