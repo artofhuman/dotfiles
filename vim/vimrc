@@ -566,4 +566,13 @@ let g:coc_global_extensions = [
       \ 'coc-python',
       \ 'coc-docker',
       \ 'coc-pairs',
+      \ 'coc-word',
+      \ 'coc-yank',
+      \ 'coc-diagnostic',
       \]
+
+" show list of yanks with preview
+nnoremap <silent> <leader>y :<C-u>CocList -A --normal yank<CR>
+
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
