@@ -51,3 +51,5 @@
 # brew install gpg
 [gpg]
       program = /usr/local/bin/gpg
+[diff "sopsdiffer"]
+	textconv = sops -d
