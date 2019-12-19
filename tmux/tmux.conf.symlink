@@ -1,7 +1,3 @@
-# use UTF8
-#set -g utf8
-#set-window-option -g utf8 on
-
 # set Ctrl-a as the default prefix key combination
 # and unbind C-b to free it up
 unbind C-b
@@ -27,20 +23,11 @@ bind -n C-k run "(tmux display-message -p '#{pane_current_command}' | grep -iq v
 bind -n C-l run "(tmux display-message -p '#{pane_current_command}' | grep -iq vim && tmux send-keys C-l) || tmux select-pane -R"
 bind -n C-\ run "(tmux display-message -p '#{pane_current_command}' | grep -iq vim && tmux send-keys 'C-\\') || tmux select-pane -l"
 
+# reload tmux conf
+bind r source-file ~/.tmux.conf
+
 # this will renumber windows automatically when one gets deleted
 set-option -g renumber-windows on
-
-# highlight current window
-set-window-option -g window-status-style 'fg=black bg=white'
-
-#----------------------
-#set some pretty colors
-#----------------------
-#set pane colors - hilight the active pane
-set-option -g pane-border-style 'fg=colour235 fg=colour240'
-
-# colorize messages in the command line
-set-option -g message-style 'bg=black fg=brightred' #base02
 
 # ----------------------
 # Status Bar
@@ -50,12 +37,6 @@ set-option -g status on
 # visual notification of activity in other windows
 setw -g monitor-activity on
 set -g visual-activity on
-
-# set color for status bar
-set-option -g status-style 'bg=colour235 fg=yellow' #base02
-#set-option -g status-attr dim
-
-set-window-option -g window-status-current-style 'fg=brightred bg=colour236'
 
 set-option -g status-right '%H:%M %d/%m/%y'
 
@@ -68,13 +49,23 @@ set -ga terminal-overrides ",*256col*:Tc"
 set -g history-limit 5000
 setw -g xterm-keys on
 
-# resize panes using vi keys
-#bind -r H resize-pane -L 5
-#bind -r J resize-pane -D 6
-#bind -r K resize-pane -U 5
-#bind -r L resize-pane -R 5
+# Zoom options
+bind-key -n C-Space resize-pane -Z # Ctrl+Space
 
-#bind-key -r J resize-pane -D 5
-#bind-key -r K resize-pane -U 5
-#bind-key -r H resize-pane -L 5
-#bind-key -r L resize-pane -R 5
+# DESIGN
+set -g status-position bottom
+set -g status-justify left
+
+# Status bar customization
+set -g status-justify left
+set -g status-style bg=black,fg=white
+set -g status-interval 5
+set -g status-left "#[fg=Cyan]#S | "
+set -g status-right '#[fg=white]%a %d %b %R'
+
+# Highlight active window
+setw -g window-status-current-style fg=red,bright
+set -g pane-active-border-style fg=red
+
+set -g message-style fg=red,bg=default,bright
+set -g display-time 3000
