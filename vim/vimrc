@@ -7,6 +7,7 @@ Plug 'scrooloose/nerdtree'              " Files explorer
 Plug 'scrooloose/nerdcommenter'         " Code comments
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
 "Plug 'Yggdroot/indentLine'
+Plug 'terryma/vim-multiple-cursors'
 
 " Completion (LSP)
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -76,8 +77,8 @@ syntax on
 set signcolumn=yes
 
 " https://github.com/Shougo/echodoc.vim
-"let g:echodoc#enable_at_startup = 1
-"let g:echodoc#type = 'virtual'
+let g:echodoc#enable_at_startup = 1
+let g:echodoc#type = 'virtual'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Colorscheme                               "
@@ -332,9 +333,6 @@ nnoremap <leader>pn :call OpenProjectNotes()<cr>
 
 " Show also matching html parenthesis
 set matchpairs+=<:>
-
-" Python heightlight
-let python_highlight_all = 1 " Подвсветка
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               NERD Tree                                 "
