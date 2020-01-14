@@ -11,11 +11,13 @@ Plug 'terryma/vim-multiple-cursors'
 
 " Completion (LSP)
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+"Plug 'dense-analysis/ale' " For linting
 
 "Plug 'zxqfl/tabnine-vim'
 
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'vim-scripts/matchit.zip'
-Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc
+"Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc, NOW used coc-pairs
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
@@ -33,7 +35,7 @@ Plug 'leshill/vim-json'
 " Ruby
 Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
 Plug 'tpope/vim-rails',         { 'for': 'ruby' }
-Plug 'tpope/vim-endwise',       { 'for': ['ruby', 'crystal'] }
+Plug 'tpope/vim-endwise',       { 'for': ['ruby', 'crystal'] } " Autoclose end on blocks
 Plug 'tpope/vim-haml',          { 'for': 'haml' }
 Plug 'slim-template/vim-slim',  { 'for': 'slim' }
 Plug 'ngmy/vim-rubocop',        { 'for': 'ruby' }
@@ -68,7 +70,7 @@ Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
 Plug 'janko-m/vim-test'         " Run tests from vim
 
 Plug 'Shougo/echodoc.vim'       " Show parameter doc.
-Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'   " Show git changes in sign columns
 call plug#end()
 
 filetype plugin indent on
@@ -560,6 +562,7 @@ endfunction
 let g:coc_global_extensions = [
       \ 'coc-solargraph',
       \ 'coc-python',
+      \ 'coc-json',
       \ 'coc-docker',
       \ 'coc-pairs',
       \ 'coc-word',
