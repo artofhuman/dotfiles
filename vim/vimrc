@@ -15,18 +15,17 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 "Plug 'zxqfl/tabnine-vim'
 
-Plug 'AndrewRadev/splitjoin.vim'
 Plug 'vim-scripts/matchit.zip'
 "Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc, NOW used coc-pairs
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'           " Fast switch between true/false -/+, etc
 Plug 'christoomey/vim-tmux-navigator'   " Support for tmux
 "Plug 'editorconfig/editorconfig-vim'
 
 Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
-Plug 'kchmck/vim-coffee-script', { 'for': 'coffee' }
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'benmills/vimux'
 
@@ -60,7 +59,7 @@ Plug 'zchee/deoplete-go',           { 'for': 'go' }
 Plug 'jremmen/vim-ripgrep'
 
 " Theme
-Plug 'joshdick/onedark.vim'
+"Plug 'joshdick/onedark.vim'
 Plug 'robertmeta/nofrils'
 Plug 'VonHeikemen/rubber-themes.vim'
 
@@ -341,7 +340,6 @@ set matchpairs+=<:>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Don't display these kinds of files
 let NERDTreeIgnore=['\.pyc$', '\~$']
-
 " Make nerdtree look nice
 " Disables display of the 'Bookmarks' label and 'Press ? for help' text
 let NERDTreeMinimalUI = 1

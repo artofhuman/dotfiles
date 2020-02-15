@@ -3094,13 +3094,13 @@
 	<key>NSWindow Frame NSFontPanel</key>
 	<string>929 110 445 103 0 0 1440 877 </string>
 	<key>NSWindow Frame SUStatusFrame</key>
-	<string>894 776 400 129 0 0 2560 1417 </string>
+	<string>520 578 400 129 0 0 1440 900 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
-	<string>778 543 620 392 0 0 2048 1129 </string>
+	<string>410 363 620 392 0 0 1440 900 </string>
 	<key>NSWindow Frame SharedPreferences</key>
 	<string>205 342 958 470 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 0 2048 1152 0 0 2048 1129 </string>
+	<string>0 0 1440 900 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>0 0 1440 900 0 0 1440 877 </string>
 	<key>New Bookmarks</key>
@@ -5279,6 +5279,8 @@
 			<string>xterm-256color</string>
 			<key>Transparency</key>
 			<real>0.0</real>
+			<key>Unicode Version</key>
+			<integer>8</integer>
 			<key>Unlimited Scrollback</key>
 			<true/>
 			<key>Use Bold Font</key>
@@ -5296,7 +5298,7 @@
 			<key>Use Underline Color</key>
 			<false/>
 			<key>Vertical Spacing</key>
-			<real>1</real>
+			<real>1.0600000000000001</real>
 			<key>Visual Bell</key>
 			<false/>
 			<key>Window Type</key>
@@ -8509,8 +8511,8 @@
 	</array>
 	<key>NoSyncAllAppVersions</key>
 	<array>
-		<string>3.3.0</string>
 		<string>3.3.6</string>
+		<string>3.3.0</string>
 		<string>3.3.1</string>
 		<string>3.3.7</string>
 		<string>3.2.9</string>
@@ -8520,6 +8522,7 @@
 	<key>NoSyncBFPRecents</key>
 	<array>
 		<string>Fira Code</string>
+		<string>JetBrains Mono</string>
 	</array>
 	<key>NoSyncFrame_SessionsPreferences</key>
 	<dict>
@@ -8531,9 +8534,9 @@
 	<key>NoSyncFrame_SharedPreferences</key>
 	<dict>
 		<key>screenFrame</key>
-		<string>{{0, 0}, {2048, 1152}}</string>
+		<string>{{0, 0}, {1440, 900}}</string>
 		<key>topLeft</key>
-		<string>{506, 685}</string>
+		<string>{444, 763}</string>
 	</dict>
 	<key>NoSyncHaveRequestedFullDiskAccess</key>
 	<true/>
@@ -8544,7 +8547,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>8BE2D866-5C83-4D9C-A7E8-AE670870B613</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>16</integer>
+	<integer>24</integer>
 	<key>NoSyncNextAnnoyanceTime</key>
 	<real>586895888.001073</real>
 	<key>NoSyncOnboardingWindowHasBeenShown</key>
@@ -9296,16 +9299,16 @@
 	</array>
 	<key>NoSyncSearchHistory2</key>
 	<array>
-		<string>model</string>
-		<string>manager</string>
-		<string>USER</string>
-		<string>PASS</string>
-		<string>desc</string>
-		<string>moira_triggers_focus</string>
-		<string>conf</string>
-		<string>pauses</string>
-		<string>settin</string>
-		<string>0, -3</string>
+		<string>amount</string>
+		<string>consta</string>
+		<string>0013_remove_cancelled_holds</string>
+		<string>0011_auto_20200212</string>
+		<string>operat</string>
+		<string>emplo</string>
+		<string>statement_data</string>
+		<string>openingHours</string>
+		<string>transaction_type</string>
+		<string>nmcc</string>
 	</array>
 	<key>NoSyncSuppressClipboardAccessDeniedWarning</key>
 	<true/>
@@ -9363,7 +9366,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2019-12-11T08:30:13Z</date>
+	<date>2020-02-10T09:22:25Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateRelaunchingMarker</key>
