@@ -5079,7 +5079,7 @@
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>FiraCode-Retina 12</string>
+			<string>FiraCode-Regular 12</string>
 			<key>Option Key Sends</key>
 			<integer>0</integer>
 			<key>Prompt Before Closing 2</key>
@@ -8512,17 +8512,16 @@
 	<key>NoSyncAllAppVersions</key>
 	<array>
 		<string>3.3.6</string>
-		<string>3.3.0</string>
+		<string>3.3.4</string>
 		<string>3.3.1</string>
 		<string>3.3.7</string>
+		<string>3.3.0</string>
 		<string>3.2.9</string>
 		<string>3.3.2</string>
-		<string>3.3.4</string>
 	</array>
 	<key>NoSyncBFPRecents</key>
 	<array>
 		<string>Fira Code</string>
-		<string>JetBrains Mono</string>
 	</array>
 	<key>NoSyncFrame_SessionsPreferences</key>
 	<dict>
@@ -8536,7 +8535,7 @@
 		<key>screenFrame</key>
 		<string>{{0, 0}, {1440, 900}}</string>
 		<key>topLeft</key>
-		<string>{444, 763}</string>
+		<string>{474, 260}</string>
 	</dict>
 	<key>NoSyncHaveRequestedFullDiskAccess</key>
 	<true/>
@@ -8547,7 +8546,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>8BE2D866-5C83-4D9C-A7E8-AE670870B613</string>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>24</integer>
+	<integer>25</integer>
 	<key>NoSyncNextAnnoyanceTime</key>
 	<real>586895888.001073</real>
 	<key>NoSyncOnboardingWindowHasBeenShown</key>
@@ -9299,16 +9298,16 @@
 	</array>
 	<key>NoSyncSearchHistory2</key>
 	<array>
+		<string>holds</string>
+		<string>sign</string>
+		<string>signi</string>
+		<string>node</string>
+		<string>ppprint</string>
+		<string>pprint</string>
+		<string>print</string>
 		<string>amount</string>
 		<string>consta</string>
 		<string>0013_remove_cancelled_holds</string>
-		<string>0011_auto_20200212</string>
-		<string>operat</string>
-		<string>emplo</string>
-		<string>statement_data</string>
-		<string>openingHours</string>
-		<string>transaction_type</string>
-		<string>nmcc</string>
 	</array>
 	<key>NoSyncSuppressClipboardAccessDeniedWarning</key>
 	<true/>
@@ -9366,7 +9365,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-02-10T09:22:25Z</date>
+	<date>2020-02-12T18:54:05Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateRelaunchingMarker</key>
