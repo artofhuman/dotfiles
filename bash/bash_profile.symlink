@@ -32,6 +32,7 @@ alias grm="git status | grep deleted | awk '{\$1=\$2=\"\"; print \$0}' | \
            perl -pe 's/^[ \t]*//' | sed 's/ /\\\\ /g' | xargs git rm"
 alias gmc='git diff --name-only --diff-filter=U' # show only files with merge conflicts
 alias hpr='hub pull-request'
+alias git-amend='git commit --amend -C HEAD'
 
 alias rebase='git rebase -i HEAD~2'
 alias rebase3='git rebase -i HEAD~3'
