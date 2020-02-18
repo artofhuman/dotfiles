@@ -16,7 +16,7 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 "Plug 'zxqfl/tabnine-vim'
 
 Plug 'vim-scripts/matchit.zip'
-"Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc, NOW used coc-pairs
+Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc, NOW used coc-pairs
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
