@@ -2,7 +2,10 @@
 
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'               " Vim community settings
-Plug 'kien/ctrlp.vim'                   " Fuzzy search by ctrl+p
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
 Plug 'scrooloose/nerdtree'              " Files explorer
 Plug 'scrooloose/nerdcommenter'         " Code comments
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
@@ -53,7 +56,7 @@ Plug 'zchee/deoplete-go',           { 'for': 'go' }
 "Plug 'vim-scripts/Tagbar'
 
 " Search
-Plug 'jremmen/vim-ripgrep'
+"Plug 'jremmen/vim-ripgrep'
 
 " Theme
 Plug 'robertmeta/nofrils'
@@ -340,28 +343,6 @@ nnoremap <silent> <C-e> :NERDTreeFind<CR>
 "                               NERD Commenter                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>/ <plug>NERDCommenterToggle<CR>
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               CtrlP                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ctrlp_custom_ignore = {
-  \ 'dir': '\v[\/]\.(git|hg|svn|build)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
-  \ }
-
-if executable('rg')
-  set grepprg=rg\ --color=never
-  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-  let g:ctrlp_use_caching = 0
-  let g:ctrlp_extensions = ['tag']
-else
-  let g:ctrlp_clear_cache_on_exit = 0
-endif
-
-let g:ctrlp_switch_buffer = 0 " disable
-
-" Additional mapping for buffer search
-nnoremap <leader>b :CtrlPBuffer<cr>
 
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -519,3 +500,18 @@ nnoremap <silent> <leader>y :<C-u>CocList -A --normal yank<CR>
 
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
+
+" FZF
+nnoremap <C-p> :Files<Cr>
+nnoremap <C-b> :Buffers<Cr>
+nnoremap <C-s> :Rg!<space>
+
+imap <C-x><C-f> <plug>(fzf-complete-file-ag)
+imap <C-x><C-l> <plug>(fzf-complete-line)
+
+command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --fixed-strings --smart-case --hidden --follow --glob "!.git/*" '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
