@@ -25,6 +25,8 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'           " Fast switch between true/false -/+, etc
 Plug 'christoomey/vim-tmux-navigator'   " Support for tmux
 "Plug 'editorconfig/editorconfig-vim'
+Plug 'liuchengxu/vista.vim'
+Plug 'pechorin/any-jump.vim'
 
 Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'ekalinin/Dockerfile.vim', { 'for': 'Dockerfile' }
@@ -55,8 +57,7 @@ Plug 'zchee/deoplete-go',           { 'for': 'go' }
 
 "Plug 'vim-scripts/Tagbar'
 
-" Search
-"Plug 'jremmen/vim-ripgrep'
+Plug 'jremmen/vim-ripgrep' " Rg Search
 
 " Theme
 Plug 'robertmeta/nofrils'
@@ -216,11 +217,11 @@ set diffopt=filler,iwhite,vertical,context:15
 let g:html_diff_one_file = 1
 
 " When editing a file, always jump to the last known cursor position.
-"autocmd BufReadPost *
-  "\ if line("'\"") > 0 && line("'\"") <= line("$") |
-  "\   exe "normal g`\"" |
-  "\ endif
-"augroup END
+autocmd BufReadPost *
+  \ if line("'\"") > 0 && line("'\"") <= line("$") |
+  \   exe "normal g`\"" |
+  \ endif
+augroup END
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Keymaps                                   "
@@ -489,7 +490,7 @@ let g:coc_global_extensions = [
       \ 'coc-python',
       \ 'coc-json',
       \ 'coc-docker',
-      \ 'coc-pairs',
+      "\ 'coc-pairs',
       \ 'coc-word',
       \ 'coc-yank',
       \ 'coc-diagnostic',
@@ -500,6 +501,42 @@ nnoremap <silent> <leader>y :<C-u>CocList -A --normal yank<CR>
 
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
+
+""""""""" TAB
+set shortmess+=c
+set hidden
+
+set nobackup
+set nowritebackup
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+"if has('patch8.1.1068')
+  "" Use `complete_info` if your (Neo)Vim version supports it.
+  "inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+"else
+  "imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+"endif
+""""""
+
 
 " FZF
 nnoremap <C-p> :Files<Cr>
@@ -515,3 +552,7 @@ command! -bang -nargs=* Rg
       \   <bang>0 ? fzf#vim#with_preview('up:60%')
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
+
+
+let g:vista_default_executive = 'coc'
+let g:vista#renderer#enable_icon = 0
