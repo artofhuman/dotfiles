@@ -1,0 +1,64 @@
+env:
+  # for starting tmux with correnct locale
+  LC_ALL: en_US.UTF-8
+  LANG: en_US.UTF-8
+  # homebrew
+  PATH: "/usr/local/bin:$PATH"
+
+window:
+  startup_mode: SimpleFullscreen
+  decorations: none
+  padding:
+    x: 2
+    y: 2
+
+tabspaces: 4
+
+#shell:
+  #program: /usr/local/bin/zsh
+  #args:
+    #- --login
+
+#shell:
+  #program: /bin/zsh
+  #args:
+    #- -l
+    #- -c
+    #- "tmux attach -t '(∩Ȍ▾Ȍ)⊃━☆ﾟ,*' || tmux new -s '(∩Ȍ▾Ȍ)⊃━☆ﾟ,*'"
+
+mouse:
+  hide_when_typing: true
+
+font:
+  normal:
+    family: "Fira Code"
+    #family: "Fira Code Retina"
+  size: 12
+
+colors:
+  # Default colors
+  primary:
+    background: '#282c34'
+    foreground: '#abb2bf'
+
+  # Normal colors
+  normal:
+    black:   '#282c34'
+    red:     '#e06c75'
+    green:   '#98c379'
+    yellow:  '#e5c07b'
+    blue:    '#61afef'
+    magenta: '#c678dd'
+    cyan:    '#c678dd'
+    white:   '#abb2bf'
+
+  # Bright colors
+  bright:
+    black:   '#3e4452'
+    red:     '#be5046'
+    green:   '#98c379'
+    yellow:  '#d19a66'
+    blue:    '#61afef'
+    magenta: '#61afef'
+    cyan:    '#56b6c2'
+    white:   '#5c6370'
