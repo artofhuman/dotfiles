@@ -4,10 +4,10 @@ source $ZPLUG_HOME/init.zsh
 # ---- Aliases
 alias e='nvim'
 alias c='cd ~/code'
-alias tls="tmux ls"
-alias td="tmux detach"
-alias tnew="tmux new-session -As `basename $PWD`"
-alias tatt="tmux attach-session -t "
+alias tls='tmux ls'
+alias td='tmux detach'
+alias tnew='tmux new-session -As `basename $PWD`'
+alias tatt='tmux attach-session -t '
 
 export EDITOR="nvim"
 
@@ -30,7 +30,6 @@ alias rebase='git rebase -i HEAD~2'
 alias rebase3='git rebase -i HEAD~3'
 alias rebase4='git rebase -i HEAD~4'
 alias rebase5='git rebase -i HEAD~5'
-
 # ---- End Aliases
 
 ## Command history configuration
