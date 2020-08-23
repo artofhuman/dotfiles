@@ -2,14 +2,21 @@ export ZPLUG_HOME=/usr/local/opt/zplug
 source $ZPLUG_HOME/init.zsh
 
 # ---- Aliases
+alias reload!='source ~/.zshrc'
 alias e='nvim'
 alias c='cd ~/code'
 alias tls='tmux ls'
 alias td='tmux detach'
-alias tnew='tmux new-session -As `basename $PWD`'
+alias tnew='tmux new-session -As $(basename $PWD | tr . -)'
 alias tatt='tmux attach-session -t '
 
 export EDITOR="nvim"
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+# use emacs-style zsh bindings
+bindkey -e
 
 # Git
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
@@ -43,6 +50,23 @@ SAVEHIST=1000000
 zplug mafredri/zsh-async, from:github
 zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
 
+#zplug zsh-users/zsh-autosuggestions
+
 DISABLE_UPDATE_PROMPT=true
 
 zplug load
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+eval "$(rbenv init -)"
+
+# ===================
+#    KEY BINDINGS
+# ===================
+# Use emacs-like key bindings by default:
+bindkey -e
+
+
+
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
