@@ -11,12 +11,15 @@ Plug 'scrooloose/nerdcommenter'         " Code comments
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
 "Plug 'Yggdroot/indentLine'
 Plug 'terryma/vim-multiple-cursors'
+"Plug 'dhruvasagar/vim-zoom'
+"Plug 'junegunn/goyo.vim'
+Plug 'psliwka/vim-smoothie'
 
 " Completion (LSP)
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 Plug 'vim-scripts/matchit.zip'
-Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc, NOW used coc-pairs
+"Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc, NOW used coc-pairs
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
@@ -32,6 +35,7 @@ Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'ekalinin/Dockerfile.vim', { 'for': 'Dockerfile' }
 Plug 'benmills/vimux'
 
+Plug 'junegunn/rainbow_parentheses.vim'
 "Plug 'leshill/vim-json'
 
 " Ruby
@@ -40,6 +44,8 @@ Plug 'tpope/vim-rails',         { 'for': 'ruby' }
 Plug 'tpope/vim-endwise',       { 'for': ['ruby', 'crystal'] } " Autoclose end on blocks
 Plug 'tpope/vim-haml',          { 'for': 'haml' }
 Plug 'slim-template/vim-slim',  { 'for': 'slim' }
+
+Plug 'psf/black',               { 'for': 'python' }
 
 "Lisp
 Plug 'vim-scripts/paredit.vim',     { 'for': ['scheme'] }
@@ -52,8 +58,7 @@ Plug 'c-brenn/phoenix.vim',         { 'for': 'elixir' }
 Plug 'slashmili/alchemist.vim',     { 'for': 'elixir' }
 
 " Golang
-Plug 'fatih/vim-go',                { 'for': 'go' }
-Plug 'zchee/deoplete-go',           { 'for': 'go' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
 
 "Plug 'vim-scripts/Tagbar'
 
@@ -62,14 +67,17 @@ Plug 'jremmen/vim-ripgrep' " Rg Search
 " Theme
 Plug 'robertmeta/nofrils'
 Plug 'VonHeikemen/rubber-themes.vim'
+Plug 'NLKNguyen/papercolor-theme'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
 
 Plug 'janko-m/vim-test'         " Run tests from vim
 
-Plug 'Shougo/echodoc.vim'       " Show parameter doc.
+"Plug 'Shougo/echodoc.vim'       " Show parameter doc.
 Plug 'airblade/vim-gitgutter'   " Show git changes in sign columns
+Plug 'editorconfig/editorconfig-vim'
+
 call plug#end()
 
 filetype plugin indent on
@@ -556,3 +564,29 @@ command! -bang -nargs=* Rg
 
 let g:vista_default_executive = 'coc'
 let g:vista#renderer#enable_icon = 0
+
+let g:PaperColor_Theme_Options = {
+  \   'language': {
+  \     'python': {
+  \       'highlight_builtins' : 0
+  \     },
+  \   }
+  \ }
+
+hi MatchParen guibg=#E06C75
+hi SignColumn term=NONE cterm=NONE ctermfg=242 ctermbg=NONE gui=NONE guifg=#6C6C6C guibg=NONE
+
+
+" === Goyo
+" changing from the default 80 to accomodate for UndoTree panel
+let g:goyo_width = 120
+
+function! s:goyo_leave()
+         hi Normal guibg=NONE ctermbg=NONE
+         hi SignColumn term=NONE cterm=NONE ctermfg=242 ctermbg=NONE gui=NONE guifg=#6C6C6C guibg=NONE
+endfunction
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+set inccommand=nosplit
+
+nmap <leader>rr <Plug>(coc-rename)
