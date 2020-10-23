@@ -32,7 +32,7 @@ font:
     #family: SF Mono
     #family: Fira Code Retina
     family: iA Writer Mono S
-  size: 13.5
+  size: 14
 
   offset:
     x: 0
@@ -92,4 +92,5 @@ key_bindings:
   #- { key: Right,    mods: Control, chars: "\x1b[1;5C" }
   #- { key: Left,     mods: Control, chars: "\x1b[1;5D" }
   #- { key: Left,     mods: Alt,     chars: "\x1b[1;3D" }
-  #- { key: Right,    mods: Alt,     chars: "\x1b[1;3C"                   }
+  #- { key: Left,     mods: Alt,     chars: "\x1b[1;3D" }
+  #- { key: Right,    mods: Alt,     chars: "\x1b[1;3C" }
