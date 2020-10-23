@@ -13,7 +13,7 @@ Plug 'bogado/file-line'                 " Open file and go to number line posiot
 Plug 'terryma/vim-multiple-cursors'
 "Plug 'dhruvasagar/vim-zoom'
 "Plug 'junegunn/goyo.vim'
-Plug 'psliwka/vim-smoothie'
+"Plug 'psliwka/vim-smoothie'
 
 " Completion (LSP)
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -77,6 +77,8 @@ Plug 'janko-m/vim-test'         " Run tests from vim
 "Plug 'Shougo/echodoc.vim'       " Show parameter doc.
 Plug 'airblade/vim-gitgutter'   " Show git changes in sign columns
 Plug 'editorconfig/editorconfig-vim'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+
 
 call plug#end()
 
