@@ -9,17 +9,13 @@ Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'              " Files explorer
 Plug 'scrooloose/nerdcommenter'         " Code comments
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
-"Plug 'Yggdroot/indentLine'
 Plug 'terryma/vim-multiple-cursors'
-"Plug 'dhruvasagar/vim-zoom'
-"Plug 'junegunn/goyo.vim'
-"Plug 'psliwka/vim-smoothie'
+Plug 'psliwka/vim-smoothie'
 
 " Completion (LSP)
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 Plug 'vim-scripts/matchit.zip'
-"Plug 'Raimondi/delimitMate'             " This plug-in provides automatic closing of quotes, parenthesis, brackets, etc, NOW used coc-pairs
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
@@ -27,58 +23,48 @@ Plug 'rhysd/git-messenger.vim'          " Show git commits in popup
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'           " Fast switch between true/false -/+, etc
 Plug 'christoomey/vim-tmux-navigator'   " Support for tmux
-"Plug 'editorconfig/editorconfig-vim'
-Plug 'liuchengxu/vista.vim'
 Plug 'pechorin/any-jump.vim'
 
 Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'ekalinin/Dockerfile.vim', { 'for': 'Dockerfile' }
 Plug 'benmills/vimux'
 
-Plug 'junegunn/rainbow_parentheses.vim'
-"Plug 'leshill/vim-json'
+"Plug 'junegunn/rainbow_parentheses.vim'
 
 " Ruby
 Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
 Plug 'tpope/vim-rails',         { 'for': 'ruby' }
-Plug 'tpope/vim-endwise',       { 'for': ['ruby', 'crystal'] } " Autoclose end on blocks
+Plug 'tpope/vim-endwise',       { 'for': ['ruby'] } " Autoclose end on blocks
 Plug 'tpope/vim-haml',          { 'for': 'haml' }
 Plug 'slim-template/vim-slim',  { 'for': 'slim' }
 
-Plug 'psf/black',               { 'for': 'python' }
+"Plug 'psf/black',               { 'for': 'python' }
 
 "Lisp
 Plug 'vim-scripts/paredit.vim',     { 'for': ['scheme'] }
 
-" Crystal
-Plug 'rhysd/vim-crystal',           { 'for': 'crystal' }
-
-Plug 'elixir-editors/vim-elixir',   { 'for': 'elixir' }
-Plug 'c-brenn/phoenix.vim',         { 'for': 'elixir' }
-Plug 'slashmili/alchemist.vim',     { 'for': 'elixir' }
+"Plug 'elixir-editors/vim-elixir',   { 'for': 'elixir' }
+"Plug 'c-brenn/phoenix.vim',         { 'for': 'elixir' }
+"Plug 'slashmili/alchemist.vim',     { 'for': 'elixir' }
 
 " Golang
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
-
-"Plug 'vim-scripts/Tagbar'
+"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
 
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
 " Theme
 Plug 'robertmeta/nofrils'
 Plug 'VonHeikemen/rubber-themes.vim'
-Plug 'NLKNguyen/papercolor-theme'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
 
 Plug 'janko-m/vim-test'         " Run tests from vim
 
-"Plug 'Shougo/echodoc.vim'       " Show parameter doc.
 Plug 'airblade/vim-gitgutter'   " Show git changes in sign columns
-Plug 'editorconfig/editorconfig-vim'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
+Plug 'editorconfig/editorconfig-vim'
 
 call plug#end()
 
@@ -86,10 +72,6 @@ filetype plugin indent on
 syntax on
 
 set signcolumn=yes
-
-" https://github.com/Shougo/echodoc.vim
-let g:echodoc#enable_at_startup = 1
-let g:echodoc#type = 'virtual'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Colorscheme                               "
@@ -363,10 +345,6 @@ autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
-"=== vim-jedi ===================================
-let g:jedi#popup_select_first = 0
-let g:jedi#goto_definitions_command = "<leader>g"
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Markdown                                  "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -407,8 +385,6 @@ let g:nerdtree_tabs_open_on_gui_startup = 0
 map <Leader>rs :TestNearest<CR>
 map <Leader>rt :TestFile<CR>
 map <Leader>rl :TestLast<CR>
-"nmap <silent> t<C-s> :TestSuite<CR>   " t Ctrl+s
-"nmap <silent> t<C-g> :TestVisit<CR>   " t Ctrl+g
 
 let test#python#runner = 'pytest'
 let test#strategy = "vimux"
@@ -453,36 +429,14 @@ augroup omnifuncs
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 augroup end
 
-"" Run Go
-au FileType go nmap <leader>r <Plug>(go-run)
-au FileType go nmap <leader>b <Plug>(go-build)
-au FileType go nmap <leader>t <Plug>(go-test)
-au FileType go nmap <leader>c <Plug>(go-coverage)
-
-au FileType go nmap <leader>rt <Plug>(go-run-tab)
-au FileType go nmap <Leader>rs <Plug>(go-run-split)
-au FileType go nmap <Leader>rv <Plug>(go-run-vertical)
-
-"" Go docs
-au FileType go nmap <leader>ds <Plug>(go-def-split)
-au FileType go nmap <leader>dv <Plug>(go-def-vertical)
-au FileType go nmap <leader>dt <Plug>(go-def-tab)
-
-au FileType go nmap <leader>gd <Plug>(go-doc)
-au FileType go nmap <leader>gv <Plug>(go-doc-vertical)
-
-au FileType go nmap <leader>gb <Plug>(go-doc-browser)
-
-"" Go types
-au FileType go nmap <leader>s <Plug>(go-implements)
-au FileType go nmap <leader>i <Plug>(go-info)
-
 " Coc
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+
+nmap <leader>rr <Plug>(coc-rename)
 
  " Use K for show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -494,6 +448,29 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+" Note coc#float#scroll works on neovim >= 0.4.3 or vim >= 8.2.0750
+nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of language server.
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
 
 let g:coc_global_extensions = [
       \ 'coc-solargraph',
@@ -563,32 +540,17 @@ command! -bang -nargs=* Rg
       \           : fzf#vim#with_preview('right:50%:hidden', '?'),
       \   <bang>0)
 
-
-let g:vista_default_executive = 'coc'
-let g:vista#renderer#enable_icon = 0
-
-let g:PaperColor_Theme_Options = {
-  \   'language': {
-  \     'python': {
-  \       'highlight_builtins' : 0
-  \     },
-  \   }
-  \ }
-
 hi MatchParen guibg=#E06C75
 hi SignColumn term=NONE cterm=NONE ctermfg=242 ctermbg=NONE gui=NONE guifg=#6C6C6C guibg=NONE
 
-
-" === Goyo
-" changing from the default 80 to accomodate for UndoTree panel
-let g:goyo_width = 120
-
-function! s:goyo_leave()
-         hi Normal guibg=NONE ctermbg=NONE
-         hi SignColumn term=NONE cterm=NONE ctermfg=242 ctermbg=NONE gui=NONE guifg=#6C6C6C guibg=NONE
-endfunction
-autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-set inccommand=nosplit
-
-nmap <leader>rr <Plug>(coc-rename)
+" gitgutter
+Plug 'airblade/vim-gitgutter'
+"let g:gitgutter_map_keys = 0
+let g:gitgutter_max_signs = 10000
+let g:gitgutter_sign_added = '▎'
+let g:gitgutter_sign_modified = '▎'
+let g:gitgutter_sign_removed = '▁'
+let g:gitgutter_sign_removed_first_line = '▔'
+let g:gitgutter_sign_modified_removed = '▎'
+let g:gitgutter_highlight_linenrs = 0
+let g:gitgutter_override_sign_column_highlight = 0
