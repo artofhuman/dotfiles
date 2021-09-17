@@ -3,14 +3,22 @@
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'               " Vim community settings
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+"Plug 'junegunn/fzf.vim'
+"
+" Telescope requirements
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+" Telescope plugins
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 Plug 'scrooloose/nerdtree'              " Files explorer
 Plug 'scrooloose/nerdcommenter'         " Code comments
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
-Plug 'terryma/vim-multiple-cursors'
-Plug 'psliwka/vim-smoothie'
+" Plug 'terryma/vim-multiple-cursors'
+" Plug 'psliwka/vim-smoothie'
 
 " Completion (LSP)
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -53,16 +61,16 @@ Plug 'vim-scripts/paredit.vim',     { 'for': ['scheme'] }
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
 " Theme
-Plug 'robertmeta/nofrils'
-Plug 'VonHeikemen/rubber-themes.vim'
+Plug 'fatih/molokai'
+Plug 'arcticicestudio/nord-vim'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
 
 Plug 'janko-m/vim-test'         " Run tests from vim
 
-Plug 'airblade/vim-gitgutter'   " Show git changes in sign columns
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+" Plug 'airblade/vim-gitgutter'   " Show git changes in sign columns
+"Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 Plug 'editorconfig/editorconfig-vim'
 
@@ -82,14 +90,15 @@ if (has("termguicolors"))
 endif
 
 syntax enable
-colorscheme rubber
+colorscheme nord
+" let g:molokai_original = 1
 
 " highlight the cursor line and don't underscore it
-set cursorline
-set colorcolumn=80
+" set cursorline
+"set colorcolumn=80
 
 set viminfo+=! " Support for yankring
-
+set guicursor= " Disable cursor shapes (always be block)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Buffer options                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -335,32 +344,7 @@ nnoremap <silent> <C-e> :NERDTreeFind<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               NERD Commenter                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>/ <plug>NERDCommenterToggle<CR>
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Markdown                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Markdown files end in .md
-au BufRead,BufNewFile *.md set filetype=markdown
-
-" Enable spellchecking for Markdown
-au BufRead,BufNewFile *.md setlocal spell
-
-" Automatically wrap at 80 characters for Markdown
-au BufRead,BufNewFile *.md setlocal textwidth=80
-
-" Ruby Hax {{{
-" Prawn files are includes for a pdf rendering library
-au BufNewFile,BufRead *.prawn set filetype=ruby
-
+map <leader>/ <plug>NERDCommenterToggle#<CR>
 " This is specific to rails apps, but I will not bind it to a particular
 " filetype
 function! TwoSpace()
@@ -420,14 +404,14 @@ nmap <Leader>p :r ~/.vbuf<CR>
 let g:syntastic_javascript_checkers = ['eslint']
 
 " omnifuncs
-augroup omnifuncs
-  autocmd!
-  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-augroup end
+" augroup omnifuncs
+"  autocmd!
+"  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+"  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+"  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+"  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+"  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+"augroup end
 
 " Coc
 " Remap keys for gotos
@@ -435,11 +419,9 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nmap <leader>ac  <Plug>(coc-codeaction)
 
 nmap <leader>rr <Plug>(coc-rename)
-
- " Use K for show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if &filetype == 'vim'
@@ -448,6 +430,11 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+ " Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -484,7 +471,7 @@ let g:coc_global_extensions = [
       \]
 
 " show list of yanks with preview
-nnoremap <silent> <leader>y :<C-u>CocList -A --normal yank<CR>
+"nnoremap <silent> <leader>y :<C-u>CocList -A --normal yank<CR>
 
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
@@ -514,43 +501,33 @@ endfunction
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-"if has('patch8.1.1068')
-  "" Use `complete_info` if your (Neo)Vim version supports it.
-  "inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-"else
-  "imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-"endif
-""""""
+" Telescope staff
 
+lua << EOF
+    -- You dont need to set any of these options. These are the default ones. Only
+    -- the loading is important
+    local actions = require('telescope.actions')
+    require('telescope').setup {
+      defaults = {
+        mappings = {
+          i = {
+            ["<C-j>"]   = actions.move_selection_next,
+            ["<C-k>"]   = actions.move_selection_previous,
+            ["<C-q>"]   = actions.smart_send_to_qflist + actions.open_qflist,
+            ["<ESC>"]   = actions.close,
+            }
+          }
+        }
+      }
 
-" FZF
-nnoremap <C-p> :Files<Cr>
-nnoremap <C-b> :Buffers<Cr>
-nnoremap <C-s> :Rg!<space>
+    -- To get fzf loaded and working with telescope, you need to call
+    -- load_extension, somewhere after setup function:
+    require('telescope').load_extension('fzf')
+EOF
 
-imap <C-x><C-f> <plug>(fzf-complete-file-ag)
-imap <C-x><C-l> <plug>(fzf-complete-line)
+" Find files using Telescope command-line sugar.
+nnoremap <C-p> <cmd>Telescope find_files<cr>
+"nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <C-b> <cmd>Telescope buffers<cr>
+"nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
-command! -bang -nargs=* Rg
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always --fixed-strings --smart-case --hidden --follow --glob "!.git/*" '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview('up:60%')
-      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \   <bang>0)
-
-hi MatchParen guibg=#E06C75
-hi SignColumn term=NONE cterm=NONE ctermfg=242 ctermbg=NONE gui=NONE guifg=#6C6C6C guibg=NONE
-
-" gitgutter
-Plug 'airblade/vim-gitgutter'
-"let g:gitgutter_map_keys = 0
-let g:gitgutter_max_signs = 10000
-let g:gitgutter_sign_added = '▎'
-let g:gitgutter_sign_modified = '▎'
-let g:gitgutter_sign_removed = '▁'
-let g:gitgutter_sign_removed_first_line = '▔'
-let g:gitgutter_sign_modified_removed = '▎'
-let g:gitgutter_highlight_linenrs = 0
-let g:gitgutter_override_sign_column_highlight = 0
