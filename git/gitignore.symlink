@@ -12,3 +12,4 @@ tags
 *.pyc
 _projectnotes.txt
 Makefile.local
+.venv/
