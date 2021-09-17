@@ -1,8 +1,6 @@
-<p align="center">
-  <img width="350px" src="console.jpg" />
-</p>
-
 ## Dotfiles
+
+Always in WIP
 
 ### installation
 
