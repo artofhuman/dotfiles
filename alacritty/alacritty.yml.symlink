@@ -20,7 +20,7 @@ shell:
 
 mouse:
   hide_when_typing: true
-  url:
+  hints:
     # URL launcher
     #
     # This program is executed when clicking on a text which is recognized as a URL.
@@ -29,9 +29,12 @@ mouse:
 
 font:
   normal:
-    #family: SF Mono
-    #family: Fira Code Retina
-    family: iA Writer Mono S
+    # family: SF Mono
+    # family: Fira Code
+    # family: "Cascadia Code"
+    # family: "Source Code Pro"
+    family: "JetBrains Mono"
+    # family: iA Writer Mono S
   size: 14
 
   offset:
