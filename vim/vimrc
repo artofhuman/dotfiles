@@ -37,8 +37,6 @@ Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'ekalinin/Dockerfile.vim', { 'for': 'Dockerfile' }
 Plug 'benmills/vimux'
 
-"Plug 'junegunn/rainbow_parentheses.vim'
-
 " Ruby
 Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
 Plug 'tpope/vim-rails',         { 'for': 'ruby' }
@@ -61,7 +59,7 @@ Plug 'vim-scripts/paredit.vim',     { 'for': ['scheme'] }
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
 " Theme
-Plug 'fatih/molokai'
+"Plug 'fatih/molokai'
 Plug 'arcticicestudio/nord-vim'
 
 " Murkdown
@@ -270,7 +268,7 @@ nnoremap <C-l> <C-w>l
 cmap w!! w !sudo tee % >/dev/null
 
 " Diff this
-nnoremap <leader>dd :windo diffthis<CR>
+"nnoremap <leader>dd :windo diffthis<CR>
 
 " Debug
 au FileType python map <Leader>d oimport pdb; pdb.set_trace()<esc>:w<cr>
@@ -280,9 +278,6 @@ map <C-T> <Esc>:tabnew<CR>
 " Return Visual select block after move left/right
 vnoremap < <gv
 vnoremap > >gv
-
-" Customisations based on filetype
-autocmd BufNewFile,BufRead *.rss.*.atom setfiletype xml
 
 " For all text files set 'textwidth' to 80 characters.
 autocmd FileType text,txt setlocal tw=80
@@ -403,16 +398,6 @@ nmap <Leader>p :r ~/.vbuf<CR>
 
 let g:syntastic_javascript_checkers = ['eslint']
 
-" omnifuncs
-" augroup omnifuncs
-"  autocmd!
-"  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-"  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-"  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-"  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-"augroup end
-
 " Coc
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
@@ -526,8 +511,6 @@ lua << EOF
 EOF
 
 " Find files using Telescope command-line sugar.
-nnoremap <C-p> <cmd>Telescope find_files<cr>
-"nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <C-b> <cmd>Telescope buffers<cr>
-"nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <C-b> <cmd>lua require('telescope.builtin').buffers()<cr>
 
