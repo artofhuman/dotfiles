@@ -1,6 +1,0 @@
-{
-    "diagnostic.virtualText": false,
-    "diagnostic.virtualTextPrefix": " # ",
-    "solargraph.useBundler": false,
-    "solargraph.diagnostics": true,
-}
