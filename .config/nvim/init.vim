@@ -17,7 +17,8 @@ Plug 'bogado/file-line'                 " Open file and go to number line posiot
 
 " Completion (LSP)
 Plug 'neovim/nvim-lspconfig'
-"Plug 'nvim-lua/completion-nvim'
+Plug 'kabouzeid/nvim-lspinstall'
+
 "
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -59,8 +60,8 @@ Plug 'vim-scripts/paredit.vim',     { 'for': ['scheme'] }
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
 " Theme
-"Plug 'fatih/molokai'
 Plug 'arcticicestudio/nord-vim'
+Plug 'gruvbox-community/gruvbox'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
@@ -407,3 +408,16 @@ set hidden
 
 set nobackup
 set nowritebackup
+
+
+lua << EOF
+-- LSP Enable diagnostics
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = false,
+    underline = true,
+    signs = true,
+    update_in_insert = false,
+  }
+)
+EOF
