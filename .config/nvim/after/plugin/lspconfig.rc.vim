@@ -39,10 +39,6 @@ lua << EOF
     --"require'completion'.on_attach(client, bufnr)
   end
 
-  nvim_lsp.solargraph.setup{}
-EOF
-
-lua <<EOF
   -- Setup nvim-cmp.
   local cmp = require'cmp'
 
@@ -61,9 +57,15 @@ lua <<EOF
     }
   })
 
-  -- Setup lspconfig.
-  require('lspconfig')['solargraph'].setup {
-    capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  }
+  -- Setup lsp servers
+  require'lspinstall'.setup() -- important
+
+  local servers = require'lspinstall'.installed_servers()
+  for _, server in pairs(servers) do
+    nvim_lsp[server].setup{
+      on_attach = on_attach,
+      capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+    }
+  end
 EOF
 
