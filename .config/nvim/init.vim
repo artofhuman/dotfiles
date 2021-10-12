@@ -3,9 +3,6 @@
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'               " Vim community settings
 
-"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-"Plug 'junegunn/fzf.vim'
-"
 " Telescope requirements
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -17,11 +14,15 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'scrooloose/nerdtree'              " Files explorer
 Plug 'scrooloose/nerdcommenter'         " Code comments
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
-" Plug 'terryma/vim-multiple-cursors'
-" Plug 'psliwka/vim-smoothie'
 
 " Completion (LSP)
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'neovim/nvim-lspconfig'
+Plug 'kabouzeid/nvim-lspinstall'
+
+"
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/nvim-cmp'
 
 Plug 'vim-scripts/matchit.zip'
 Plug 'tpope/vim-surround'
@@ -59,8 +60,8 @@ Plug 'vim-scripts/paredit.vim',     { 'for': ['scheme'] }
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
 " Theme
-"Plug 'fatih/molokai'
 Plug 'arcticicestudio/nord-vim'
+Plug 'gruvbox-community/gruvbox'
 
 " Murkdown
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
@@ -398,66 +399,6 @@ nmap <Leader>p :r ~/.vbuf<CR>
 
 let g:syntastic_javascript_checkers = ['eslint']
 
-" Coc
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap <leader>ac  <Plug>(coc-codeaction)
-
-nmap <leader>rr <Plug>(coc-rename)
-
-function! s:show_documentation()
-  if &filetype == 'vim'
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
- " Use K for show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
-" Remap <C-f> and <C-b> for scroll float windows/popups.
-" Note coc#float#scroll works on neovim >= 0.4.3 or vim >= 8.2.0750
-nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-
-" Use CTRL-S for selections ranges.
-" Requires 'textDocument/selectionRange' support of language server.
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
-
-let g:coc_global_extensions = [
-      \ 'coc-solargraph',
-      \ 'coc-python',
-      \ 'coc-json',
-      \ 'coc-docker',
-      "\ 'coc-pairs',
-      \ 'coc-word',
-      \ 'coc-yank',
-      \ 'coc-diagnostic',
-      \]
-
-" show list of yanks with preview
-"nnoremap <silent> <leader>y :<C-u>CocList -A --normal yank<CR>
-
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
 
@@ -468,49 +409,15 @@ set hidden
 set nobackup
 set nowritebackup
 
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" Telescope staff
 
 lua << EOF
-    -- You dont need to set any of these options. These are the default ones. Only
-    -- the loading is important
-    local actions = require('telescope.actions')
-    require('telescope').setup {
-      defaults = {
-        mappings = {
-          i = {
-            ["<C-j>"]   = actions.move_selection_next,
-            ["<C-k>"]   = actions.move_selection_previous,
-            ["<C-q>"]   = actions.smart_send_to_qflist + actions.open_qflist,
-            ["<ESC>"]   = actions.close,
-            }
-          }
-        }
-      }
-
-    -- To get fzf loaded and working with telescope, you need to call
-    -- load_extension, somewhere after setup function:
-    require('telescope').load_extension('fzf')
+-- LSP Enable diagnostics
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = false,
+    underline = true,
+    signs = true,
+    update_in_insert = false,
+  }
+)
 EOF
-
-" Find files using Telescope command-line sugar.
-nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>
-nnoremap <C-b> <cmd>lua require('telescope.builtin').buffers()<cr>
-
