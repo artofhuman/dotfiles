@@ -11,6 +11,7 @@ brew 'hub'
 brew 'ctags'
 brew 'ripgrep'
 brew 'htop'
+brew 'pyenv'
 
 brew 'docker'
 brew 'docker-compose'
