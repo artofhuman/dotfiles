@@ -15,9 +15,6 @@ export EDITOR="nvim"
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-# use emacs-style zsh bindings
-bindkey -e
-
 # Git
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gp='git push origin HEAD'
@@ -63,6 +60,9 @@ eval "$(rbenv init -)"
 # ===================
 # Use emacs-like key bindings by default:
 bindkey -e
+
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 eval "$(pyenv init -)"
