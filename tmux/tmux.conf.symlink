@@ -44,21 +44,10 @@ setw -g xterm-keys on
 bind-key -n C-Space resize-pane -Z # Ctrl+Space
 
 # ----------------------
-# Status Bar
-# -----------------------
-# visual notification of activity in other windows
-#setw -g monitor-activity on
-#set -g visual-activity on
-
-#set -g status-left-length 40
-#set -g status-justify centre
-
 # Start windows and pane numbering with index 1 instead of 0
 set -g base-index 1
 setw -g pane-base-index 1
 
-# This tmux statusbar config was created by tmuxline.vim
-# on Wed, 25 Nov 2015
 set -g status "on"
 set -g status-bg "colour236"
 set -g status-justify "left"
@@ -89,13 +78,3 @@ bind-key -T copy-mode-vi 'v' send-keys -X begin-selection
 # copy text with `y` in copy mode
 # bind-key -T copy-mode-vi 'y' send -X copy-selection-and-cancel\; run "tmux save -|pbcopy >/dev/null 2>&1"
 bind-key -T copy-mode-vi 'y' send -X copy-selection-and-cancel
-
-# https://github.com/tmux-plugins/tpm
-#set -g @plugin 'tmux-plugins/tpm'
-#set -g @plugin 'tmux-plugins/tmux-sensible'
-
-## .. plugins here
-##set -g @plugin 'tmux-plugins/tmux-yank'
-
-## Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-#run -b '~/.tmux/plugins/tpm/tpm'
