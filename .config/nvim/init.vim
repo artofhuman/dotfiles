@@ -12,8 +12,8 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 Plug 'scrooloose/nerdtree'              " Files explorer
-Plug 'scrooloose/nerdcommenter'         " Code comments
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
+Plug 'numToStr/Comment.nvim'
 
 " Completion (LSP)
 Plug 'neovim/nvim-lspconfig'
@@ -340,7 +340,6 @@ nnoremap <silent> <C-e> :NERDTreeFind<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               NERD Commenter                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>/ <plug>NERDCommenterToggle#<CR>
 " This is specific to rails apps, but I will not bind it to a particular
 " filetype
 function! TwoSpace()
@@ -406,8 +405,8 @@ set updatetime=300
 set shortmess+=c
 set hidden
 
-set nobackup
-set nowritebackup
+" set nobackup
+" set nowritebackup
 
 
 lua << EOF
@@ -421,3 +420,8 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 EOF
+
+lua << EOF
+require('Comment').setup()
+EOF
+
