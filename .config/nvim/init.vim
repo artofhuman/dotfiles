@@ -19,10 +19,11 @@ Plug 'numToStr/Comment.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'kabouzeid/nvim-lspinstall'
 
-"
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
+
+" Plug 'mfussenegger/nvim-jdtls'
 
 Plug 'vim-scripts/matchit.zip'
 Plug 'tpope/vim-surround'
@@ -38,17 +39,19 @@ Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'ekalinin/Dockerfile.vim', { 'for': 'Dockerfile' }
 Plug 'benmills/vimux'
 
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 " Ruby
-Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
+" Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
 Plug 'tpope/vim-rails',         { 'for': 'ruby' }
 Plug 'tpope/vim-endwise',       { 'for': ['ruby'] } " Autoclose end on blocks
-Plug 'tpope/vim-haml',          { 'for': 'haml' }
-Plug 'slim-template/vim-slim',  { 'for': 'slim' }
+" Plug 'tpope/vim-haml',          { 'for': 'haml' }
+" Plug 'slim-template/vim-slim',  { 'for': 'slim' }
 
 "Plug 'psf/black',               { 'for': 'python' }
 
 "Lisp
-Plug 'vim-scripts/paredit.vim',     { 'for': ['scheme'] }
+" Plug 'vim-scripts/paredit.vim',     { 'for': ['scheme'] }
 
 "Plug 'elixir-editors/vim-elixir',   { 'for': 'elixir' }
 "Plug 'c-brenn/phoenix.vim',         { 'for': 'elixir' }
