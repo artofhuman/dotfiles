@@ -5,6 +5,8 @@ set -g prefix C-a
 
 set-option -g default-shell /usr/local/bin/zsh
 
+set-option -g focus-events on
+
 # Mouse mode on
 set -g terminal-overrides 'xterm*:smcup@:rmcup@'
 set -g mouse on
@@ -34,7 +36,7 @@ bind r source-file ~/.tmux.conf \; display "Reloaded!"
 # this will renumber windows automatically when one gets deleted
 set-option -g renumber-windows on
 
-set -g default-terminal "xterm-256color"
+set-option -g default-terminal "screen-256color"
 set -ga terminal-overrides ",*256col*:Tc"
 
 set -g history-limit 1000000
