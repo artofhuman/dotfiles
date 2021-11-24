@@ -54,7 +54,13 @@ lua << EOF
     sources = {
       { name = 'nvim_lsp' },
       { name = 'buffer' },
-    }
+    },
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end,
+    },
   })
 
   -- Setup lsp servers
