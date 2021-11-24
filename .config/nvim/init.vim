@@ -22,6 +22,9 @@ Plug 'williamboman/nvim-lsp-installer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
+" Snippets required by cmp
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
 
 " Plug 'mfussenegger/nvim-jdtls'
 
