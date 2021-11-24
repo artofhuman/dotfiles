@@ -17,7 +17,7 @@ Plug 'numToStr/Comment.nvim'
 
 " Completion (LSP)
 Plug 'neovim/nvim-lspconfig'
-Plug 'kabouzeid/nvim-lspinstall'
+Plug 'williamboman/nvim-lsp-installer'
 
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -406,11 +406,6 @@ set updatetime=300
 
 """"""""" TAB
 set shortmess+=c
-set hidden
-
-" set nobackup
-" set nowritebackup
-
 
 lua << EOF
 -- LSP Enable diagnostics
