@@ -104,6 +104,7 @@ colorscheme nord
 
 set viminfo+=! " Support for yankring
 set guicursor= " Disable cursor shapes (always be block)
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Buffer options                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -164,6 +165,9 @@ set sidescroll=1
 
 set splitright
 set splitbelow
+
+" support mouse scroll for easy navigation in large files
+set mouse=a
 
 " Map leader to ,
 let mapleader = ","
