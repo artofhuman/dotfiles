@@ -1,6 +1,3 @@
-export ZPLUG_HOME=/usr/local/opt/zplug
-source $ZPLUG_HOME/init.zsh
-
 # ---- Aliases
 alias reload!='source ~/.zshrc'
 alias e='nvim'
@@ -11,9 +8,6 @@ alias tnew='tmux new-session -As $(basename $PWD | tr . -)'
 alias tatt='tmux attach-session -t '
 
 export EDITOR="nvim"
-
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # Git
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
@@ -44,25 +38,33 @@ SAVEHIST=1000000
 # =============
 #    PROMPT
 # =============
-zplug mafredri/zsh-async, from:github
-zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
+autoload -U promptinit; promptinit
+prompt pure
 
-DISABLE_UPDATE_PROMPT=true
+# DISABLE_UPDATE_PROMPT=true
 
-zplug load
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-eval "$(rbenv init -)"
-
-# ===================
-#    KEY BINDINGS
-# ===================
+# KEY BINDINGS
 # Use emacs-like key bindings by default:
 bindkey -e
 
 bindkey "^[[1;3C" forward-word
 bindkey "^[[1;3D" backward-word
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+rbenv() {
+  eval "$(command rbenv init -)"
+  rbenv "$@"
+}
+
+pyenv () {
+  eval "$(pyenv init -)"
+  pyenv "$@"
+}
+
+#export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-eval "$(pyenv init -)"
+export JAVA_HOME=$(/usr/libexec/java_home)
+
