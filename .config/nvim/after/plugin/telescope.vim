@@ -20,6 +20,8 @@ lua << EOF
     require('telescope').load_extension('fzf')
 EOF
 
-" Find files using Telescope command-line sugar.
+" Find files using Telescope command-line sugaras.
 nnoremap <C-p> <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <C-b> <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <C-i> <cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>
+nnoremap <leader>r <cmd>lua require('telescope.builtin').lsp_references()<cr>

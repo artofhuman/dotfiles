@@ -26,8 +26,9 @@ fail () {
   exit
 }
 
-install_neovim () {
-  link_files "$DOTFILES_ROOT/.config/nvim" "$HOME/.config/nvim"
+install_configs () {
+  #link_files "$DOTFILES_ROOT/.config/nvim" "$HOME/.config/nvim"
+  link_files "$DOTFILES_ROOT/.config/kitty" "$HOME/.config/kitty"
 }
 
 install_vim () {
@@ -45,7 +46,7 @@ link_files () {
 install_dotfiles () {
   info 'installing dotfiles'
 
-  overwrite_all=false
+overwrite_all=false
 backup_all=false
 skip_all=false
 
@@ -110,8 +111,7 @@ done
 }
 
 install_dotfiles
-install_neovim
-install_vim
+install_configs
 
 echo ''
 echo ' All installed!'
