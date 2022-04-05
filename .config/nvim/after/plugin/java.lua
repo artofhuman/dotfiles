@@ -1,0 +1,32 @@
+-- local function sep_os_replacer(str)
+--   local result = str
+--   local path_sep = package.config:sub(1, 1)
+--   result = result:gsub("/", path_sep)
+--   return result
+-- end
+--
+-- local home = os.getenv("HOME")
+-- local workspace_dir = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+-- local workspace = sep_os_replacer(home .. "/code/" .. workspace_dir)
+--
+-- local config = {
+--   -- The command that starts the language server
+--   -- cmd = {
+--   --   "jdtls",
+--   --   "-data",
+--   --   workspace,
+--   -- },
+--
+--   cmd = {
+--     '/usr/bin/java',
+--     '-Dosgi.bundles.defaultStartLevel=4',
+--     '-jar' .. home .. '/code/jdt-language-server-1.5.0-202110191539/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
+--     '-data',
+--     workspace
+--   },
+--
+--   -- This is the default if not provided, you can remove it. Or adjust as needed.
+--   -- One dedicated LSP server & client will be started per unique root_dir
+--   root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'})
+-- }
+-- require('jdtls').start_or_attach(config)

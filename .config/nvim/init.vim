@@ -1,5 +1,3 @@
-" set nocompatible
-
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-sensible'               " Vim community settings
 
@@ -26,21 +24,27 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
 
+Plug 'ray-x/lsp_signature.nvim'
+
+" create game loop
+
+Plug 'github/copilot.vim'
+
 " Plug 'mfussenegger/nvim-jdtls'
 
-Plug 'vim-scripts/matchit.zip'
+" Plug 'vim-scripts/matchit.zip'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
 Plug 'rhysd/git-messenger.vim'          " Show git commits in popup
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'           " Fast switch between true/false -/+, etc
-Plug 'christoomey/vim-tmux-navigator'   " Support for tmux
 Plug 'pechorin/any-jump.vim'
 
 Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'ekalinin/Dockerfile.vim', { 'for': 'Dockerfile' }
 Plug 'benmills/vimux'
+Plug 'christoomey/vim-tmux-navigator'   " Support for tmux
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
@@ -48,21 +52,6 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
 Plug 'tpope/vim-rails',         { 'for': 'ruby' }
 Plug 'tpope/vim-endwise',       { 'for': ['ruby'] } " Autoclose end on blocks
-" Plug 'tpope/vim-haml',          { 'for': 'haml' }
-" Plug 'slim-template/vim-slim',  { 'for': 'slim' }
-
-"Plug 'psf/black',               { 'for': 'python' }
-
-"Lisp
-" Plug 'vim-scripts/paredit.vim',     { 'for': ['scheme'] }
-
-"Plug 'elixir-editors/vim-elixir',   { 'for': 'elixir' }
-"Plug 'c-brenn/phoenix.vim',         { 'for': 'elixir' }
-"Plug 'slashmili/alchemist.vim',     { 'for': 'elixir' }
-
-" Golang
-"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries', 'for': 'go' }
-
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
 " Theme
@@ -73,6 +62,7 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
 
 Plug 'janko-m/vim-test'         " Run tests from vim
+Plug 'onsails/lspkind-nvim/'    " Lsp icons
 
 " Plug 'airblade/vim-gitgutter'   " Show git changes in sign columns
 "Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
@@ -96,11 +86,6 @@ endif
 
 syntax enable
 colorscheme nord
-" let g:molokai_original = 1
-
-" highlight the cursor line and don't underscore it
-" set cursorline
-"set colorcolumn=80
 
 set viminfo+=! " Support for yankring
 set guicursor= " Disable cursor shapes (always be block)
@@ -377,6 +362,7 @@ map <Leader>rl :TestLast<CR>
 
 let test#python#runner = 'pytest'
 let test#strategy = "vimux"
+let pipenv_prefix = "pytest"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Switch                                    "
@@ -429,4 +415,5 @@ EOF
 lua << EOF
 require('Comment').setup()
 EOF
-
+imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")                                                                                                             
+let g:copilot_no_tab_map = v:true

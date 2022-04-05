@@ -1,5 +1,5 @@
 # ---- Aliases
-alias reload!='source ~/.zshrc'
+alias reload='source ~/.zshrc'
 alias e='nvim'
 alias c='cd ~/code'
 alias tls='tmux ls'
@@ -16,7 +16,7 @@ alias gd='git diff'
 alias gc='git commit -v'
 alias gca='git commit -a -v'
 alias gco='git checkout'
-alias gb='git branch'
+alias gb='git branch --sort=-committerdate'
 alias gs='git status -sb' # upgrade your git if -sb breaks for you. it's fun.
 alias grm="git status | grep deleted | awk '{\$1=\$2=\"\"; print \$0}' | \
            perl -pe 's/^[ \t]*//' | sed 's/ /\\\\ /g' | xargs git rm"
@@ -35,9 +35,10 @@ HISTFILE=$HOME/.zsh_history
 HISTSIZE=1000000
 SAVEHIST=1000000
 
-# =============
-#    PROMPT
-# =============
+## Completion
+autoload -Uz compinit && compinit
+
+# Promt
 autoload -U promptinit; promptinit
 prompt pure
 
@@ -60,6 +61,28 @@ rbenv() {
 pyenv () {
   eval "$(pyenv init -)"
   pyenv "$@"
+}
+
+nvm () {
+  unset -f nvm
+  export NVM_DIR=~/.nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+  nvm "$@"
+}
+
+
+node() {
+  unset -f node
+  export NVM_DIR=~/.nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+  node "$@"
+}
+
+npm() {
+  unset -f npm
+  export NVM_DIR=~/.nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+  npm "$@"
 }
 
 #export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
