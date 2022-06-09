@@ -9,7 +9,7 @@ Plug 'nvim-telescope/telescope.nvim'
 " Telescope plugins
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
-Plug 'scrooloose/nerdtree'              " Files explorer
+Plug 'scrooloose/nerdtree'
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
 Plug 'numToStr/Comment.nvim'
 
@@ -25,14 +25,10 @@ Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
 
 Plug 'ray-x/lsp_signature.nvim'
+Plug 'mfussenegger/nvim-dap'
 
-" create game loop
+" Plug 'github/copilot.vim'
 
-Plug 'github/copilot.vim'
-
-" Plug 'mfussenegger/nvim-jdtls'
-
-" Plug 'vim-scripts/matchit.zip'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
@@ -52,21 +48,11 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
 Plug 'tpope/vim-rails',         { 'for': 'ruby' }
 Plug 'tpope/vim-endwise',       { 'for': ['ruby'] } " Autoclose end on blocks
+
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
-" Theme
 Plug 'arcticicestudio/nord-vim'
-Plug 'gruvbox-community/gruvbox'
-
-" Murkdown
-Plug 'tpope/vim-markdown',      { 'for': 'markdown' }
-
-Plug 'janko-m/vim-test'         " Run tests from vim
-Plug 'onsails/lspkind-nvim/'    " Lsp icons
-
-" Plug 'airblade/vim-gitgutter'   " Show git changes in sign columns
-"Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-
+Plug 'janko-m/vim-test'
 Plug 'editorconfig/editorconfig-vim'
 
 call plug#end()
@@ -80,15 +66,17 @@ set signcolumn=yes
 "                               Colorscheme                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+syntax enable
+colorscheme nord
+"
+let g:nord_uniform_status_lines = 1
+
 if (has("termguicolors"))
   set termguicolors
 endif
 
-syntax enable
-colorscheme nord
-
 set viminfo+=! " Support for yankring
-set guicursor= " Disable cursor shapes (always be block)
+" set guicursor= " Disable cursor shapes (always be block), temply disable due to better copilot experience
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Buffer options                            "
@@ -194,12 +182,8 @@ set foldlevel=99
 " toggle folds with space
 nmap <space> za
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Completion                                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Make cmdline tab completion similar to bash
-" enable <ctrl-n> and <ctrl-p> to scroll thru matches
-set wildmode=list:longest
+" Option complete
+set wildmode=full
 set wildignore=*.o,*.obj,*~,*.pyc,*.pyo,*.bak
 set wildignore+=*DS_Store*
 set wildignore+=*.png,*.jpg,*.gif
@@ -331,10 +315,6 @@ nnoremap <Bs> :NERDTreeToggle<CR>
 " Open the project tree and expose current file in the nerdtree with Ctrl-\
 nnoremap <silent> <C-e> :NERDTreeFind<CR>
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               NERD Commenter                            "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " This is specific to rails apps, but I will not bind it to a particular
 " filetype
 function! TwoSpace()
@@ -415,5 +395,8 @@ EOF
 lua << EOF
 require('Comment').setup()
 EOF
+
 imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")                                                                                                             
 let g:copilot_no_tab_map = v:true
+
+set laststatus=3 " for neovim 0.7.0 show global status line
