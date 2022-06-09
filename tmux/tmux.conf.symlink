@@ -3,7 +3,7 @@
 unbind C-b
 set -g prefix C-a
 
-set-option -g default-shell /usr/local/bin/zsh
+set-option -g default-shell /bin/zsh
 
 set-option -g focus-events on
 
