@@ -24,7 +24,6 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
 
-Plug 'ray-x/lsp_signature.nvim'
 Plug 'mfussenegger/nvim-dap'
 
 " Plug 'github/copilot.vim'
@@ -61,139 +60,64 @@ filetype plugin indent on
 syntax on
 
 set signcolumn=yes
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Colorscheme                               "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 syntax enable
+
+set termguicolors
 colorscheme nord
-"
 let g:nord_uniform_status_lines = 1
 
-if (has("termguicolors"))
-  set termguicolors
-endif
-
-set viminfo+=! " Support for yankring
-" set guicursor= " Disable cursor shapes (always be block), temply disable due to better copilot experience
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Buffer options                            "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set hidden              " hide buffers when they are abandoned"
-set autoread            " auto reload changed files
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Display options                           "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set title               " show file name in window title"
-set novisualbell        " mute error bell
-
-set list                " show unprintable chars
+" show unprintable chars
+set list
 set listchars=tab:·\ ,trail:·,extends:»,precedes:«
-"set relativenumber
+
 set number
-set nolazyredraw
 
-set backspace=indent,eol,start
-set undolevels=100
-
-" Indicates a fast terminal connection.  More characters will be sent to
-" the screen for redrawing, instead of using insert/delete line
-" commands.  Improves smoothness of redrawing when there are multiple
-" windows and the terminal does not support a scrolling region.
-" Also enables the extra writing of characters at the end of each screen
-" line for lines that wrap.  This helps when using copy/paste with the
-" mouse in an xterm and other terminals.
-set ttyfast
-"set lazyredraw
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Indention                                 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set smartindent
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set shiftround
 set expandtab
-" Turn off line breaks
 set nowrap
 set nolinebreak
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Localiztion                               "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set langmenu=none               " always use English menu"
-set termencoding=utf-8          " default encoding
-set fileencodings=utf-8,cp1251,koi8-r,cp866 " list encodings for completion
-set fileformats=unix,dos,mac    " list file formats
-
-" Jump N lines when running out of the screen
-set scrolljump=7
-set scrolloff=10
-set sidescrolloff=10
-set sidescroll=1
 
 set splitright
 set splitbelow
 
-" support mouse scroll for easy navigation in large files
-set mouse=a
+set sidescrolloff=10
 
-" Map leader to ,
+set mouse=a " support mouse scroll for easy navigation in large files
+
 let mapleader = ","
 
-" Paste mode toggle on <,p>
-set pastetoggle=<leader>p
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Status Line                               "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set statusline=%f%h\ %y\ %m\ %r\ %{&encoding}\
-
 set statusline+=%=Line:%l/%L[%p%%]\ Col:%c\ [%b][0x%B]
 set statusline+=\ Buf:%n\
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Search settings                           "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Включаем подсветку выражения, которое ищется в тексте
-set hlsearch
-" Останавливать поиск при достижении конца файла
-set nowrapscan
-" Игнорировать регистр букв при поиске
+" Search
 set ignorecase
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Backups                                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" no backup files
 set nobackup
 set noswapfile
-set nowb
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Folding                                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set foldmethod=indent
-set nofoldenable                " don't fold by default
+set nofoldenable " don't fold by default
 set foldlevel=99
 " toggle folds with space
 nmap <space> za
 
-" Option complete
 set wildmode=full
+" Ignore compiled files
 set wildignore=*.o,*.obj,*~,*.pyc,*.pyo,*.bak
 set wildignore+=*DS_Store*
-set wildignore+=*.png,*.jpg,*.gif
 
+set laststatus=3 " for neovim 0.7.0 show global status line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Diff settings                             "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Add ignorance of whitespace to diff
 set diffopt=filler,iwhite,vertical,context:15
-let g:html_diff_one_file = 1
 
 " When editing a file, always jump to the last known cursor position.
 autocmd BufReadPost *
@@ -246,9 +170,6 @@ nnoremap <C-l> <C-w>l
 " This allows us to save a file as root with the :w!! command, if we have sudo
 " privileges, when we're not currently useing vim as root
 cmap w!! w !sudo tee % >/dev/null
-
-" Diff this
-"nnoremap <leader>dd :windo diffthis<CR>
 
 " Debug
 au FileType python map <Leader>d oimport pdb; pdb.set_trace()<esc>:w<cr>
@@ -330,8 +251,6 @@ au FileType yaml call TwoSpace()
 au FileType javascript call TwoSpace()
 au BufNewFile,BufRead *.erb call TwoSpace()
 
-let g:nerdtree_tabs_open_on_gui_startup = 0
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Vim test
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -344,9 +263,6 @@ let test#python#runner = 'pytest'
 let test#strategy = "vimux"
 let pipenv_prefix = "pytest"
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Switch                                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap - :Switch<cr>
 
 noremap <leader>1 1gt
@@ -377,7 +293,7 @@ let g:syntastic_javascript_checkers = ['eslint']
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
 
-""""""""" TAB
+" Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 
 lua << EOF
@@ -396,7 +312,5 @@ lua << EOF
 require('Comment').setup()
 EOF
 
-imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")                                                                                                             
-let g:copilot_no_tab_map = v:true
-
-set laststatus=3 " for neovim 0.7.0 show global status line
+" imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
+" let g:copilot_no_tab_map = v:true
