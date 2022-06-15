@@ -1,1 +1,0 @@
-/Users/semen_pupkov/.dotfiles/vim/vimrc

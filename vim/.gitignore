@@ -1,7 +1,0 @@
-.DS_Store
-*.log
-bundle/*
-node_modules
-vim_phpdebug.sess
-.vim
-plugged
