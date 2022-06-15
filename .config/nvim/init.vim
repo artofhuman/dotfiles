@@ -58,9 +58,7 @@ call plug#end()
 
 filetype plugin indent on
 syntax on
-
-set signcolumn=yes
-syntax enable
+set signcolumn=number
 
 set termguicolors
 colorscheme nord
@@ -113,6 +111,13 @@ set wildignore=*.o,*.obj,*~,*.pyc,*.pyo,*.bak
 set wildignore+=*DS_Store*
 
 set laststatus=3 " for neovim 0.7.0 show global status line
+
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Diff settings                             "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -156,10 +161,10 @@ nnoremap j gj
 nnoremap k gk
 
 " Resize windows with arrow keys
-nnoremap <D-Up> <C-w>+
-nnoremap <D-Down> <C-w>-
-nnoremap <D-Left> <C-w><
-nnoremap <D-Right>  <C-w>>
+" nnoremap <D-Up> <C-w>+
+" nnoremap <D-Down> <C-w>-
+" nnoremap <D-Left> <C-w><
+" nnoremap <D-Right>  <C-w>>
 
 " Window movement
 nnoremap <C-h> <C-w>h
@@ -182,7 +187,7 @@ vnoremap > >gv
 
 " For all text files set 'textwidth' to 80 characters.
 autocmd FileType text,txt setlocal tw=80
-
+autocmd FileType python setlocal indentkeys-=<:> " do not indent after type in insert mode
 autocmd BufRead,BufNewFile *.md         set ft=mkd tw=80 ts=2 sw=2 expandtab
 autocmd BufRead,BufNewFile *.markdown   set ft=mkd tw=80 ts=2 sw=2 expandtab
 autocmd BufRead,BufNewFile *.wiki       set ft=wiki tw=80 ts=2 sw=2 expandtab
@@ -204,7 +209,7 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfunction
 command! StripTrailingWhitespaces call <SID>StripTrailingWhitespaces()
-nmap ,w :StripTrailingWhitespaces<CR>
+nmap <leader>w :StripTrailingWhitespaces<CR>
 
 "from https://github.com/jackfranklin/dotfiles/blob/master/vim/vimrc
 function! OpenProjectNotes()
@@ -227,9 +232,8 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 let NERDTreeMinimalUI = 1
 " Tells the NERD tree to use arrows instead of + ~ chars when displaying directories
 let NERDTreeDirArrows = 1
-let g:NERDTreeWinSize = 30
-
 let NERDTreeShowHidden=1
+let g:NERDTreeWinSize = 30
 
 " Toggle the NERD Tree on an off
 nnoremap <Bs> :NERDTreeToggle<CR>
@@ -251,10 +255,7 @@ au FileType yaml call TwoSpace()
 au FileType javascript call TwoSpace()
 au BufNewFile,BufRead *.erb call TwoSpace()
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"                               Vim test
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
+" vim-test
 map <Leader>rs :TestNearest<CR>
 map <Leader>rt :TestFile<CR>
 map <Leader>rl :TestLast<CR>
@@ -276,9 +277,6 @@ noremap <leader>8 8gt
 noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 
-nnoremap <silent> <c-w> :exe "tabn ".g:lasttab<cr>
-vnoremap <silent> <c-w> :exe "tabn ".g:lasttab<cr>
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Allow to copy/paste between VIM instances
 " "copy the current visual selection to ~/.vbuf
@@ -287,14 +285,6 @@ vmap <Leader>y :w! ~/.vbuf<CR>
 nmap <Leader>y :.w! ~/.vbuf<CR>
 " "paste the contents of the buffer file
 nmap <Leader>p :r ~/.vbuf<CR>
-
-let g:syntastic_javascript_checkers = ['eslint']
-
-" Smaller updatetime for CursorHold & CursorHoldI
-set updatetime=300
-
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
 
 lua << EOF
 -- LSP Enable diagnostics
