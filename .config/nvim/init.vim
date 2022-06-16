@@ -277,21 +277,8 @@ nmap <Leader>y :.w! ~/.vbuf<CR>
 " "paste the contents of the buffer file
 nmap <Leader>p :r ~/.vbuf<CR>
 
-lua << EOF
--- LSP Enable diagnostics
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = false,
-    underline = true,
-    signs = true,
-    update_in_insert = false,
-  }
-)
-EOF
-
-lua << EOF
-require('Comment').setup()
-EOF
+" lsp
+set completeopt=menu,menuone,noselect
 
 " imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
 " let g:copilot_no_tab_map = v:true
