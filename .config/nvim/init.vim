@@ -51,6 +51,7 @@ Plug 'tpope/vim-endwise',       { 'for': ['ruby'] } " Autoclose end on blocks
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
 Plug 'arcticicestudio/nord-vim'
+Plug 'catppuccin/nvim', {'as': 'catppuccin'}
 Plug 'janko-m/vim-test'
 Plug 'editorconfig/editorconfig-vim'
 
@@ -62,7 +63,6 @@ set signcolumn=number
 
 set termguicolors
 colorscheme nord
-let g:nord_uniform_status_lines = 1
 
 " show unprintable chars
 set list
@@ -91,6 +91,9 @@ let mapleader = ","
 set statusline=%f%h\ %y\ %m\ %r\ %{&encoding}\
 set statusline+=%=Line:%l/%L[%p%%]\ Col:%c\ [%b][0x%B]
 set statusline+=\ Buf:%n\
+set laststatus=3 " for neovim 0.7.0 show global status line
+
+hi StatusLine ctermbg=white ctermfg=white
 
 " Search
 set ignorecase
@@ -109,8 +112,6 @@ set wildmode=full
 " Ignore compiled files
 set wildignore=*.o,*.obj,*~,*.pyc,*.pyo,*.bak
 set wildignore+=*DS_Store*
-
-set laststatus=3 " for neovim 0.7.0 show global status line
 
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=300
@@ -159,12 +160,6 @@ vmap <C-S-j> xp'[V']
 
 nnoremap j gj
 nnoremap k gk
-
-" Resize windows with arrow keys
-" nnoremap <D-Up> <C-w>+
-" nnoremap <D-Down> <C-w>-
-" nnoremap <D-Left> <C-w><
-" nnoremap <D-Right>  <C-w>>
 
 " Window movement
 nnoremap <C-h> <C-w>h
@@ -227,13 +222,9 @@ set matchpairs+=<:>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Don't display these kinds of files
 let NERDTreeIgnore=['\.pyc$', '\~$']
-" Make nerdtree look nice
 " Disables display of the 'Bookmarks' label and 'Press ? for help' text
 let NERDTreeMinimalUI = 1
-" Tells the NERD tree to use arrows instead of + ~ chars when displaying directories
-let NERDTreeDirArrows = 1
 let NERDTreeShowHidden=1
-let g:NERDTreeWinSize = 30
 
 " Toggle the NERD Tree on an off
 nnoremap <Bs> :NERDTreeToggle<CR>
