@@ -64,7 +64,6 @@ setw -g window-status-separator ""
 setw -g window-status-format "#[fg=colour245,bg=colour236] #I #[fg=colour245,bg=colour236]#W "
 setw -g window-status-current-format "#[fg=colour236,bg=colour240,nobold,nounderscore,noitalics]#[fg=colour231,bg=colour240] #I #[fg=colour231,bg=colour240]#{?window_zoomed_flag,#[fg=green][],}#W #[fg=colour240,bg=colour236,nobold,nounderscore,noitalics]"
 
-#set -g message-style fg=red,bg=default,bright
 set -g display-time 3000
 
 # copy text with mouse selection without pressing any key
@@ -80,3 +79,9 @@ bind-key -T copy-mode-vi 'v' send-keys -X begin-selection
 # copy text with `y` in copy mode
 # bind-key -T copy-mode-vi 'y' send -X copy-selection-and-cancel\; run "tmux save -|pbcopy >/dev/null 2>&1"
 bind-key -T copy-mode-vi 'y' send -X copy-selection-and-cancel
+
+set -g @plugin "arcticicestudio/nord-tmux"
+# set -g @nord_tmux_no_patched_font "1"
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run '~/.tmux/plugins/tpm/tpm'
