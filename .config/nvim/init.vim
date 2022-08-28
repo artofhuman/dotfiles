@@ -14,8 +14,8 @@ Plug 'bogado/file-line'                 " Open file and go to number line posiot
 Plug 'numToStr/Comment.nvim'
 
 " Completion (LSP)
-Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/nvim-lsp-installer'
+Plug 'neovim/nvim-lspconfig'
 
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -52,6 +52,9 @@ Plug 'jremmen/vim-ripgrep' " Rg Search
 
 Plug 'arcticicestudio/nord-vim'
 Plug 'catppuccin/nvim', {'as': 'catppuccin'}
+
+Plug 'psliwka/vim-smoothie' " smoothie cursor motions
+
 Plug 'janko-m/vim-test'
 Plug 'editorconfig/editorconfig-vim'
 
