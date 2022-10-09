@@ -17,6 +17,8 @@ Plug 'numToStr/Comment.nvim'
 Plug 'williamboman/nvim-lsp-installer'
 Plug 'neovim/nvim-lspconfig'
 
+Plug 'ray-x/lsp_signature.nvim'
+
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/nvim-cmp'
@@ -32,6 +34,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
 Plug 'rhysd/git-messenger.vim'          " Show git commits in popup
+" Plug 'lewis6991/gitsigns.nvim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'           " Fast switch between true/false -/+, etc
 Plug 'pechorin/any-jump.vim'
@@ -51,9 +54,7 @@ Plug 'tpope/vim-endwise',       { 'for': ['ruby'] } " Autoclose end on blocks
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
 Plug 'arcticicestudio/nord-vim'
-Plug 'catppuccin/nvim', {'as': 'catppuccin'}
-
-Plug 'psliwka/vim-smoothie' " smoothie cursor motions
+Plug 'EdenEast/nightfox.nvim'
 
 Plug 'janko-m/vim-test'
 Plug 'editorconfig/editorconfig-vim'
@@ -88,6 +89,7 @@ set splitbelow
 set sidescrolloff=10
 
 set mouse=a " support mouse scroll for easy navigation in large files
+set cursorline
 
 let mapleader = ","
 
