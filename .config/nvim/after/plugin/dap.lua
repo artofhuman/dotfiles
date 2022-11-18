@@ -1,7 +1,10 @@
 local ok, dap = pcall(require, "dap")
 if not ok then return end
 
-require("dapui").setup()
+require("dapui").setup({
+    icons = { expanded = "▾", collapsed = "▸", current_frame = "->" },
+})
+
 require("nvim-dap-virtual-text").setup()
 
 local dap, dapui = require("dap"), require("dapui")
