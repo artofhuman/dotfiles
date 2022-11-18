@@ -14,7 +14,8 @@ Plug 'bogado/file-line'                 " Open file and go to number line posiot
 Plug 'numToStr/Comment.nvim'
 
 " Completion (LSP)
-Plug 'williamboman/nvim-lsp-installer'
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 
 Plug 'ray-x/lsp_signature.nvim'
@@ -33,13 +34,14 @@ Plug 'mfussenegger/nvim-dap'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
-Plug 'rhysd/git-messenger.vim'          " Show git commits in popup
-" Plug 'lewis6991/gitsigns.nvim'
+
+Plug 'lewis6991/gitsigns.nvim'
+
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'           " Fast switch between true/false -/+, etc
 Plug 'pechorin/any-jump.vim'
 
-Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
+" Plug 'pangloss/vim-javascript',  { 'for': 'javascript' }
 Plug 'ekalinin/Dockerfile.vim', { 'for': 'Dockerfile' }
 Plug 'benmills/vimux'
 Plug 'christoomey/vim-tmux-navigator'   " Support for tmux
@@ -54,16 +56,22 @@ Plug 'tpope/vim-endwise',       { 'for': ['ruby'] } " Autoclose end on blocks
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
 Plug 'arcticicestudio/nord-vim'
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+" Plug 'rose-pine/neovim'
+" Plug 'cocopon/iceberg.vim'
+" Plug 'mhartington/oceanic-next'
+Plug 'p00f/alabaster.nvim'
 Plug 'EdenEast/nightfox.nvim'
 
 Plug 'janko-m/vim-test'
-Plug 'editorconfig/editorconfig-vim'
 
 call plug#end()
 
 filetype plugin indent on
 syntax on
-set signcolumn=number
+
+" set signcolumn=number
+set signcolumn=yes " for gitsigns show sign column
 
 set termguicolors
 colorscheme nord
@@ -93,12 +101,20 @@ set cursorline
 
 let mapleader = ","
 
-set statusline=%f%h\ %y\ %m\ %r\ %{&encoding}\
-set statusline+=%=Line:%l/%L[%p%%]\ Col:%c\ [%b][0x%B]
-set statusline+=\ Buf:%n\
+set statusline=
+set statusline+=%#Visual#       " colour
+set statusline+=%#CursorIM#     " colour
+set statusline+=%R              " readonly flag
+set statusline+=%M              " modified [+] flag
+set statusline+=%#CursorLine#   " colour
+set statusline+=\ %f\           " short file name
+set statusline+=%=              " right align
+set statusline+=%#CursorLine#   " colour
+set statusline+=\ %y\ %{&encoding}\           " file type
+set statusline+=\ %3l:%-2c\     " line + column
+" set statusline+=%#Cursor#       " colour
+set statusline+=\ %3p%%\        " percentage
 set laststatus=3 " for neovim 0.7.0 show global status line
-
-hi StatusLine ctermbg=white ctermfg=white
 
 " Search
 set ignorecase
