@@ -1,21 +1,19 @@
 # set Ctrl-a as the default prefix key combination
 # and unbind C-b to free it up
+set -g default-terminal "screen-256color"
+
 unbind C-b
 set -g prefix C-a
 
 set-option -g default-shell /bin/zsh
 
-set-option -g focus-events on
-
-# Mouse mode on
-set -g terminal-overrides 'xterm*:smcup@:rmcup@'
 set -g mouse on
+set -g escape-time 10
+set -g focus-events on
+set -g set-clipboard on
 
-# make delay minimal
-set -sg escape-time 0
-
-# use vim keybindings in copy mode
-setw -g mode-keys vi
+# set -g set-titles on
+# set -g set-titles-string "#W #{command} #T #{session_path}"
 
 # better pane splitting
 bind | split-window -h
@@ -36,52 +34,56 @@ bind r source-file ~/.tmux.conf \; display "Reloaded!"
 # this will renumber windows automatically when one gets deleted
 set-option -g renumber-windows on
 
-set-option -g default-terminal "screen-256color"
-set -ga terminal-overrides ",*256col*:Tc"
-
 set -g history-limit 1000000
-setw -g xterm-keys on
 
 # Zoom options
 bind-key -n C-Space resize-pane -Z # Ctrl+Space
 
 # ----------------------
 # Start windows and pane numbering with index 1 instead of 0
+
+BG="#2e3440"
+
 set -g base-index 1
 setw -g pane-base-index 1
 
 set -g status "on"
-set -g status-bg "colour236"
+set -g status-bg "$BG"
 set -g status-justify "left"
 set -g status-position "bottom"
 set -g status-left-length "100"
+set -g status-left-style "none"
 set -g status-right-length "100"
-set -g status-left "#{prefix_highlight}#[fg=colour236,bg=colour204,bold] #S #[fg=colour148,bg=colour236,nobold,nounderscore,noitalics]"
-set -g status-right "#[fg=colour240,bg=colour236,nobold,nounderscore,noitalics]#[fg=colour250,bg=colour240] %Y-%m-%d %H:%M #[fg=colour252,bg=colour240,nobold,nounderscore,noitalics]#[fg=colour241,bg=colour252] #h "
 
-# Highlight active window
+set -g pane-border-style "fg=$BG,bg=default"
+set -g pane-active-border-style "fg=#3b4252,bg=default"
+set -g pane-border-status bottom
+set -g pane-border-format ""
+
+set -g message-style "fg=brightwhite,bg=$BG"
+set -g message-command-style "fg=brightwhite,bg=$BG"
+setw -g window-status-activity-style "none"
 setw -g window-status-separator ""
-setw -g window-status-format "#[fg=colour245,bg=colour236] #I #[fg=colour245,bg=colour236]#W "
-setw -g window-status-current-format "#[fg=colour236,bg=colour240,nobold,nounderscore,noitalics]#[fg=colour231,bg=colour240] #I #[fg=colour231,bg=colour240]#{?window_zoomed_flag,#[fg=green][],}#W #[fg=colour240,bg=colour236,nobold,nounderscore,noitalics]"
+setw -g window-status-style "none,fg=brightwhite,bg=default"
 
-set -g display-time 3000
+set -g status-left " #[fg=#8fbcbb,bg=$BG]#S #[fg=brightwhite,bg=default,nobold,nounderscore,noitalics]"
+set -g status-right "#[fg=#616E88,bg=$BG]%I:%M%p #[fg=#616E88,bg=default] %m/%d/%Y "
+setw -g window-status-format "#[fg=#616E88,bg=$BG] #I#[fg=#616E88,bg=default] #W "
+setw -g window-status-current-format "#[fg=#5e81ac,bg=$BG] #I#[fg=brightwhite,bg=default] #W "
 
 # copy text with mouse selection without pressing any key
-bind-key -T copy-mode-vi MouseDragEnd1Pane send -X copy-selection-and-cancel\; run "tmux save -|pbcopy >/dev/null 2>&1"
+# bind-key -T copy-mode-vi MouseDragEnd1Pane send -X copy-selection-and-cancel\; run "tmux save -|pbcopy >/dev/null 2>&1"
 
 # Update default binding of `Enter` and `Space to also use copy-pipe
-unbind -T copy-mode-vi Enter
-unbind -T copy-mode-vi Space
+# unbind -T copy-mode-vi Enter
+# unbind -T copy-mode-vi Space
 
 # setup 'v' to begin selection as in Vim
-bind-key -T copy-mode-vi 'v' send-keys -X begin-selection
+# bind-key -T copy-mode-vi 'v' send-keys -X begin-selection
 
 # copy text with `y` in copy mode
 # bind-key -T copy-mode-vi 'y' send -X copy-selection-and-cancel\; run "tmux save -|pbcopy >/dev/null 2>&1"
-bind-key -T copy-mode-vi 'y' send -X copy-selection-and-cancel
-
-set -g @plugin "arcticicestudio/nord-tmux"
-# set -g @nord_tmux_no_patched_font "1"
+# bind-key -T copy-mode-vi 'y' send -X copy-selection-and-cancel
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-run '~/.tmux/plugins/tpm/tpm'
+# run '~/.tmux/plugins/tpm/tpm'
