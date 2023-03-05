@@ -9,7 +9,8 @@ Plug 'nvim-telescope/telescope.nvim'
 " Telescope plugins
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
-Plug 'scrooloose/nerdtree'
+" Plug 'scrooloose/nerdtree'
+Plug 'nvim-tree/nvim-tree.lua'
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
 Plug 'numToStr/Comment.nvim'
 
@@ -31,9 +32,9 @@ Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
 Plug 'theHamsta/nvim-dap-virtual-text'
 Plug 'mfussenegger/nvim-dap-python'
+Plug 'nvim-telescope/telescope-dap.nvim'
 
 " Plug 'github/copilot.vim'
-
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
@@ -60,11 +61,14 @@ Plug 'jremmen/vim-ripgrep' " Rg Search
 
 Plug 'arcticicestudio/nord-vim'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
-" Plug 'rose-pine/neovim'
+Plug 'rose-pine/neovim'
+Plug 'shaunsingh/moonlight.nvim'
 " Plug 'cocopon/iceberg.vim'
 " Plug 'mhartington/oceanic-next'
-Plug 'p00f/alabaster.nvim'
+" Plug 'p00f/alabaster.nvim'
 Plug 'EdenEast/nightfox.nvim'
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
+" Plug 'rebelot/kanagawa.nvim'
 
 Plug 'janko-m/vim-test'
 
@@ -78,12 +82,14 @@ set signcolumn=yes " for gitsigns show sign column
 
 set termguicolors
 colorscheme nord
+" colorscheme tokyonight-night
 
 " show unprintable chars
 set list
 set listchars=tab:·\ ,trail:·,extends:»,precedes:«
 
 set number
+set cmdheight=0  " show command line and status line as 1 line
 
 set smartindent
 set tabstop=4
@@ -244,16 +250,16 @@ set matchpairs+=<:>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               NERD Tree                                 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Don't display these kinds of files
-let NERDTreeIgnore=['\.pyc$', '\~$']
-" Disables display of the 'Bookmarks' label and 'Press ? for help' text
-let NERDTreeMinimalUI = 1
-let NERDTreeShowHidden=1
+" " Don't display these kinds of files
+" let NERDTreeIgnore=['\.pyc$', '\~$']
+" " Disables display of the 'Bookmarks' label and 'Press ? for help' text
+" let NERDTreeMinimalUI = 1
+" let NERDTreeShowHidden=1
 
 " Toggle the NERD Tree on an off
-nnoremap <Bs> :NERDTreeToggle<CR>
-" Open the project tree and expose current file in the nerdtree with Ctrl-\
-nnoremap <silent> <C-e> :NERDTreeFind<CR>
+nnoremap <Bs> :NvimTreeToggle<CR>
+" " Open the project tree and expose current file in the nerdtree with Ctrl-\
+nnoremap <silent> <C-e> :NvimTreeFindFile<CR>
 
 " This is specific to rails apps, but I will not bind it to a particular
 " filetype

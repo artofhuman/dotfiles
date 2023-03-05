@@ -38,3 +38,7 @@ alias rebase='git rebase -i HEAD~2'
 alias rebase3='git rebase -i HEAD~3'
 alias rebase4='git rebase -i HEAD~4'
 alias rebase5='git rebase -i HEAD~5'
+
+export PATH="$HOME/.poetry/bin:$PATH"
+
+source /Users/semyonpupkov/.docker/init-bash.sh || true # Added by Docker Desktop
