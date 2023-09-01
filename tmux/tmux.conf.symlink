@@ -1,9 +1,9 @@
-# set Ctrl-a as the default prefix key combination
-# and unbind C-b to free it up
 set -g default-terminal "screen-256color"
+set -ga terminal-overrides ",xterm-256color*:Tc"
 
 unbind C-b
 set -g prefix C-a
+bind-key C-a send-prefix
 
 set-option -g default-shell /bin/zsh
 
@@ -12,8 +12,8 @@ set -g escape-time 10
 set -g focus-events on
 set -g set-clipboard on
 
-# set -g set-titles on
-# set -g set-titles-string "#W #{command} #T #{session_path}"
+set -g set-titles on
+set -g set-titles-string "#W #{command} #T #{session_path}"
 
 # better pane splitting
 bind | split-window -h
@@ -32,9 +32,17 @@ unbind r
 bind r source-file ~/.tmux.conf \; display "Reloaded!"
 
 # this will renumber windows automatically when one gets deleted
+set-option -g status-position bottom
+set-option -g status on
+set-option -g status-interval 1
+set-option -g automatic-rename on
 set-option -g renumber-windows on
+set-option -g automatic-rename-format '#{b:pane_current_path}'
 
-set -g history-limit 1000000
+set -g history-limit 10000
+
+# saving sessions
+set -g @continuum-restore 'on'
 
 # Zoom options
 bind-key -n C-Space resize-pane -Z # Ctrl+Space
@@ -44,7 +52,29 @@ bind-key -n C-Space resize-pane -Z # Ctrl+Space
 set -g base-index 1
 setw -g pane-base-index 1
 
-# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-run '~/.tmux/plugins/tpm/tpm'
+# tmuxline
+set -g status "on"
+set -g status-justify "left"
+set -g status-style "none,bg=default"
+set -g status-left-style "none"
+set -g status-left-length "100"
+set -g status-right-style "none"
+set -g status-right-length "100"
+set -g pane-border-style "fg=#2e3440,bg=default"
+set -g pane-active-border-style "fg=#3b4252,bg=default"
+set -g pane-border-status bottom
+set -g pane-border-format ""
+set -g message-style "fg=brightwhite,bg=default"
+set -g message-command-style "fg=brightwhite,bg=default"
+set -g status-left "#[fg=#8fbcbb,bg=default,bold]#S #[fg=brightwhite,bg=default,nobold,nounderscore,noitalics]"
+set -g status-right "#[fg=#616E88,bg=default]%I:%M%p #[fg=#616E88,bg=default] %m/%d/%Y "
+setw -g window-status-format "#[fg=#616E88,bg=default] #I#[fg=#616E88,bg=default] #W "
+setw -g window-status-current-format "#[fg=#5e81ac,bg=default] #I#[fg=brightwhite,bg=default] #W "
+setw -g window-status-activity-style "none"
+setw -g window-status-separator ""
+setw -g window-status-style "none,fg=brightwhite,bg=default"
 
-set -g @plugin "nordtheme/tmux"
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+# run '~/.tmux/plugins/tpm/tpm'
+
+# set -g @plugin "nordtheme/tmux"

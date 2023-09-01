@@ -58,7 +58,8 @@ Plug 'tpope/vim-endwise',       { 'for': ['ruby'] } " Autoclose end on blocks
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
 Plug 'gruvbox-community/gruvbox'
-Plug 'arcticicestudio/nord-vim'
+" Plug 'arcticicestudio/nord-vim'
+Plug 'shaunsingh/nord.nvim'
 Plug 'EdenEast/nightfox.nvim'
 " Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'rose-pine/neovim'
@@ -81,6 +82,14 @@ set signcolumn=yes      " for gitsigns show sign column
 set termguicolors
 " let g:gruvbox_contrast_dark = "hard"
 " let g:gruvbox_contrast_light = "hard"
+
+" Example config in Vim-Script
+let g:nord_contrast = v:false
+let g:nord_disable_background = v:true
+let g:nord_italic = v:false
+let g:nord_uniform_diff_background = v:true
+let g:nord_bold = v:false
+
 colorscheme nord
 set background=dark
 
