@@ -102,5 +102,12 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/openssl@3/bin:$PATH"
 
 export PATH="$HOME/.poetry/bin:$PATH"
+export PATH="/Users/semyonpupkov/.local/bin:$PATH"
 
 source /Users/semyonpupkov/.docker/init-zsh.sh || true # Added by Docker Desktop
+
+PATH="/Users/semyonpupkov/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/Users/semyonpupkov/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/semyonpupkov/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/semyonpupkov/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/semyonpupkov/perl5"; export PERL_MM_OPT;
