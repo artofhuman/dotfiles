@@ -1,6 +1,4 @@
 call plug#begin('~/.vim/plugged')
-Plug 'tpope/vim-sensible'               " Vim community settings
-
 " Telescope requirements
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -9,8 +7,8 @@ Plug 'nvim-telescope/telescope.nvim'
 " Telescope plugins
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
-" Plug 'scrooloose/nerdtree'
-Plug 'nvim-tree/nvim-tree.lua'
+Plug 'scrooloose/nerdtree'
+" Plug 'nvim-tree/nvim-tree.lua'
 Plug 'bogado/file-line'                 " Open file and go to number line posiotion
 Plug 'numToStr/Comment.nvim'
 
@@ -28,11 +26,11 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
 
-Plug 'mfussenegger/nvim-dap'
-Plug 'rcarriga/nvim-dap-ui'
-Plug 'theHamsta/nvim-dap-virtual-text'
-Plug 'mfussenegger/nvim-dap-python'
-Plug 'nvim-telescope/telescope-dap.nvim'
+" Plug 'mfussenegger/nvim-dap'
+" Plug 'rcarriga/nvim-dap-ui'
+" Plug 'theHamsta/nvim-dap-virtual-text'
+" Plug 'mfussenegger/nvim-dap-python'
+" Plug 'nvim-telescope/telescope-dap.nvim'
 
 " Plug 'github/copilot.vim'
 Plug 'tpope/vim-surround'
@@ -59,16 +57,16 @@ Plug 'tpope/vim-endwise',       { 'for': ['ruby'] } " Autoclose end on blocks
 
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
+Plug 'gruvbox-community/gruvbox'
 Plug 'arcticicestudio/nord-vim'
-Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'EdenEast/nightfox.nvim'
+" Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'rose-pine/neovim'
-Plug 'shaunsingh/moonlight.nvim'
+" Plug 'shaunsingh/moonlight.nvim'
 " Plug 'cocopon/iceberg.vim'
 " Plug 'mhartington/oceanic-next'
-" Plug 'p00f/alabaster.nvim'
-Plug 'EdenEast/nightfox.nvim'
-Plug 'catppuccin/vim', { 'as': 'catppuccin' }
-" Plug 'rebelot/kanagawa.nvim'
+Plug 'p00f/alabaster.nvim'
+" Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 
 Plug 'janko-m/vim-test'
 
@@ -78,19 +76,19 @@ filetype plugin indent on
 syntax on
 
 " set signcolumn=number
-set signcolumn=yes " for gitsigns show sign column
+set signcolumn=yes      " for gitsigns show sign column
 
 set termguicolors
+" let g:gruvbox_contrast_dark = "hard"
+" let g:gruvbox_contrast_light = "hard"
 colorscheme nord
-" colorscheme tokyonight-night
+set background=dark
 
 " show unprintable chars
 set list
 set listchars=tab:·\ ,trail:·,extends:»,precedes:«
 
 set number
-set cmdheight=0  " show command line and status line as 1 line
-
 set smartindent
 set tabstop=4
 set softtabstop=4
@@ -105,8 +103,8 @@ set splitbelow
 
 set sidescrolloff=10
 
-set mouse=a " support mouse scroll for easy navigation in large files
-set cursorline
+set mouse=a                     " support mouse scroll for easy navigation
+" set cursorline
 
 let mapleader = ","
 
@@ -123,18 +121,17 @@ set statusline+=\ %y\ %{&encoding}\           " file type
 set statusline+=\ %3l:%-2c\     " line + column
 " set statusline+=%#Cursor#       " colour
 set statusline+=\ %3p%%\        " percentage
-set laststatus=3 " for neovim 0.7.0 show global status line
 
-" Search
-set ignorecase
+set laststatus=3                " for neovim 0.7.0 show global status line
+set pumheight=10                " Completion window max size
+set ignorecase                  " Search case insensitive...
 
 " no backup files
 set nobackup
 set noswapfile
 
 set foldmethod=indent
-set nofoldenable " don't fold by default
-set foldlevel=99
+set foldlevel=99                " fold max lines
 " toggle folds with space
 nmap <space> za
 
@@ -142,12 +139,9 @@ set wildmode=full
 " Ignore compiled files
 set wildignore=*.o,*.obj,*~,*.pyc,*.pyo,*.bak
 set wildignore+=*DS_Store*
+set updatetime=300              " Smaller updatetime for CursorHold & CursorHoldI
 
-" Smaller updatetime for CursorHold & CursorHoldI
-set updatetime=300
-
-" Don't pass messages to |ins-completion-menu|.
-set shortmess+=c
+set shortmess+=c                " Don't pass messages to |ins-completion-menu|.
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "                               Diff settings                             "
@@ -251,15 +245,16 @@ set matchpairs+=<:>
 "                               NERD Tree                                 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " " Don't display these kinds of files
-" let NERDTreeIgnore=['\.pyc$', '\~$']
-" " Disables display of the 'Bookmarks' label and 'Press ? for help' text
-" let NERDTreeMinimalUI = 1
-" let NERDTreeShowHidden=1
+let NERDTreeIgnore=['\.pyc$', '\~$']
+" Disables display of the 'Bookmarks' label and 'Press ? for help' text
+let NERDTreeMinimalUI = 1
+let NERDTreeShowHidden=1
 
 " Toggle the NERD Tree on an off
-nnoremap <Bs> :NvimTreeToggle<CR>
+" nnoremap <Bs> :NvimTreeToggle<CR>
+nnoremap <Bs> :NERDTreeToggle<CR>
 " " Open the project tree and expose current file in the nerdtree with Ctrl-\
-nnoremap <silent> <C-e> :NvimTreeFindFile<CR>
+nnoremap <silent> <C-e> :NERDTreeFind<CR>
 
 " This is specific to rails apps, but I will not bind it to a particular
 " filetype
@@ -309,6 +304,3 @@ nmap <Leader>p :r ~/.vbuf<CR>
 
 " lsp
 set completeopt=menu,menuone,noselect
-
-" imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
-" let g:copilot_no_tab_map = v:true
