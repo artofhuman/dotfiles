@@ -17,7 +17,7 @@ Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 
-Plug 'ray-x/lsp_signature.nvim'
+" Plug 'ray-x/lsp_signature.nvim'
 
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -25,6 +25,10 @@ Plug 'hrsh7th/nvim-cmp'
 " Snippets required by cmp
 Plug 'L3MON4D3/LuaSnip'
 Plug 'saadparwaiz1/cmp_luasnip'
+
+Plug 'mg979/vim-visual-multi'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'nvim-tree/nvim-web-devicons' 
 
 " Plug 'mfussenegger/nvim-dap'
 " Plug 'rcarriga/nvim-dap-ui'
@@ -36,6 +40,7 @@ Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'               " Support git
 Plug 'tpope/vim-rhubarb'                " Allow open code on github
+Plug 'shumphrey/fugitive-gitlab.vim'
 
 Plug 'lewis6991/gitsigns.nvim'
 
@@ -57,16 +62,20 @@ Plug 'tpope/vim-endwise',       { 'for': ['ruby'] } " Autoclose end on blocks
 
 Plug 'jremmen/vim-ripgrep' " Rg Search
 
-Plug 'gruvbox-community/gruvbox'
 " Plug 'arcticicestudio/nord-vim'
 Plug 'shaunsingh/nord.nvim'
 Plug 'EdenEast/nightfox.nvim'
+Plug 'sainnhe/everforest'
+Plug 'ellisonleao/gruvbox.nvim'
+Plug 'sainnhe/gruvbox-material'
+
 " Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'rose-pine/neovim'
 " Plug 'shaunsingh/moonlight.nvim'
-" Plug 'cocopon/iceberg.vim'
+Plug 'cocopon/iceberg.vim'
 " Plug 'mhartington/oceanic-next'
 Plug 'p00f/alabaster.nvim'
+Plug 'savq/melange-nvim'
 " Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 
 Plug 'janko-m/vim-test'
@@ -90,7 +99,7 @@ let g:nord_italic = v:false
 let g:nord_uniform_diff_background = v:true
 let g:nord_bold = v:false
 
-colorscheme nord
+colorscheme gruvbox-material
 set background=dark
 
 " show unprintable chars
@@ -313,3 +322,5 @@ nmap <Leader>p :r ~/.vbuf<CR>
 
 " lsp
 set completeopt=menu,menuone,noselect
+
+let g:fugitive_gitlab_domains = ['https://git.skbkontur.ru']

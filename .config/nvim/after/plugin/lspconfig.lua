@@ -99,4 +99,4 @@ require("mason-lspconfig").setup_handlers({
     end,
 })
 
-require "lsp_signature".setup()
+-- require "lsp_signature".setup()
