@@ -32,7 +32,7 @@ unbind r
 bind r source-file ~/.tmux.conf \; display "Reloaded!"
 
 # this will renumber windows automatically when one gets deleted
-set-option -g status-position bottom
+set-option -g status-position top
 set-option -g status on
 set-option -g status-interval 1
 set-option -g automatic-rename on
@@ -62,7 +62,7 @@ set -g status-right-style "none"
 set -g status-right-length "100"
 set -g pane-border-style "fg=#2e3440,bg=default"
 set -g pane-active-border-style "fg=#3b4252,bg=default"
-set -g pane-border-status bottom
+# set -g pane-border-status bottom
 set -g pane-border-format ""
 set -g message-style "fg=brightwhite,bg=default"
 set -g message-command-style "fg=brightwhite,bg=default"
