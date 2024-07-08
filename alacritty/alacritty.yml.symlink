@@ -1,101 +1,76 @@
+# Any items in the `env` entry below will be added as
+# environment variables. Some entries may override variables
+# set by alacritty it self.
 env:
-  # for starting tmux with correnct locale
-  LC_ALL: en_US.UTF-8
-  LANG: en_US.UTF-8
-  # homebrew
-  PATH: "/usr/local/bin:$PATH"
+  # TERM env customization.
+  #
+  # If this property is not set, alacritty will set it to xterm-256color.
+  #
+  # Note that some xterm terminfo databases don't declare support for italics.
+  # You can verify this by checking for the presence of `smso` and `sitm` in
+  # `infocmp xterm-256color`.
+  TERM: xterm-256color
 
 window:
-  #startup_mode: SimpleFullscreen
-  startup_mode: Maximized
-  decorations: buttonless
+  # Window dimensions in character columns and lines
+  # (changes require restart)
+  dimensions:
+    columns: 160
+    lines: 48
+
+  # Adds this many blank pixels of padding around the window
+  # Units are physical pixels; this is not DPI aware.
+  # (change requires restart)
   padding:
     x: 2
     y: 2
 
-shell:
-  program: /usr/local/bin/zsh
-  args:
-    - --login
+  # Spread additional padding evenly around the terminal content.
+  dynamic_padding: false
 
-mouse:
-  hide_when_typing: true
-  hints:
-    # URL launcher
-    #
-    # This program is executed when clicking on a text which is recognized as a URL.
-    # The URL is always added to the command as the last parameter.
-    launcher: open
+  dynamic_title: true
 
+  # Background opacity
+  opacity: 0.9
+  blur: true
+
+
+  # Window decorations
+  # Setting this to false will result in window without borders and title bar.
+  decorations: Full
+
+# When true, bold text is drawn using the bright variant of colors.
+draw_bold_text_with_bright_colors: true
+
+# Font configuration (changes require restart)
 font:
+  # The normal (roman) font face to use.
   normal:
-    # family: SF Mono
-    # family: Fira Code
-    # family: "Cascadia Code"
-    # family: "Source Code Pro"
-    family: "JetBrains Mono"
-    # family: iA Writer Mono S
-  size: 14
+    family: Berkeley Mono
+    style: Regular
 
+  # The bold font face
+  bold:
+    family: Berkeley Mono
+    style: Bold
+
+  # The italic font face
+  italic:
+    family: Berkeley Mono
+    style: Italic
+
+  # Point size of the font
+  size: 16.0
+
+  # Offset is the extra space around each character. offset.y can be thought of
+  # as modifying the linespacing, and offset.x as modifying the letter spacing.
   offset:
     x: 0
     y: 0
 
+  # Glyph offset determines the locations of the glyphs within their cells with
+  # the default being at the bottom. Increase the x offset to move the glyph to
+  # the right, increase the y offset to move the glyph upward.
   glyph_offset:
     x: 0
     y: 0
-
-  use_thin_strokes: true
-
-selection:
-  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
-  save_to_clipboard: true
-
-colors:
-  primary:
-    background: '#2e3440'
-    foreground: '#d8dee9'
-    dim_foreground: '#a5abb6'
-  cursor:
-    text: '#2e3440'
-    cursor: '#d8dee9'
-  vi_mode_cursor:
-    text: '#2e3440'
-    cursor: '#d8dee9'
-  selection:
-    text: CellForeground
-    background: '#4c566a'
-  search:
-    matches:
-      foreground: CellBackground
-      background: '#88c0d0'
-    bar:
-      background: '#434c5e'
-      foreground: '#d8dee9'
-  normal:
-    black: '#3b4252'
-    red: '#bf616a'
-    green: '#a3be8c'
-    yellow: '#ebcb8b'
-    blue: '#81a1c1'
-    magenta: '#b48ead'
-    cyan: '#88c0d0'
-    white: '#e5e9f0'
-  bright:
-    black: '#4c566a'
-    red: '#bf616a'
-    green: '#a3be8c'
-    yellow: '#ebcb8b'
-    blue: '#81a1c1'
-    magenta: '#b48ead'
-    cyan: '#8fbcbb'
-    white: '#eceff4'
-  dim:
-    black: '#373e4d'
-    red: '#94545d'
-    green: '#809575'
-    yellow: '#b29e75'
-    blue: '#68809a'
-    magenta: '#8c738c'
-    cyan: '#6d96a5'
-    white: '#aeb3bb'

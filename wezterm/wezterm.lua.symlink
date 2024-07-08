@@ -6,17 +6,17 @@ if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
 
--- config.color_scheme = "nord"
+config.color_scheme = "nord"
 -- config.color_scheme = "dawnfox"
 -- config.color_scheme = "rose-pine-moon"
 -- config.color_scheme = "Gruvbox Dark (Gogh)"
-config.color_scheme = "Gruvbox Material (Gogh)"
+-- config.color_scheme = "Gruvbox Material (Gogh)"
 -- config.color_scheme = "duskfox"
 -- config.color_scheme = "dayfox"
 
 
 config.colors = {
-	-- background = "#232730",
+	background = "#232730",
 	-- cursor_bg = "#4C566A",
 	-- cursor_border = "#4C566A",
 }
@@ -24,27 +24,26 @@ config.colors = {
 config.font = wezterm.font_with_fallback({
 	-- { family = "Hack", italic = false },
 	-- { family = "JetBrains Mono", italic = false },
-	-- { family = "JetBrains Mono", italic = false },
-    -- { family = "Iosevka Term", italic = false },
-	{ family = "Berkeley Mono", italic = false },
+    -- { family = "Iosevka Term", italic = false }
+    { family = "Berkeley Mono", italic = false },
 	-- { family = "Symbols Nerd Font Mono", scale = 0.75 },
     -- { family = "SF Mono", italic = false },
 })
 
 config.font_size = 16.0
-config.line_height = 1.15
+config.line_height = 1.25
 
 config.use_fancy_tab_bar = false
-config.hide_tab_bar_if_only_one_tab = true
+-- config.hide_tab_bar_if_only_one_tab = true
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
--- config.macos_window_background_blur = 40
--- config.window_background_opacity = 0.9
+config.macos_window_background_blur = 40
+config.window_background_opacity = 0.88
 config.window_close_confirmation = "NeverPrompt"
 
 config.window_padding = {
 	left = "24px",
 	right = "24px",
-	top = "1.5cell",
+	top = "0px",
 	bottom = "0px",
 }
 

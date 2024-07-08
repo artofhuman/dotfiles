@@ -29,6 +29,7 @@ Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'mg979/vim-visual-multi'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'nvim-tree/nvim-web-devicons' 
+Plug 'windwp/nvim-autopairs'
 
 " Plug 'mfussenegger/nvim-dap'
 " Plug 'rcarriga/nvim-dap-ui'
@@ -54,6 +55,7 @@ Plug 'benmills/vimux'
 Plug 'christoomey/vim-tmux-navigator'   " Support for tmux
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
 
 " Ruby
 " Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
@@ -64,10 +66,14 @@ Plug 'jremmen/vim-ripgrep' " Rg Search
 
 " Plug 'arcticicestudio/nord-vim'
 Plug 'shaunsingh/nord.nvim'
-Plug 'EdenEast/nightfox.nvim'
-Plug 'sainnhe/everforest'
-Plug 'ellisonleao/gruvbox.nvim'
+Plug 'olivercederborg/poimandres.nvim'
+" Plug 'jasonlong/poimandres.nvim'
+" Plug 'EdenEast/nightfox.nvim'
+" Plug 'sainnhe/everforest'
+" Plug 'ellisonleao/gruvbox.nvim'
 Plug 'sainnhe/gruvbox-material'
+" Plug 'savq/melange-nvim'
+" Plug 'folke/tokyonight.nvim'
 
 " Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'rose-pine/neovim'
@@ -75,7 +81,6 @@ Plug 'rose-pine/neovim'
 Plug 'cocopon/iceberg.vim'
 " Plug 'mhartington/oceanic-next'
 Plug 'p00f/alabaster.nvim'
-Plug 'savq/melange-nvim'
 " Plug 'catppuccin/vim', { 'as': 'catppuccin' }
 
 Plug 'janko-m/vim-test'
@@ -93,13 +98,28 @@ set termguicolors
 " let g:gruvbox_contrast_light = "hard"
 
 " Example config in Vim-Script
-let g:nord_contrast = v:false
+let g:nord_contrast = v:true
 let g:nord_disable_background = v:true
 let g:nord_italic = v:false
 let g:nord_uniform_diff_background = v:true
 let g:nord_bold = v:false
+let g:nord_borders = v:true
 
-colorscheme gruvbox-material
+let g:gruvbox_material_background = 'hard'
+let g:gruvbox_material_better_performance = 1
+
+" colorscheme gruvbox-material
+colorscheme nord
+
+lua <<EOF
+require("rose-pine").setup({
+  disable_italics = true,
+  highlight_groups = {
+    Comment = { italic = true }
+  }
+})
+EOF
+
 set background=dark
 
 " show unprintable chars
@@ -132,7 +152,7 @@ set statusline+=%#CursorIM#     " colour
 set statusline+=%R              " readonly flag
 set statusline+=%M              " modified [+] flag
 set statusline+=%#CursorLine#   " colour
-set statusline+=\ %f\           " short file name
+" set statusline+=\ %f\           " short file name
 set statusline+=%=              " right align
 set statusline+=%#CursorLine#   " colour
 set statusline+=\ %y\ %{&encoding}\           " file type
@@ -186,8 +206,8 @@ map <Leader>v :vnew <C-R>=expand("%:p:h") . '/'<CR>
 " Save
 nmap <leader>s :w<cr>
 imap <leader>s <esc>:w<cr>
-map <C-s> <esc>:w<CR>
-imap <C-s> <esc>:w<CR>
+map <D-s> <esc>:w<CR>
+imap <D-s> <esc>:w<CR>
 
 " Clear search results
 nnoremap <silent> <Esc><Esc> :nohlsearch<CR><Esc>
@@ -324,3 +344,13 @@ nmap <Leader>p :r ~/.vbuf<CR>
 set completeopt=menu,menuone,noselect
 
 let g:fugitive_gitlab_domains = ['https://git.skbkontur.ru']
+
+lua <<EOF
+require("nvim-autopairs").setup {
+  check_ts = true
+}
+EOF
+
+"lua <<EOF
+" print("Hello user! Welcome to Neovim!")
+"EOF
