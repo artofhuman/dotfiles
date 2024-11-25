@@ -70,9 +70,9 @@ cmp.setup({
     end, {'i', 's'}),
   },
 
-  window = {
-    documentation = cmp.config.window.bordered()
-  },
+  -- window = {
+  --   documentation = cmp.config.window.bordered()
+  -- },
 
   sources = {
     { name = 'nvim_lsp' },

@@ -55,7 +55,7 @@ Plug 'benmills/vimux'
 Plug 'christoomey/vim-tmux-navigator'   " Support for tmux
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'nvim-treesitter/playground'
+" Plug 'nvim-treesitter/playground'
 
 " Ruby
 " Plug 'vim-ruby/vim-ruby',       { 'for': 'ruby' }
@@ -66,11 +66,11 @@ Plug 'jremmen/vim-ripgrep' " Rg Search
 
 " Plug 'arcticicestudio/nord-vim'
 Plug 'shaunsingh/nord.nvim'
-Plug 'olivercederborg/poimandres.nvim'
-" Plug 'jasonlong/poimandres.nvim'
+" Plug 'olivercederborg/poimandres.nvim'
+Plug 'jasonlong/poimandres.nvim'
 " Plug 'EdenEast/nightfox.nvim'
-" Plug 'sainnhe/everforest'
-" Plug 'ellisonleao/gruvbox.nvim'
+Plug 'sainnhe/everforest'
+Plug 'ellisonleao/gruvbox.nvim'
 Plug 'sainnhe/gruvbox-material'
 " Plug 'savq/melange-nvim'
 " Plug 'folke/tokyonight.nvim'
@@ -350,7 +350,3 @@ require("nvim-autopairs").setup {
   check_ts = true
 }
 EOF
-
-"lua <<EOF
-" print("Hello user! Welcome to Neovim!")
-"EOF

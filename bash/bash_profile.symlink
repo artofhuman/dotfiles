@@ -42,3 +42,5 @@ alias rebase5='git rebase -i HEAD~5'
 export PATH="$HOME/.poetry/bin:$PATH"
 
 source /Users/semyonpupkov/.docker/init-bash.sh || true # Added by Docker Desktop
+
+. "$HOME/.cargo/env"
