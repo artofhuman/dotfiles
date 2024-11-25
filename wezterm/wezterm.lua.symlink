@@ -6,43 +6,47 @@ if wezterm.config_builder then
 	config = wezterm.config_builder()
 end
 
-config.color_scheme = "nord"
--- config.color_scheme = "dawnfox"
--- config.color_scheme = "rose-pine-moon"
--- config.color_scheme = "Gruvbox Dark (Gogh)"
--- config.color_scheme = "Gruvbox Material (Gogh)"
--- config.color_scheme = "duskfox"
--- config.color_scheme = "dayfox"
+-- config.color_scheme = "nord"
+-- config.color_scheme = "Poimandres"
+config.color_scheme = "rose-pine-moon"
+-- config.color_scheme = "rose-pine-dawn"
+-- config.color_scheme = "iceberg-dark"
+-- config.color_scheme = "Poimandres Storm"
+-- config.color_scheme = "Tokyo Night Moon"
 
 
 config.colors = {
-	background = "#232730",
-	-- cursor_bg = "#4C566A",
+	-- background = "#232730",
+	-- cursor_bg = "#f5f5f5",
+	-- cursor_bg = "#d5d5d5",
 	-- cursor_border = "#4C566A",
 }
 
 config.font = wezterm.font_with_fallback({
+	-- { family = "IBM Plex Mono", italic = false },
 	-- { family = "Hack", italic = false },
-	-- { family = "JetBrains Mono", italic = false },
-    -- { family = "Iosevka Term", italic = false }
-    { family = "Berkeley Mono", italic = false },
-	-- { family = "Symbols Nerd Font Mono", scale = 0.75 },
-    -- { family = "SF Mono", italic = false },
+	{ family = "JetBrains Mono", italic = false },
+	-- { family = "Noto Sans Mono", italic = false },
+  -- { family = "Iosevka Term", italic = false }
+  -- { family = "Berkeley Mono", italic = false },
+  -- { family = "SF Mono", italic = false },
 })
 
-config.font_size = 16.0
+config.font_size = 16
 config.line_height = 1.25
 
 config.use_fancy_tab_bar = false
 -- config.hide_tab_bar_if_only_one_tab = true
-config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
-config.macos_window_background_blur = 40
-config.window_background_opacity = 0.88
+-- config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+config.window_decorations = "RESIZE"
 config.window_close_confirmation = "NeverPrompt"
 
+config.macos_window_background_blur = 30
+config.window_background_opacity = 0.93
+
 config.window_padding = {
-	left = "24px",
-	right = "24px",
+	left = "5px",
+	right = "5px",
 	top = "0px",
 	bottom = "0px",
 }

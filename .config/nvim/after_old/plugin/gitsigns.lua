@@ -1,4 +1,7 @@
 require('gitsigns').setup{
+    update_debounce = 30,
+    -- _refresh_staged_on_update = false,
+
     on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
 
