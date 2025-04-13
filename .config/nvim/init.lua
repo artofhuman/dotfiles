@@ -27,29 +27,49 @@ require("lazy").setup({
         vim.g.nord_borders = false
 
         -- vim.cmd[[colorscheme nord]]
-  
-        -- nord fixes
-        vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3b4252", underline = false, bold = false })
       end
     },
   
-    { 
-      'olivercederborg/poimandres.nvim',
-      lazy = false,
-      priority = 1000,
-      config = function()
-        require('poimandres').setup {
-          -- leave this setup function empty for default config
-          -- or refer to the configuration section
-          -- for configuration options
-          disable_background = true
-        }
-      end,
+    -- { 
+    --   'olivercederborg/poimandres.nvim',
+    --   lazy = false,
+    --   priority = 1000,
+    --   config = function()
+    --     require('poimandres').setup {
+    --       -- leave this setup function empty for default config
+    --       -- or refer to the configuration section
+    --       -- for configuration options
+    --       disable_background = false
+    --     }
+    --   end,
+    --
+    --   -- optionally set the colorscheme within lazy config
+    --   init = function()
+    --     -- vim.cmd("colorscheme poimandres")
+    --   end
+    -- },
 
-      -- optionally set the colorscheme within lazy config
+    {
+      "scottmckendry/cyberdream.nvim",
+      -- enabled = theme == "cyberdream",
+      lazy = false,
+      priority = 1000000,
+      opts = {
+        saturation = 0.95,
+        transparent = true,
+      },
       init = function()
-        -- vim.cmd("colorscheme poimandres")
-      end
+        vim.cmd "colorscheme cyberdream"
+        vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
+        vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
+        vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
+        vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
+        vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3c4048", bg = "none" })
+        vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#7b8496" })
+        vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "#232429" })
+        vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bg = "#232429" })
+        vim.api.nvim_set_hl(0, "TreesitterContextBottom", { bg = "#232429", underline = true })
+      end,
     },
   
     { 
@@ -57,7 +77,9 @@ require("lazy").setup({
       name = "rose-pine",
       config = function()
         require("rose-pine").setup({
-          variant = "moon",
+          --variant = "moon",
+          variant = "auto",
+          dark_variant = "main", -- main, moon, or dawn
           styles = {
             bold = false,
             italic = false,
@@ -66,19 +88,16 @@ require("lazy").setup({
         })
       end
     },
+  
+    -- { 'atelierbram/vim-colors_atelier-schemes' },
+    -- { 'p00f/alabaster.nvim' },
+    -- { 'davidosomething/vim-colors-meh' },
+    { 
+      'zenbones-theme/zenbones.nvim',
+      dependencies = "rktjmp/lush.nvim",
+    },
 
-    -- {
-    --   'jesseleite/nvim-noirbuddy',
-    --   dependencies = {
-    --     { 'tjdevries/colorbuddy.nvim' }
-    --   },
-    --   lazy = false,
-    --   priority = 1000,
-    --   opts = {
-    --     preset = "slate"
-    --     -- All of your `setup(opts)` will go here
-    --   },
-    -- },
+    { 'vim-test/vim-test' },
 
     {
       "folke/tokyonight.nvim",
@@ -92,8 +111,9 @@ require("lazy").setup({
         }
       },
     },
-  
-    { "savq/melange-nvim" },
+
+    -- {"nyoom-engineering/oxocarbon.nvim"},
+    { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 
     -- save my last cursor position
     {
@@ -132,8 +152,8 @@ require("lazy").setup({
           incremental_selection = {
             enable = true,
             keymaps = {
-              init_selection = "<space>", -- maps in normal mode to init the node/scope selection with space
-              node_incremental = "<space>", -- increment to the upper named parent
+              -- init_selection = "<space>", -- maps in normal mode to init the node/scope selection with space
+              -- node_incremental = "<space>", -- increment to the upper named parent
               node_decremental = "<bs>", -- decrement to the previous node
               scope_incremental = "<tab>", -- increment to the upper scope (as defined in locals.scm)
             },
@@ -191,15 +211,15 @@ require("lazy").setup({
                 ['[]'] = '@function.outer',
               },
             },
-            swap = {
-              enable = true,
-              swap_next = {
-                ['<leader>sn'] = '@parameter.inner',
-              },
-              swap_previous = {
-                ['<leader>sp'] = '@parameter.inner',
-              },
-            },
+            -- swap = {
+            --   enable = true,
+            --   swap_next = {
+            --     ['<leader>sn'] = '@parameter.inner',
+            --   },
+            --   swap_previous = {
+            --     ['<leader>sp'] = '@parameter.inner',
+            --   },
+            -- },
           },
         })
       end,
@@ -231,6 +251,7 @@ require("lazy").setup({
       config = function ()
         local actions = require('telescope.actions')
         local telescope = require("telescope")
+        local ts_theme = "ivy"
         telescope.setup({
           defaults = {
             file_ignore_patterns = {
@@ -238,9 +259,18 @@ require("lazy").setup({
             },
             -- layout_strategy='vertical',
             -- layout_config={width=0.6},
+		
+            layout_strategy = 'vertical',
+            layout_config = {
+              width=0.6
+              -- height = vim.o.lines,
+              -- width = vim.o.columns,
+              -- prompt_position = "bottom",
+              -- preview_height = 0.4,
+            },
             mappings = {
               i = {
-                ["<ESC>"]   = actions.close,
+                ["<ESC>"] = actions.close,
               }
             },
           },
@@ -252,6 +282,33 @@ require("lazy").setup({
               case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
                                                -- the default case_mode is "smart_case"
             }
+          },
+          pickers = {
+            buffers = {
+              theme = ts_theme
+            },
+            find_files = {
+              theme = ts_theme,
+              hidden = true
+            },
+            current_buffer_fuzzy_find = {
+              theme = ts_theme
+            },
+            lsp_document_symbols = {
+              theme = ts_theme
+            },
+            lsp_references = {
+              theme = ts_theme
+              -- theme = 'cursor',
+              -- initial_mode = 'normal',
+              -- layout_config = {
+              --   width = 0.8,
+              --   height = 0.4,
+              -- },
+            },
+            grep_string = {
+              theme = ts_theme
+            },
           },
         })
     
@@ -286,6 +343,7 @@ require("lazy").setup({
           },
           filters = {
             dotfiles = false,
+            git_ignored = false,
           },
           renderer = {
             highlight_git = true,
@@ -381,6 +439,9 @@ require("lazy").setup({
                selection_order = "near_cursor",
              },
            },
+           performance = {
+             max_view_entries = 15
+           },
          })
       end
     },
@@ -397,6 +458,28 @@ require("lazy").setup({
     },
 
     { 'bogado/file-line' },
+
+    {
+      "christoomey/vim-tmux-navigator",
+      lazy = false,
+      cmd = {
+        "TmuxNavigateLeft",
+        "TmuxNavigateDown",
+        "TmuxNavigateUp",
+        "TmuxNavigateRight",
+        "TmuxNavigatePrevious",
+        "TmuxNavigatorProcessList",
+      },
+      keys = {
+        { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+        { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+        { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+        { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+        { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+      },
+    },
+
+    {"preservim/vimux"},
   
     -- git staff
     -- git browse
@@ -414,29 +497,87 @@ require("lazy").setup({
       end
     },
 
+    { 'sindrets/diffview.nvim' },
+    { 'tpope/vim-fugitive' },
+    ---
     {
-      'sindrets/diffview.nvim'
+      "rest-nvim/rest.nvim",
+      dependencies = {
+        "nvim-treesitter/nvim-treesitter",
+        opts = function (_, opts)
+          opts.ensure_installed = opts.ensure_installed or {}
+          table.insert(opts.ensure_installed, "http")
+        end,
+      }
     },
 
     {
-      'tpope/vim-fugitive'
-    },
-    ---
+      "yetone/avante.nvim",
+      event = "VeryLazy",
+      version = false, -- Never set this value to "*"! Never!
+      opts = {
+        debug=True,
+        -- add any opts here
+        provider = "qianwen",
+        vendors = {
+          qianwen = {
+            __inherited_from = "openai",
+            api_key_name = "DASHSCOPE_API_KEY",
+            endpoint = "https://srs-litellm.kontur.host/v1",
+            model = "qwen25coder32b20480",
+          },
+        },
+
+        mappings = {
+          ask = "<leader>aa",
+          edit = "<leader>ae",
+          refresh = "<leader>ar",
+          diff = {
+            ours = "co",
+            theirs = "ct",
+            both = "cb",
+            next = "]x",
+            prev = "[x",
+          },
+          jump = {
+            next = "]]",
+            prev = "[[",
+          },
+          submit = {
+            normal = "<CR>",
+            insert = "<C-s>",
+          },
+          toggle = {
+            debug = "<leader>ad",
+            hint = "<leader>ah",
+          },
+        },
+      },
+      build = "make",
+      dependencies = {
+        "nvim-treesitter/nvim-treesitter",
+        "stevearc/dressing.nvim",
+        "nvim-lua/plenary.nvim",
+        "MunifTanjim/nui.nvim",
+        --- The below dependencies are optional,
+        "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+        "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+        "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+      },
+    }
   },
   
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "habamax" } },
+  install = { colorscheme = { "rose-pine" } },
   -- automatically check for plugin updates
   checker = { enabled = false },
 })
 
-
-
--- vim.cmd[[colorscheme nord]]
+vim.opt.laststatus = 3
 
 -- Settings
-vim.g.mapleader = ","
+vim.g.mapleader = " "
 vim.opt.termguicolors = true -- Enable 24-bit RGB colors
 vim.opt.number = true        -- Show line numbers
 vim.opt.splitright = true    -- Split windows right to the current windows
@@ -487,10 +628,10 @@ vim.keymap.set('n', '<Leader>d', add_debug, {noremap = true, silent = true}) -- 
 -- rename the word under the cursor 
 vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 -- Better split switching
-vim.keymap.set('', '<C-j>', '<C-W>j')
-vim.keymap.set('', '<C-k>', '<C-W>k')
-vim.keymap.set('', '<C-h>', '<C-W>h')
-vim.keymap.set('', '<C-l>', '<C-W>l')
+-- vim.keymap.set('', '<C-j>', '<C-W>j')
+-- vim.keymap.set('', '<C-k>', '<C-W>k')
+-- vim.keymap.set('', '<C-h>', '<C-W>h')
+-- vim.keymap.set('', '<C-l>', '<C-W>l')
 
 -- Terminal (not sure I need this)
 -- Open terminal in vertical and horizontal split
@@ -507,13 +648,14 @@ vim.o.foldtext = ''
 
 -- Telescope
 local builtin = require('telescope.builtin')
--- vim.keymap.set('n', '<C-p>', builtin.find_files, {})
-vim.keymap.set('n', '<C-p>', builtin.find_files, {})
-vim.keymap.set('n', '<C-b>', builtin.buffers, {})
-vim.keymap.set('n', '<C-g>', builtin.lsp_document_symbols, {})
+-- local themes = require('telescope.themes')
+vim.keymap.set('n', '<leader>p', builtin.find_files, {})
+vim.keymap.set('n', '<leader>b', builtin.buffers, {})
+vim.keymap.set('n', '<leader>g', builtin.lsp_document_symbols, {})
+-- vim.keymap.set('n', '<C-o>', builtin.lsp_dynamic_workspace_symbols, {})
 vim.keymap.set('n', '<leader>r', builtin.lsp_references, {})
-vim.keymap.set('n', '<leader>rg', builtin.grep_string, {})
-vim.keymap.set('n', '<leader>gg', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {})
+vim.keymap.set('n', '<leader>s', builtin.grep_string, {})
+vim.keymap.set('n', '<leader>f', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {})
 -- vim.keymap.set('n', '<leader>s', builtin.lsp_document_symbols, {})
 
 -- File-tree mappings
@@ -530,9 +672,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local opts = { buffer = ev.buf }
 
     vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-    vim.keymap.set('n', '<leader>v', "<cmd>vsplit | lua vim.lsp.buf.definition()<CR>", opts)
-    vim.keymap.set('n', '<leader>s', "<cmd>belowright split | lua vim.lsp.buf.definition()<CR>", opts)
-
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
@@ -562,5 +701,22 @@ new_icons[key] = icon
 end
 icons.set_icon(new_icons)
 
+vim.cmd("colorscheme cyberdream")
+vim.diagnostic.config({ virtual_text = true })
 
-vim.cmd("colorscheme rose-pine-moon")
+-- tests
+vim.g['test#python#runner'] = 'pytest'
+vim.g['test#python#pytest#executable'] = 'pytest'
+vim.g['test#strategy'] = 'vimux'
+-- let pipenv_prefix = "pytest"
+
+vim.keymap.set({'n', 'v'}, '<leader>rs', "<cmd>TestNearest<CR>", {})
+vim.keymap.set({'n', 'v'}, '<leader>rt', "<cmd>TestFile<CR>", {})
+vim.keymap.set({'n', 'v'}, '<leader>rl', "<cmd>TestLast<CR>", {})
+
+if (vim.g.colors_name == 'nord') then
+  vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3b4252", underline = false, bold = false })
+  vim.api.nvim_set_hl(0, "TelescopePreviewBorder", { fg = "#3b4252", underline = false, bold = false })
+  vim.api.nvim_set_hl(0, "TelescopeResultsBorder", { fg = "#3b4252", underline = false, bold = false })
+  vim.api.nvim_set_hl(0, "TelescopePromptBorder", { fg = "#3b4252", underline = false, bold = false })
+end
