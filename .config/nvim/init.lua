@@ -29,25 +29,6 @@ require("lazy").setup({
         -- vim.cmd[[colorscheme nord]]
       end
     },
-  
-    -- { 
-    --   'olivercederborg/poimandres.nvim',
-    --   lazy = false,
-    --   priority = 1000,
-    --   config = function()
-    --     require('poimandres').setup {
-    --       -- leave this setup function empty for default config
-    --       -- or refer to the configuration section
-    --       -- for configuration options
-    --       disable_background = false
-    --     }
-    --   end,
-    --
-    --   -- optionally set the colorscheme within lazy config
-    --   init = function()
-    --     -- vim.cmd("colorscheme poimandres")
-    --   end
-    -- },
 
     {
       "scottmckendry/cyberdream.nvim",
@@ -89,8 +70,6 @@ require("lazy").setup({
       end
     },
   
-    -- { 'atelierbram/vim-colors_atelier-schemes' },
-    -- { 'p00f/alabaster.nvim' },
     -- { 'davidosomething/vim-colors-meh' },
     { 
       'zenbones-theme/zenbones.nvim',
@@ -113,7 +92,7 @@ require("lazy").setup({
     },
 
     -- {"nyoom-engineering/oxocarbon.nvim"},
-    { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+    -- { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 
     -- save my last cursor position
     {
@@ -163,7 +142,6 @@ require("lazy").setup({
           },
           highlight = {
             enable = true,
-
             -- Disable slow treesitter highlight for large files
             -- disable = function(lang, buf)
             --   local max_filesize = 100 * 1024 -- 100 KB
@@ -211,15 +189,6 @@ require("lazy").setup({
                 ['[]'] = '@function.outer',
               },
             },
-            -- swap = {
-            --   enable = true,
-            --   swap_next = {
-            --     ['<leader>sn'] = '@parameter.inner',
-            --   },
-            --   swap_previous = {
-            --     ['<leader>sp'] = '@parameter.inner',
-            --   },
-            -- },
           },
         })
       end,
@@ -257,16 +226,9 @@ require("lazy").setup({
             file_ignore_patterns = {
               "*.pyc",
             },
-            -- layout_strategy='vertical',
-            -- layout_config={width=0.6},
-		
             layout_strategy = 'vertical',
             layout_config = {
               width=0.6
-              -- height = vim.o.lines,
-              -- width = vim.o.columns,
-              -- prompt_position = "bottom",
-              -- preview_height = 0.4,
             },
             mappings = {
               i = {
@@ -299,12 +261,6 @@ require("lazy").setup({
             },
             lsp_references = {
               theme = ts_theme
-              -- theme = 'cursor',
-              -- initial_mode = 'normal',
-              -- layout_config = {
-              --   width = 0.8,
-              --   height = 0.4,
-              -- },
             },
             grep_string = {
               theme = ts_theme
@@ -370,87 +326,144 @@ require("lazy").setup({
         })
       end,
     },
-  
+      
     -- completions
-    {
-      "hrsh7th/nvim-cmp",
-      dependencies = { 
-        'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/cmp-buffer',
-        'hrsh7th/cmp-path',
-        'L3MON4D3/LuaSnip',
-        'saadparwaiz1/cmp_luasnip'
-      },
-      config = function()
-      	local cmp = require("cmp")
-      	local luasnip = require("luasnip")
-      	local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-
-        local has_words_before = function()
-          unpack = unpack or table.unpack
-          local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-          return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-        end
-
-        cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+    -- {
+    --   "hrsh7th/nvim-cmp",
+    --   dependencies = { 
+    --     'hrsh7th/cmp-nvim-lsp',
+    --     'hrsh7th/cmp-buffer',
+    --     'hrsh7th/cmp-path',
+    --     'L3MON4D3/LuaSnip',
+    --     'saadparwaiz1/cmp_luasnip'
+    --   },
+    --   config = function()
+    --   	local cmp = require("cmp")
+    --   	local luasnip = require("luasnip")
+    --   	local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+    --
+    --     local has_words_before = function()
+    --       unpack = unpack or table.unpack
+    --       local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    --       return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+    --     end
+    --
+    --     cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+    --
+    --     luasnip.config.setup {}
+    --      require('cmp').setup({
+    --        snippet = {
+    --          expand = function(args)
+    --            luasnip.lsp_expand(args.body)
+    --          end,
+    --        },
+    --        sources = {
+    --          { name = 'nvim_lsp' },
+    --          { 
+    --            name = "buffer",
+    --            options = {
+    --              get_bufnrs = function()
+    --                return vim.api.nvim_list_bufs()
+    --              end
+    --            }
+    --          },
+    --          { name = "luasnip" },
+    --          { name = "path" },
+    --        },
+    --
+    --        mapping = cmp.mapping.preset.insert {
+    --          ['<C-n>'] = cmp.mapping.select_next_item(),
+    --          ['<C-p>'] = cmp.mapping.select_prev_item(),
+    --          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    --          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    --          ['<CR>'] = cmp.mapping.confirm { select = true },
+    --          ['<Tab>'] = cmp.mapping(function(fallback)
+    --            if cmp.visible() then
+    --              cmp.select_next_item()
+    --            elseif luasnip.expand_or_locally_jumpable() then 
+    --              luasnip.expand_or_jump()
+    --            elseif has_words_before() then
+    --              cmp.complete()
+    --            else
+    --              fallback()
+    --            end
+    --          end, { 'i', 's' }),
+    --        },
+    --        view = {
+    --          entries = {
+    --            name = "custom",
+    --            selection_order = "near_cursor",
+    --          },
+    --        },
+    --        performance = {
+    --          max_view_entries = 15
+    --        },
+    --      })
+    --   end
+    -- },
+    --
     
-        luasnip.config.setup {}
-         require('cmp').setup({
-           snippet = {
-             expand = function(args)
-               luasnip.lsp_expand(args.body)
-             end,
-           },
-           sources = {
-             { name = 'nvim_lsp' },
-             { 
-               name = "buffer",
-               options = {
-                 get_bufnrs = function()
-                   return vim.api.nvim_list_bufs()
-                 end
-               }
-             },
-             { name = "luasnip" },
-             { name = "path" },
-           },
+    {
+      'saghen/blink.cmp',
+      -- optional: provides snippets for the snippet source
+      -- dependencies = { 'rafamadriz/friendly-snippets' },
 
-           mapping = cmp.mapping.preset.insert {
-             ['<C-n>'] = cmp.mapping.select_next_item(),
-             ['<C-p>'] = cmp.mapping.select_prev_item(),
-             ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-             ['<C-f>'] = cmp.mapping.scroll_docs(4),
-             ['<CR>'] = cmp.mapping.confirm { select = true },
-             ['<Tab>'] = cmp.mapping(function(fallback)
-               if cmp.visible() then
-                 cmp.select_next_item()
-               elseif luasnip.expand_or_locally_jumpable() then 
-                 luasnip.expand_or_jump()
-               elseif has_words_before() then
-                 cmp.complete()
-               else
-                 fallback()
-               end
-             end, { 'i', 's' }),
-           },
-           view = {
-             entries = {
-               name = "custom",
-               selection_order = "near_cursor",
-             },
-           },
-           performance = {
-             max_view_entries = 15
-           },
-         })
-      end
+      -- use a release tag to download pre-built binaries
+      version = '1.*',
+      -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+      -- build = 'cargo build --release',
+      -- If you use nix, you can build from source using latest nightly rust with:
+      -- build = 'nix run .#build-plugin',
+
+      ---@module 'blink.cmp'
+      ---@type blink.cmp.Config
+      opts = {
+        -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+        -- 'super-tab' for mappings similar to vscode (tab to accept)
+        -- 'enter' for enter to accept
+        -- 'none' for no mappings
+        -- 
+        -- All presets have the following mappings:
+        -- C-space: Open menu or open docs if already open
+        -- C-n/C-p or Up/Down: Select next/previous item
+        -- C-e: Hide menu
+        -- C-k: Toggle signature help (if signature.enabled = true)
+        --
+        -- See :h blink-cmp-config-keymap for defining your own keymap
+        keymap = { preset = 'super-tab' },
+  
+        appearance = {
+          -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+          -- Adjusts spacing to ensure icons are aligned
+          nerd_font_variant = 'mono'
+        },
+
+        -- (Default) Only show the documentation popup when manually triggered
+        completion = { documentation = { auto_show = false } },
+        signature = { enabled = false },
+
+        -- Default list of enabled providers defined so that you can extend it
+        -- elsewhere in your config, without redefining it, due to `opts_extend`
+        sources = {
+          default = { 'lsp', 'path', 'buffer' },
+        },
+
+        -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
+        -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
+        -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
+        --
+        -- See the fuzzy documentation for more information
+        fuzzy = { implementation = "prefer_rust_with_warning" }
+      },
+      opts_extend = { "sources.default" }
     },
   
     {
       "neovim/nvim-lspconfig",
+      dependencies = { 'saghen/blink.cmp' },
       config = function ()
-        local capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-        capabilities.textDocument.completion.completionItem.snippetSupport = true
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
+        capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities({}, false))
 
         require'lspconfig'.pyright.setup{}
         require'lspconfig'.solargraph.setup{}
@@ -511,60 +524,60 @@ require("lazy").setup({
       }
     },
 
-    {
-      "yetone/avante.nvim",
-      event = "VeryLazy",
-      version = false, -- Never set this value to "*"! Never!
-      opts = {
-        debug=True,
-        -- add any opts here
-        provider = "qianwen",
-        vendors = {
-          qianwen = {
-            __inherited_from = "openai",
-            api_key_name = "DASHSCOPE_API_KEY",
-            endpoint = "https://srs-litellm.kontur.host/v1",
-            model = "qwen25coder32b20480",
-          },
-        },
-
-        mappings = {
-          ask = "<leader>aa",
-          edit = "<leader>ae",
-          refresh = "<leader>ar",
-          diff = {
-            ours = "co",
-            theirs = "ct",
-            both = "cb",
-            next = "]x",
-            prev = "[x",
-          },
-          jump = {
-            next = "]]",
-            prev = "[[",
-          },
-          submit = {
-            normal = "<CR>",
-            insert = "<C-s>",
-          },
-          toggle = {
-            debug = "<leader>ad",
-            hint = "<leader>ah",
-          },
-        },
-      },
-      build = "make",
-      dependencies = {
-        "nvim-treesitter/nvim-treesitter",
-        "stevearc/dressing.nvim",
-        "nvim-lua/plenary.nvim",
-        "MunifTanjim/nui.nvim",
-        --- The below dependencies are optional,
-        "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-        "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-        "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-      },
-    }
+    -- {
+    --   "yetone/avante.nvim",
+    --   event = "VeryLazy",
+    --   version = false, -- Never set this value to "*"! Never!
+    --   opts = {
+    --     debug=True,
+    --     -- add any opts here
+    --     provider = "qianwen",
+    --     vendors = {
+    --       qianwen = {
+    --         __inherited_from = "openai",
+    --         api_key_name = "DASHSCOPE_API_KEY",
+    --         endpoint = "https://srs-litellm.kontur.host/v1",
+    --         model = "qwen25coder32b20480",
+    --       },
+    --     },
+    --
+    --     mappings = {
+    --       ask = "<leader>aa",
+    --       edit = "<leader>ae",
+    --       refresh = "<leader>ar",
+    --       diff = {
+    --         ours = "co",
+    --         theirs = "ct",
+    --         both = "cb",
+    --         next = "]x",
+    --         prev = "[x",
+    --       },
+    --       jump = {
+    --         next = "]]",
+    --         prev = "[[",
+    --       },
+    --       submit = {
+    --         normal = "<CR>",
+    --         insert = "<C-s>",
+    --       },
+    --       toggle = {
+    --         debug = "<leader>ad",
+    --         hint = "<leader>ah",
+    --       },
+    --     },
+    --   },
+    --   build = "make",
+    --   dependencies = {
+    --     "nvim-treesitter/nvim-treesitter",
+    --     "stevearc/dressing.nvim",
+    --     "nvim-lua/plenary.nvim",
+    --     "MunifTanjim/nui.nvim",
+    --     --- The below dependencies are optional,
+    --     "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+    --     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+    --     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+    --   },
+    -- }
   },
   
   -- Configure any other settings here. See the documentation for more details.
