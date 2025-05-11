@@ -31,12 +31,16 @@ install_configs () {
   link_files "$DOTFILES_ROOT/.config/kitty" "$HOME/.config/kitty"
 }
 
+install_emacs () {
+  printf "INSTALL EMACS"
+  link_files "$DOTFILES_ROOT/emacs.d/init.el" "$HOME/.emacs.d/init.el"
+}
+
 install_vim () {
   rm -rf "$HOME/.vim"
   link_files "$DOTFILES_ROOT/vim" "$HOME/.vim"
   vim +PlugInstall +qall
 }
-
 
 link_files () {
   ln -s $1 $2
@@ -110,6 +114,7 @@ link_files $source $dest
 done
 }
 
+install_emacs
 install_dotfiles
 install_configs
 
