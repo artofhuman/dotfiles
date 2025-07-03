@@ -40,7 +40,7 @@ require("lazy").setup({
         transparent = true,
       },
       init = function()
-        vim.cmd "colorscheme cyberdream"
+        -- vim.cmd "colorscheme cyberdream"
         vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
         vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
         vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
@@ -52,13 +52,15 @@ require("lazy").setup({
         vim.api.nvim_set_hl(0, "TreesitterContextBottom", { bg = "#232429", underline = true })
       end,
     },
+
+    -- { "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...},
   
     { 
       "rose-pine/neovim",
       name = "rose-pine",
       config = function()
         require("rose-pine").setup({
-          --variant = "moon",
+          variant = "moon",
           variant = "auto",
           dark_variant = "main", -- main, moon, or dawn
           styles = {
@@ -76,8 +78,6 @@ require("lazy").setup({
       dependencies = "rktjmp/lush.nvim",
     },
 
-    { 'vim-test/vim-test' },
-
     {
       "folke/tokyonight.nvim",
       lazy = false,
@@ -90,6 +90,8 @@ require("lazy").setup({
         }
       },
     },
+  
+    { 'vim-test/vim-test' },
 
     -- {"nyoom-engineering/oxocarbon.nvim"},
     -- { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
@@ -225,6 +227,7 @@ require("lazy").setup({
           defaults = {
             file_ignore_patterns = {
               "*.pyc",
+              ".git/",
             },
             layout_strategy = 'vertical',
             layout_config = {
@@ -467,6 +470,7 @@ require("lazy").setup({
 
         require'lspconfig'.pyright.setup{}
         require'lspconfig'.solargraph.setup{}
+        require'lspconfig'.ts_ls.setup{}
       end
     },
 
@@ -523,6 +527,71 @@ require("lazy").setup({
         end,
       }
     },
+  
+    {
+      "yetone/avante.nvim",
+      -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+      build = "make",  -- ⚠️ must add this line! ! !
+      event = "VeryLazy",
+      version = false, -- Never set this value to "*"! Never!
+      opts = {
+        windows = {
+          width = 45,
+          ask = {
+            start_insert = false,
+          },
+        },
+        provider = "konturai",
+        auto_suggestions_provider = "kotnur_ai_completions",
+        hints = { enabled = false }, -- disable hints on visual select
+        behaviour = {
+          auto_suggestions = false,
+        },
+        providers = {
+          konturai = {
+             __inherited_from = 'openai',
+             disable_tools = true,
+             endpoint = 'https://srs-litellm.kontur.host/v1',
+             model = 'qwen25coder32b20480',
+             -- api_key_name = "^cmd: cat ~/.authinfo | head -n 1 | awk '{print $6}'",
+             api_key_name = {"cat","~/.authinfo", "|", "head -n 1", "|", "awk '{print $6}'"},
+             extra_request_body = {
+               max_completion_tokens = 8192
+             }
+          },
+          kotnur_ai_completions = {
+             __inherited_from = 'openai',
+             disable_tools = true,
+             model = 'qwen25coder05bbase_20250507_chatfree',
+             endpoint = 'https://srs-litellm.kontur.host/v1',
+             api_key_name = {"cat","~/.authinfo", "|", "head -n 1", "|", "awk '{print $6}'"},
+             extra_request_body = {
+               max_completion_tokens = 8192
+             }
+          }
+        }
+      },
+      dependencies = {
+        "nvim-treesitter/nvim-treesitter",
+        "nvim-lua/plenary.nvim",
+        "MunifTanjim/nui.nvim",
+        --- The below dependencies are optional,
+        "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+        -- "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+        "stevearc/dressing.nvim", -- for input provider dressing
+        "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+        -- "zbirenbaum/copilot.lua", -- for providers='copilot'
+        {
+          -- Make sure to set this up properly if you have lazy=true
+          'MeanderingProgrammer/render-markdown.nvim',
+          opts = {
+            file_types = { "markdown", "Avante" },
+          },
+          ft = { "markdown", "Avante" },
+        },
+      },
+  },
+
 
     -- {
     --   "yetone/avante.nvim",
@@ -635,7 +704,18 @@ vim.keymap.set('n', '*', stay_star, {noremap = true, silent = true})
 
 local function add_debug()
   local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { "import pdb; pdb.set_trace()" })
+  local filetype = vim.bo.filetype
+  local st = ""
+
+  if filetype == "ruby" then
+    st = "binding.pry"
+  elseif filetype == "python" then
+    st = "breakpoint()"
+  end
+
+  vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { st })
+  -- emulate press =
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("==", true, false, true), 'n', true) 
 end
 vim.keymap.set('n', '<Leader>d', add_debug, {noremap = true, silent = true}) -- Set debug point
 -- rename the word under the cursor 
@@ -715,7 +795,16 @@ end
 icons.set_icon(new_icons)
 
 vim.cmd("colorscheme cyberdream")
-vim.diagnostic.config({ virtual_text = true })
+vim.diagnostic.config({ virtual_text = false })
+
+vim.keymap.set('n', '<leader>e', function()
+  -- local new_config = not vim.diagnostic.config().virtual_lines
+  -- vim.diagnostic.config({ virtual_lines = new_config })
+  vim.diagnostic.open_float(true)
+end, { desc = 'Toggle diagnostic virtual_lines' })
+
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
+
 
 -- tests
 vim.g['test#python#runner'] = 'pytest'

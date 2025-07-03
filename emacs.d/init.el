@@ -52,7 +52,7 @@
 (setq modus-themes-mode-line '(borderless))
 ;; (load-theme 'modus-operandi-deuteranopia)
 ;;(load-theme 'modus-operandi-tinted)
-(set-face-attribute 'default nil :font "Iosevka" :height 164);; :weight 'light) ;; :weight 'light)
+(set-face-attribute 'default nil :font "Iosevka" :height 160);; :weight 'light) ;; :weight 'light)
 ;; (set-face-attribute 'default nil :font "Whois" :height 170)  ;;# no cyrilic :(
 
 ;; default, fixed-pitch(mono), variable-pitch
@@ -70,7 +70,36 @@
           (set-face-attribute face nil :weight 'normal)))
  (face-list))
 
-;; (setq mode-line-format nil) ; Hide status line, Does not work globaly
+;; (use-package mode-line-idle :ensure t :commands (mode-line-idle))
+
+(defvar my/modeline-filename
+  '(:eval (list (if (eq buffer-file-name nil) ""
+                  (concat (file-name-nondirectory
+                           (directory-file-name
+                            (file-name-directory (buffer-file-name)))) "/"))
+                (propertize "%b"
+                            'face (if (buffer-modified-p)
+                                      'font-lock-string-face
+                                    'font-lock-builtin-face)
+                            'help-echo (buffer-file-name)))))
+
+(setq-default
+  header-line-format
+    (list
+        ;; '(:eval (mode-line-idle 0.3 meain/modeline-project-color "░"))
+        my/modeline-filename
+        ;; '(:eval (mode-line-idle 1.0 meain/modeline-vcs ""))
+        ;; '(:eval (mode-line-idle 1.0 meain/modeline-yap ""))
+        ;; '(:eval (if (boundp 'keycast-mode-line) keycast-mode-line))
+        'mode-line-format-right-align
+        ;; '(:eval (if (boundp 'org-timer-mode-line-string) (concat org-timer-mode-line-string " ")))
+        (propertize ":%l:%c ")
+        (propertize "%p") ;; position in file, TODO: check it, does not works now
+        (propertize " %m ")
+        " "))
+
+(setq-default mode-line-format nil)  ;; Hide status line
+
 ;; Add unique buffer names in the minibuffer where there are many
 ;; identical files. This is super useful if you rely on folders for
 ;; organization a
@@ -149,10 +178,12 @@
 
 (use-package corfu
   ;; Optional customizations
+  :config
+  (setq corfu-count 10)
   :custom
   (corfu-auto t)
   (corfu-auto-prefix 2)
-  (corfu-auto-delay 0.2)
+  (corfu-auto-delay 0)
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
   ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
@@ -208,7 +239,6 @@
   ;; completion functions takes precedence over the global list.
   (add-hook 'completion-at-point-functions #'cape-dabbrev)
   (add-hook 'completion-at-point-functions #'cape-file)
-  (add-hook 'completion-at-point-functions #'cape-elisp-block)
   ;; (add-hook 'completion-at-point-functions #'cape-history)
   ;; ...
   )
@@ -259,6 +289,7 @@
 (use-package evil-commentary :ensure t :init)
 (evil-commentary-mode)
 
+;; === my func staff
 ;; (evil-define-key 'normal vterm-mode-map "k" ')
 ;;; END Evil section
 
@@ -286,23 +317,32 @@
   (backward-char))
 
 ;; TODO: match word with _ as whole word (for search by start *)
-(setq evil-symbol-word-search t)
 (modify-syntax-entry ?_ "w")
 
 ;; emacs redo
 (setq evil-undo-system "undo-redo")
 
-;;Add paddings 
+;; Add paddings 
 (use-package spacious-padding
  :ensure t
  :init
+ :config
+ (setq spacious-padding-widths
+      '( :internal-border-width 7
+         :header-line-width 2
+         :mode-line-width 2
+         :tab-width 0
+         :right-divider-width 7
+         :scroll-bar-width 0))
  (spacious-padding-mode))
 
 (use-package vterm
   :defer t
   :ensure t
   :config
-  :config (setq vterm-max-scrollback 100000)
+  :config
+  (setq vterm-max-scrollback 100000)
+  (vterm-timer-delay 0.01)
   ;; :custom
   ;; (vterm-keymap-exceptions
   ;;  ;; vterm-default
@@ -310,6 +350,7 @@
   ;;    ;; for use evil to move between windows
   ;;    "C-k" "C-j"))
   )
+
 (use-package vterm-toggle
   ;; :defer t
   :ensure t
@@ -344,7 +385,6 @@
 ;;---
 
 (global-set-key (kbd "s-j")  'vterm-toggle)
-;; (vterm-timer-delay 0.01)
 
 ;; set PATH from env to emacs
 (use-package exec-path-from-shell :ensure t)
@@ -381,16 +421,6 @@
 
 (setq magit-blame-echo-style 'headings) ;; in echo mode show git message under each line
 
-(defun my/diff-hl-set-reference ()
-  "Set the reference revision for showing diff-hl changes. Do so buffer-locally."
-  (interactive)
-  (setq-local
-   diff-hl-reference-revision
-   (read-string
-    (format "Set reference revision (buffer %s): "
-            (buffer-name))))
-  (diff-hl-update))
-
 (use-package gptel :ensure t :init)
 (setq-default gptel-model 'qwen25coder32b20480 ;Pick your default model
               gptel-backend (gptel-make-azure "kontur-llm"
@@ -404,7 +434,7 @@
   (when (fboundp 'projectile-project-root)
     (projectile-project-root)))
 
-(defun copy-current-buffer-file-name ()
+(defun my/copy-current-buffer-file-name ()
   "Get the relative file path from the project root."
   (interactive)
   (if buffer-file-name
@@ -448,6 +478,19 @@
 ;;   (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^gitlab\\." :type "gitlab"))
 ;;   )
 
+(use-package consult
+  :ensure t
+  :after (xref evil)
+  :defer t
+  :config
+  (setq consult-ripgrep-args "rg --null --line-buffered --color=never --max-columns=1000 --path-separator /\
+      --smart-case --no-heading --line-number --hidden --follow --glob \"!.git/*\"")
+  (setq xref-show-xrefs-function #'consult-xref)
+  (setq xref-show-definitions-function #'consult-xref)
+  (evil-set-command-property 'consult-imenu :jump t)
+  :init
+  (define-key evil-normal-state-map (kbd "<SPC> /") 'consult-line))
+
 ;; Embark stuff
 (use-package embark
   :defer 1
@@ -479,13 +522,69 @@
   "g" 'consult-ripgrep
   "s" 'consult-ripgrep-at-point
   "p" 'project-find-file
-  "y" 'copy-current-buffer-file-name
+  "y" 'my/copy-current-buffer-file-name
   "r" 'xref-find-references
   "d" 'my/insert-debug-stmt
+  "t g" 'magit
+  "t b" 'magit-blame-echo
+  "t h" 'diff-hl-show-hunk
   )
 
 ;; Don't hightlight under cursor
 (setq eglot-ignored-server-capabilites '(:documentHighlightProvider))
-(setq eldoc-echo-area-use-multiline-p nil) ;; don't resize minibufer
+;; (setq eldoc-echo-area-use-multiline-p 1) ;; don't resize minibufer
 (setq pixel-scroll-precision-mode-map 1) ;; smoth scroling for gui emacs
 (setq x-select-enable-clipboard t) ;; enable copy to system clipboard
+
+;; eldoc load
+(use-package eldoc
+  :defer t
+  :after (evil)
+  :config
+  (setq eldoc-echo-area-use-multiline-p nil)
+  (define-key evil-normal-state-map (kbd "K") 'eldoc-print-current-symbol-info)
+  (global-eldoc-mode nil))
+
+;; Show eldoc messages in a popup at point
+(use-package eldoc-box
+  :ensure t
+  :commands (eldoc-box-help-at-point eldoc-box-hover-mode eldoc-box-hover-at-point-mode)
+  :init
+  (global-set-key (kbd "M-d")
+                  (lambda ()
+                    (interactive)
+                    (let ((eldoc-echo-area-use-multiline-p t))
+                      (call-interactively #'eldoc-box-help-at-point)))))
+
+;; Speed up eglot communication by translating to bycode externally
+(use-package eglot-booster
+  :ensure t
+  :after eglot
+  :config
+  (setq eglot-booster-io-only t)
+  (eglot-booster-mode))
+
+;; consult-eglot
+(use-package consult-eglot
+  :ensure t
+  :commands (consult-eglot-symbols meain/imenu-or-eglot)
+  :after (imenu eglot)
+  :config
+  :init
+  (defun meain/imenu-or-eglot (&optional alternate)
+    "Create a func to alternate between goto thingy stuff.
+Giving it a name so that I can target it in vertico mode and make it use buffer."
+    (interactive "P")
+    (cond
+     ((equal alternate nil) (consult-imenu))
+     ((equal alternate '(4)) (consult-eglot-symbols))
+      ((equal alternate '(16)) (tree-jump-search))
+     ))
+  (global-set-key (kbd "M-i") #'meain/imenu-or-eglot))
+
+
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
