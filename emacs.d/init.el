@@ -12,15 +12,22 @@
 (setq create-lockfiles nil)
 (setq warning-minimum-level :emergency)
 
+;; Also, for mac os hide icon on middle of tittle bar
+;; defaults write org.gnu.Emacs HideDocumentIcon YES
+
+;; Don't blink cursor. Reduce distract
 (blink-cursor-mode -1)
 
+;; Save custom config to local file, not the end of init.el
 (setq custom-file "~/.config/emacs/custom-config.el")
 (load-file "~/.config/emacs/custom-config.el")
 
 ;; cursor as line, temporary without evil
 (setq-default cursor-type 'bar)
 
-(setq ring-bell-function 'ignore) ; Disable bell
+;; Disable bell
+(setq ring-bell-function 'ignore)
+
 
 ;; Match mac os title bar with color scheme
 (when (memq window-system '(mac ns))
@@ -34,10 +41,24 @@
 (setq-default line-spacing 3)
 (setq-default truncate-lines t)
 
-(fset 'yes-or-no-p 'y-or-n-p) ;; Quicker yes or no
+;; Quicker yes or no
+(fset 'yes-or-no-p 'y-or-n-p)
 
-;; Full size from startup
+;; Unbind some default keybindings
+(global-unset-key (kbd "C-x C-z"))
+(global-unset-key (kbd "C-<wheel-up>"))
+(global-unset-key (kbd "C-<wheel-down>"))
+
+;; Fullscreen size from startup
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; dont ask about safe theme when switch custom theme
+(setq custom-safe-themes t)
+
+;; disable custom theme on load new one
+(defun disable-custom-themes (theme &optional no-confirm no-enable)
+  (mapc 'disable-theme custom-enabled-themes))
+(advice-add 'load-theme :before #'disable-custom-themes)
 
 (use-package doom-themes
   :ensure t
@@ -106,6 +127,7 @@
 ;; and have lots of files with the same name,
 ;; e.g. foo/index.ts and bar/index.ts.
 (require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
 
 ;;; Automatically insert closing parens
 (electric-pair-mode t)
@@ -115,7 +137,7 @@
 
 ;; Scrol like in vim
 (setq scroll-step 1)
-(setq scroll-margin 10)
+(setq scroll-margin 15)
 
 ;; Automatically save your place in files
 (save-place-mode 1)
@@ -137,7 +159,7 @@
 (setq search-whitespace-regexp ".*?")
 
 ;; Display line numbers only when in programming modes
-;; (add-hook 'prog-mode-hook 'display-line-numbers-mode) ;; Disable for now
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -182,9 +204,10 @@
   (setq corfu-count 10)
   :custom
   (corfu-auto t)
-  (corfu-auto-prefix 2)
-  (corfu-auto-delay 0)
+  (corfu-auto-prefix 1)
+  (corfu-auto-delay 0.1)
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-quit-no-match 'separator)
   ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
@@ -533,6 +556,7 @@
 ;; Don't hightlight under cursor
 (setq eglot-ignored-server-capabilites '(:documentHighlightProvider))
 ;; (setq eldoc-echo-area-use-multiline-p 1) ;; don't resize minibufer
+(pixel-scroll-mode)
 (setq pixel-scroll-precision-mode-map 1) ;; smoth scroling for gui emacs
 (setq x-select-enable-clipboard t) ;; enable copy to system clipboard
 
@@ -546,15 +570,15 @@
   (global-eldoc-mode nil))
 
 ;; Show eldoc messages in a popup at point
-(use-package eldoc-box
-  :ensure t
-  :commands (eldoc-box-help-at-point eldoc-box-hover-mode eldoc-box-hover-at-point-mode)
-  :init
-  (global-set-key (kbd "M-d")
-                  (lambda ()
-                    (interactive)
-                    (let ((eldoc-echo-area-use-multiline-p t))
-                      (call-interactively #'eldoc-box-help-at-point)))))
+;; (use-package eldoc-box
+;;   :ensure t
+;;   :commands (eldoc-box-help-at-point eldoc-box-hover-mode eldoc-box-hover-at-point-mode)
+;;   :init
+;;   (global-set-key (kbd "M-d")
+;;                   (lambda ()
+;;                     (interactive)
+;;                     (let ((eldoc-echo-area-use-multiline-p t))
+;;                       (call-interactively #'eldoc-box-help-at-point)))))
 
 ;; Speed up eglot communication by translating to bycode externally
 (use-package eglot-booster
@@ -582,9 +606,8 @@ Giving it a name so that I can target it in vertico mode and make it use buffer.
      ))
   (global-set-key (kbd "M-i") #'meain/imenu-or-eglot))
 
-
 (use-package orderless
   :ensure t
   :custom
-  (completion-styles '(orderless basic))
+  (completion-styles '(orderless basic partial-completion))
   (completion-category-overrides '((file (styles basic partial-completion)))))
