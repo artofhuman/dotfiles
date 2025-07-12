@@ -331,13 +331,18 @@
 (global-set-key [escape] 'my/keyboard-quit)
 
 (defun my/insert-debug-stmt ()
-  "Place breakpoint or binding.pry stmt by hotkey"
+  "Insert a debug statement appropriate for the major mode and indent the line."
   (interactive)
-  (if (equal major-mode 'ruby-mode)
-      (insert "binding.pry"))
-  (if (equal major-mode 'python-mode)
-      (insert "breakpoint()"))
-  (backward-char))
+  (let ((debug-stmt
+         (cond
+          ((eq major-mode 'ruby-mode) "binding.pry")
+          ((eq major-mode 'python-mode) "breakpoint()"))))
+    (when debug-stmt
+      (beginning-of-line)
+      (open-line 1)
+      (forward-line 1)
+      (insert debug-stmt)
+      (indent-according-to-mode))))
 
 ;; TODO: match word with _ as whole word (for search by start *)
 (modify-syntax-entry ?_ "w")
@@ -437,7 +442,7 @@
   :config
   ;; (diff-hl-flydiff-mode)
   (global-diff-hl-mode)
-  (set-frame-parameter nil 'left-fringe 2)  ;; thin line
+  (set-frame-parameter nil 'left-fringe 3)  ;; thin line
   (add-hook 'dired-mode-hook 'diff-hl-dired-mode-unless-remote)
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
@@ -453,7 +458,7 @@
                               :key gptel-api-key
                               :models '("qwen25coder32b20480")))
 
-(defun get-project-root ()
+(defun my/get-project-root ()
   (when (fboundp 'projectile-project-root)
     (projectile-project-root)))
 
@@ -476,7 +481,7 @@
 ;; Ripgrep the current word from project root
 (defun consult-ripgrep-at-point ()
   (interactive)
-  (consult-ripgrep (get-project-root)(thing-at-point 'symbol)))
+  (consult-ripgrep (my/get-project-root)(thing-at-point 'symbol)))
 
 (use-package zoom-window :ensure t :defer)
 
@@ -568,17 +573,6 @@
   (setq eldoc-echo-area-use-multiline-p nil)
   (define-key evil-normal-state-map (kbd "K") 'eldoc-print-current-symbol-info)
   (global-eldoc-mode nil))
-
-;; Show eldoc messages in a popup at point
-;; (use-package eldoc-box
-;;   :ensure t
-;;   :commands (eldoc-box-help-at-point eldoc-box-hover-mode eldoc-box-hover-at-point-mode)
-;;   :init
-;;   (global-set-key (kbd "M-d")
-;;                   (lambda ()
-;;                     (interactive)
-;;                     (let ((eldoc-echo-area-use-multiline-p t))
-;;                       (call-interactively #'eldoc-box-help-at-point)))))
 
 ;; Speed up eglot communication by translating to bycode externally
 (use-package eglot-booster
