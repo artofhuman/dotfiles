@@ -468,9 +468,9 @@ require("lazy").setup({
         local capabilities = vim.lsp.protocol.make_client_capabilities()
         capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities({}, false))
 
-        require'lspconfig'.pyright.setup{}
-        require'lspconfig'.solargraph.setup{}
-        require'lspconfig'.ts_ls.setup{}
+        require'lspconfig'.pyright.setup({  handlers = handlers })
+        require'lspconfig'.solargraph.setup({ handlers = handlers  })
+        require'lspconfig'.ts_ls.setup({ handlers = handlers })
       end
     },
 
@@ -528,125 +528,70 @@ require("lazy").setup({
       }
     },
   
-    {
-      "yetone/avante.nvim",
-      -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-      build = "make",  -- ⚠️ must add this line! ! !
-      event = "VeryLazy",
-      version = false, -- Never set this value to "*"! Never!
-      opts = {
-        windows = {
-          width = 45,
-          ask = {
-            start_insert = false,
-          },
-        },
-        provider = "konturai",
-        auto_suggestions_provider = "kotnur_ai_completions",
-        hints = { enabled = false }, -- disable hints on visual select
-        behaviour = {
-          auto_suggestions = false,
-        },
-        providers = {
-          konturai = {
-             __inherited_from = 'openai',
-             disable_tools = true,
-             endpoint = 'https://srs-litellm.kontur.host/v1',
-             model = 'qwen25coder32b20480',
-             -- api_key_name = "^cmd: cat ~/.authinfo | head -n 1 | awk '{print $6}'",
-             api_key_name = {"cat","~/.authinfo", "|", "head -n 1", "|", "awk '{print $6}'"},
-             extra_request_body = {
-               max_completion_tokens = 8192
-             }
-          },
-          kotnur_ai_completions = {
-             __inherited_from = 'openai',
-             disable_tools = true,
-             model = 'qwen25coder05bbase_20250507_chatfree',
-             endpoint = 'https://srs-litellm.kontur.host/v1',
-             api_key_name = {"cat","~/.authinfo", "|", "head -n 1", "|", "awk '{print $6}'"},
-             extra_request_body = {
-               max_completion_tokens = 8192
-             }
-          }
-        }
-      },
-      dependencies = {
-        "nvim-treesitter/nvim-treesitter",
-        "nvim-lua/plenary.nvim",
-        "MunifTanjim/nui.nvim",
-        --- The below dependencies are optional,
-        "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-        -- "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-        "stevearc/dressing.nvim", -- for input provider dressing
-        "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-        -- "zbirenbaum/copilot.lua", -- for providers='copilot'
-        {
-          -- Make sure to set this up properly if you have lazy=true
-          'MeanderingProgrammer/render-markdown.nvim',
-          opts = {
-            file_types = { "markdown", "Avante" },
-          },
-          ft = { "markdown", "Avante" },
-        },
-      },
-  },
-
-
     -- {
     --   "yetone/avante.nvim",
+    --   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+    --   build = "make",  -- ⚠️ must add this line! ! !
     --   event = "VeryLazy",
     --   version = false, -- Never set this value to "*"! Never!
     --   opts = {
-    --     debug=True,
-    --     -- add any opts here
-    --     provider = "qianwen",
-    --     vendors = {
-    --       qianwen = {
-    --         __inherited_from = "openai",
-    --         api_key_name = "DASHSCOPE_API_KEY",
-    --         endpoint = "https://srs-litellm.kontur.host/v1",
-    --         model = "qwen25coder32b20480",
+    --     windows = {
+    --       width = 45,
+    --       ask = {
+    --         start_insert = false,
     --       },
     --     },
-    --
-    --     mappings = {
-    --       ask = "<leader>aa",
-    --       edit = "<leader>ae",
-    --       refresh = "<leader>ar",
-    --       diff = {
-    --         ours = "co",
-    --         theirs = "ct",
-    --         both = "cb",
-    --         next = "]x",
-    --         prev = "[x",
-    --       },
-    --       jump = {
-    --         next = "]]",
-    --         prev = "[[",
-    --       },
-    --       submit = {
-    --         normal = "<CR>",
-    --         insert = "<C-s>",
-    --       },
-    --       toggle = {
-    --         debug = "<leader>ad",
-    --         hint = "<leader>ah",
-    --       },
+    --     provider = "konturai",
+    --     auto_suggestions_provider = "kotnur_ai_completions",
+    --     hints = { enabled = false }, -- disable hints on visual select
+    --     behaviour = {
+    --       auto_suggestions = false,
     --     },
+    --     providers = {
+    --       konturai = {
+    --          __inherited_from = 'openai',
+    --          disable_tools = true,
+    --          endpoint = 'https://srs-litellm.kontur.host/v1',
+    --          model = 'qwen25coder32b20480',
+    --          -- api_key_name = "^cmd: cat ~/.authinfo | head -n 1 | awk '{print $6}'",
+    --          api_key_name = {"cat","~/.authinfo", "|", "head -n 1", "|", "awk '{print $6}'"},
+    --          extra_request_body = {
+    --            max_completion_tokens = 8192
+    --          }
+    --       },
+    --       kotnur_ai_completions = {
+    --          __inherited_from = 'openai',
+    --          disable_tools = true,
+    --          model = 'qwen25coder05bbase_20250507_chatfree',
+    --          endpoint = 'https://srs-litellm.kontur.host/v1',
+    --          api_key_name = {"cat","~/.authinfo", "|", "head -n 1", "|", "awk '{print $6}'"},
+    --          extra_request_body = {
+    --            max_completion_tokens = 8192
+    --          }
+    --       }
+    --     }
     --   },
-    --   build = "make",
     --   dependencies = {
     --     "nvim-treesitter/nvim-treesitter",
-    --     "stevearc/dressing.nvim",
     --     "nvim-lua/plenary.nvim",
     --     "MunifTanjim/nui.nvim",
     --     --- The below dependencies are optional,
     --     "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-    --     "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+    --     -- "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+    --     "stevearc/dressing.nvim", -- for input provider dressing
     --     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+    --     -- "zbirenbaum/copilot.lua", -- for providers='copilot'
+    --     {
+    --       -- Make sure to set this up properly if you have lazy=true
+    --       'MeanderingProgrammer/render-markdown.nvim',
+    --       opts = {
+    --         file_types = { "markdown", "Avante" },
+    --       },
+    --       ft = { "markdown", "Avante" },
+    --     },
     --   },
-    -- }
+    -- },
+
   },
   
   -- Configure any other settings here. See the documentation for more details.
@@ -767,7 +712,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gd', "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    --
+    vim.keymap.set('n', 'K', function()
+      vim.lsp.buf.hover { border = 'single' }
+    end, { buffer = ev.buf })
+
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<leader>cl', vim.lsp.codelens.run, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
@@ -794,8 +744,62 @@ new_icons[key] = icon
 end
 icons.set_icon(new_icons)
 
+local border = {
+    { '┌', 'FloatBorder' },
+    { '─', 'FloatBorder' },
+    { '┐', 'FloatBorder' },
+    { '│', 'FloatBorder' },
+    { '┘', 'FloatBorder' },
+    { '─', 'FloatBorder' },
+    { '└', 'FloatBorder' },
+    { '│', 'FloatBorder' },
+}
+
+   -- local border = {
+   --    { "╭", "FloatBorder" },
+   --    { "─", "FloatBorder" },
+   --    { "╮", "FloatBorder" },
+   --    { "│", "FloatBorder" },
+   --    { "╯", "FloatBorder" },
+   --    { "─", "FloatBorder" },
+   --    { "╰", "FloatBorder" },
+   --    { "│", "FloatBorder" },
+   --  }
+
+-- Add the border on hover and on signature help popup window
+local handlers = {
+    ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
+    ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
+}
+
 vim.cmd("colorscheme cyberdream")
-vim.diagnostic.config({ virtual_text = false })
+vim.diagnostic.config({ 
+  virtual_text = true,
+
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "󰚌 ",
+      [vim.diagnostic.severity.WARN] = " ",
+      [vim.diagnostic.severity.INFO] = " ",
+      [vim.diagnostic.severity.HINT] = "󱧡 ",
+    },
+    numhl = {
+      [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+      [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+      [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+      [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+    },
+    texthl = {
+      [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+      [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+      [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+      [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+    },
+  },
+
+  float = { border = border },
+})
+
 
 vim.keymap.set('n', '<leader>e', function()
   -- local new_config = not vim.diagnostic.config().virtual_lines
