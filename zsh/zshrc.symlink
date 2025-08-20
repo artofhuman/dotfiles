@@ -117,3 +117,6 @@ PERL_MB_OPT="--install_base \"/Users/semyonpupkov/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/semyonpupkov/perl5"; export PERL_MM_OPT;
 
 . "$HOME/.cargo/env"
+
+# opencode
+export PATH=/Users/semyonpupkov/.opencode/bin:$PATH

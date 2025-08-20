@@ -73,7 +73,9 @@
 (setq modus-themes-mode-line '(borderless))
 ;; (load-theme 'modus-operandi-deuteranopia)
 ;;(load-theme 'modus-operandi-tinted)
-(set-face-attribute 'default nil :font "Iosevka" :height 160);; :weight 'light) ;; :weight 'light)
+
+;; (set-face-attribute 'default nil :font "Fragment Mono" :height 140);; :weight 'light) ;; :weight 'light)
+(set-face-attribute 'default nil :font "Iosevka" :height 155);; :weight 'light) ;; :weight 'light)
 ;; (set-face-attribute 'default nil :font "Whois" :height 170)  ;;# no cyrilic :(
 
 ;; default, fixed-pitch(mono), variable-pitch
@@ -316,6 +318,44 @@
 ;; (evil-define-key 'normal vterm-mode-map "k" ')
 ;;; END Evil section
 
+
+(defun testrun-core--root ()
+  "Get root directory for compilation.
+
+This uses `project-current' to find the root directory of
+the project and assumes that's the root for the compile command.
+If `project-current' cannot find a project, returns the `default-directory'."
+  (if-let ((project (project-current)))
+      (project-root project)
+    default-directory))
+
+(defun testrun-core--file-name ()
+  "Get the buffer filename relative to the compilation root."
+  (file-relative-name buffer-file-name (testrun-core--root)))
+
+(defun my/vterm-run-command (command)
+  "Insert text of current line in vterm and execute."
+  (interactive)
+  (require 'vterm)
+    (let ((buf (current-buffer)))
+      (unless (get-buffer vterm-buffer-name)
+        (vterm))
+      (display-buffer vterm-buffer-name t)
+      (switch-to-buffer-other-window vterm-buffer-name)
+      (vterm--goto-line -1)
+      (message command)
+      (vterm-send-string command)
+      (vterm-send-return)
+      (switch-to-buffer-other-window buf)
+      ))
+
+(defun my/vterm-toggle-run-pytest-current-file ()
+  "Insert text of current line in vterm and execute."
+  (interactive)
+  (my/vterm-run-command (concat "pytest " (testrun-core--file-name))))
+
+(global-set-key (kbd "C-c t")  'my/vterm-toggle-run-pytest-current-file)
+  
 ;; Quit out of everything with esc, in default we need 3 time press esc
 ;; stolen from here https://github.com/meain/dotfiles/blob/7ee3c3006dd7fe6506c68bc09a0d3194d8ea7923/emacs/.config/emacs/init.el#L703
 (defun my/keyboard-quit ()
