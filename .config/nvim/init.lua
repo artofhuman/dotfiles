@@ -18,16 +18,25 @@ vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
-    { 
-      "shaunsingh/nord.nvim", 
-      config = function()
-        vim.g.nord_bold = false
-        vim.g.nord_italic = false
-        vim.g.nord_disable_background = true
-        vim.g.nord_borders = false
+    -- { 
+    --   "shaunsingh/nord.nvim", 
+    --   config = function()
+    --     vim.g.nord_bold = false
+    --     vim.g.nord_italic = false
+    --     vim.g.nord_disable_background = true
+    --     vim.g.nord_borders = false
+    --   end
+    -- },
 
-        -- vim.cmd[[colorscheme nord]]
-      end
+    {
+      "gbprod/nord.nvim",
+      lazy = false,
+      priority = 1000,
+      config = function()
+        require("nord").setup({
+          transparent = true
+        })
+      end,
     },
 
     {
@@ -41,19 +50,33 @@ require("lazy").setup({
       },
       init = function()
         -- vim.cmd "colorscheme cyberdream"
-        vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
-        vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
-        vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
-        vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
-        vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3c4048", bg = "none" })
-        vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#7b8496" })
-        vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "#232429" })
-        vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bg = "#232429" })
-        vim.api.nvim_set_hl(0, "TreesitterContextBottom", { bg = "#232429", underline = true })
+        -- vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
+        -- vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
+        -- vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
+        -- vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
+        -- vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3c4048", bg = "none" })
+        -- vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#7b8496" })
+        -- vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "#232429" })
+        -- vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bg = "#232429" })
+        -- vim.api.nvim_set_hl(0, "TreesitterContextBottom", { bg = "#232429", underline = true })
       end,
     },
 
-    -- { "ellisonleao/gruvbox.nvim", priority = 1000 , config = true, opts = ...},
+    { 
+      "ellisonleao/gruvbox.nvim", 
+      priority = 1000, -- make sure to load this before all the other start plugins
+      lazy = false,
+      -- init = function()
+      --   vim.api.nvim_set_hl(0, "SignColumn", { bg = "none", ctermbg = "none" })
+      -- end,
+      config = function ()
+        require("gruvbox").setup({
+          contrast = "hard",
+          bold = false
+          -- transparent_mode = true,
+        })
+      end,
+    },
   
     { 
       "rose-pine/neovim",
@@ -71,30 +94,68 @@ require("lazy").setup({
         })
       end
     },
-  
-    -- { 'davidosomething/vim-colors-meh' },
-    { 
-      'zenbones-theme/zenbones.nvim',
-      dependencies = "rktjmp/lush.nvim",
-    },
+
+    { "p00f/alabaster.nvim" },
 
     {
       "folke/tokyonight.nvim",
       lazy = false,
       priority = 1000,
-      opts = {
-        transparent = true,
-        styles = {
-          comments = { italic = false },
-          keywords = { italic = false },
-        }
-      },
+      -- opts = {},
+      config = function()
+        require("tokyonight").setup({
+          transparent = true,
+          on_highlights = function(hl, c)
+            -- set telescope-bg transparent
+              local prompt = "#2d3149"
+              hl.TelescopeNormal = {
+                bg = c.bg_dark,
+                fg = c.fg_dark,
+              }
+              hl.TelescopeBorder = {
+                bg = c.bg_dark,
+                fg = c.bg_dark,
+              }
+              hl.TelescopePromptNormal = {
+                bg = prompt,
+              }
+              hl.TelescopePromptBorder = {
+                bg = prompt,
+                fg = prompt,
+              }
+              hl.TelescopePromptTitle = {
+                bg = prompt,
+                fg = prompt,
+              }
+              hl.TelescopePreviewTitle = {
+                bg = c.bg_dark,
+                fg = c.bg_dark,
+              }
+              hl.TelescopeResultsTitle = {
+                bg = c.bg_dark,
+                fg = c.bg_dark,
+              }
+          end,
+          styles = {
+            sidebars = "transparent",
+            comments = { italic = false },
+            keywords = { italic = false },
+          }
+        })
+      end
     },
+
+    -- { 'GustavoPrietoP/doom-themes.nvim' },
+    -- { 'davidosomething/vim-colors-meh' },
+    --
+    { 
+      'zenbones-theme/zenbones.nvim', dependencies = "rktjmp/lush.nvim",
+    },
+
+    -- { "savq/melange-nvim" },
+    --
   
     { 'vim-test/vim-test' },
-
-    -- {"nyoom-engineering/oxocarbon.nvim"},
-    -- { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
 
     -- save my last cursor position
     {
@@ -306,6 +367,9 @@ require("lazy").setup({
           },
           renderer = {
             highlight_git = true,
+            icons = {
+              padding = "  ",  -- for Iosevka font
+            },
           },
           on_attach = function(bufnr)
             local api = require('nvim-tree.api')
@@ -330,82 +394,6 @@ require("lazy").setup({
       end,
     },
       
-    -- completions
-    -- {
-    --   "hrsh7th/nvim-cmp",
-    --   dependencies = { 
-    --     'hrsh7th/cmp-nvim-lsp',
-    --     'hrsh7th/cmp-buffer',
-    --     'hrsh7th/cmp-path',
-    --     'L3MON4D3/LuaSnip',
-    --     'saadparwaiz1/cmp_luasnip'
-    --   },
-    --   config = function()
-    --   	local cmp = require("cmp")
-    --   	local luasnip = require("luasnip")
-    --   	local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-    --
-    --     local has_words_before = function()
-    --       unpack = unpack or table.unpack
-    --       local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    --       return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-    --     end
-    --
-    --     cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-    --
-    --     luasnip.config.setup {}
-    --      require('cmp').setup({
-    --        snippet = {
-    --          expand = function(args)
-    --            luasnip.lsp_expand(args.body)
-    --          end,
-    --        },
-    --        sources = {
-    --          { name = 'nvim_lsp' },
-    --          { 
-    --            name = "buffer",
-    --            options = {
-    --              get_bufnrs = function()
-    --                return vim.api.nvim_list_bufs()
-    --              end
-    --            }
-    --          },
-    --          { name = "luasnip" },
-    --          { name = "path" },
-    --        },
-    --
-    --        mapping = cmp.mapping.preset.insert {
-    --          ['<C-n>'] = cmp.mapping.select_next_item(),
-    --          ['<C-p>'] = cmp.mapping.select_prev_item(),
-    --          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    --          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    --          ['<CR>'] = cmp.mapping.confirm { select = true },
-    --          ['<Tab>'] = cmp.mapping(function(fallback)
-    --            if cmp.visible() then
-    --              cmp.select_next_item()
-    --            elseif luasnip.expand_or_locally_jumpable() then 
-    --              luasnip.expand_or_jump()
-    --            elseif has_words_before() then
-    --              cmp.complete()
-    --            else
-    --              fallback()
-    --            end
-    --          end, { 'i', 's' }),
-    --        },
-    --        view = {
-    --          entries = {
-    --            name = "custom",
-    --            selection_order = "near_cursor",
-    --          },
-    --        },
-    --        performance = {
-    --          max_view_entries = 15
-    --        },
-    --      })
-    --   end
-    -- },
-    --
-    
     {
       'saghen/blink.cmp',
       -- optional: provides snippets for the snippet source
@@ -527,76 +515,11 @@ require("lazy").setup({
         end,
       }
     },
-  
-    -- {
-    --   "yetone/avante.nvim",
-    --   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    --   build = "make",  -- ⚠️ must add this line! ! !
-    --   event = "VeryLazy",
-    --   version = false, -- Never set this value to "*"! Never!
-    --   opts = {
-    --     windows = {
-    --       width = 45,
-    --       ask = {
-    --         start_insert = false,
-    --       },
-    --     },
-    --     provider = "konturai",
-    --     auto_suggestions_provider = "kotnur_ai_completions",
-    --     hints = { enabled = false }, -- disable hints on visual select
-    --     behaviour = {
-    --       auto_suggestions = false,
-    --     },
-    --     providers = {
-    --       konturai = {
-    --          __inherited_from = 'openai',
-    --          disable_tools = true,
-    --          endpoint = 'https://srs-litellm.kontur.host/v1',
-    --          model = 'qwen25coder32b20480',
-    --          -- api_key_name = "^cmd: cat ~/.authinfo | head -n 1 | awk '{print $6}'",
-    --          api_key_name = {"cat","~/.authinfo", "|", "head -n 1", "|", "awk '{print $6}'"},
-    --          extra_request_body = {
-    --            max_completion_tokens = 8192
-    --          }
-    --       },
-    --       kotnur_ai_completions = {
-    --          __inherited_from = 'openai',
-    --          disable_tools = true,
-    --          model = 'qwen25coder05bbase_20250507_chatfree',
-    --          endpoint = 'https://srs-litellm.kontur.host/v1',
-    --          api_key_name = {"cat","~/.authinfo", "|", "head -n 1", "|", "awk '{print $6}'"},
-    --          extra_request_body = {
-    --            max_completion_tokens = 8192
-    --          }
-    --       }
-    --     }
-    --   },
-    --   dependencies = {
-    --     "nvim-treesitter/nvim-treesitter",
-    --     "nvim-lua/plenary.nvim",
-    --     "MunifTanjim/nui.nvim",
-    --     --- The below dependencies are optional,
-    --     "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-    --     -- "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-    --     "stevearc/dressing.nvim", -- for input provider dressing
-    --     "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-    --     -- "zbirenbaum/copilot.lua", -- for providers='copilot'
-    --     {
-    --       -- Make sure to set this up properly if you have lazy=true
-    --       'MeanderingProgrammer/render-markdown.nvim',
-    --       opts = {
-    --         file_types = { "markdown", "Avante" },
-    --       },
-    --       ft = { "markdown", "Avante" },
-    --     },
-    --   },
-    -- },
-
   },
   
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "rose-pine" } },
+  install = { colorscheme = { "nord" } },
   -- automatically check for plugin updates
   checker = { enabled = false },
 })
@@ -633,7 +556,6 @@ vim.opt.laststatus = 0 -- removing statusline
 vim.opt.updatetime = 500 -- trigger cursorhold event faster.
 vim.opt.scrolloff = 8 -- annoying scroll fix
 vim.opt.signcolumn = "yes" -- show sign column so that text doesn't shift
-
 
 vim.keymap.set('n', '<Leader>w', ':write!<CR>') -- Fast saving
 vim.keymap.set('n', '<Esc><Esc>', ':nohlsearch<CR>') -- Disable search
@@ -673,8 +595,8 @@ vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
 
 -- Terminal (not sure I need this)
 -- Open terminal in vertical and horizontal split
--- vim.keymap.set('n', '<leader>tv', '<cmd>vnew term://zsh<CR>', { noremap = true })
--- vim.keymap.set('n', '<leader>ts', '<cmd>split term://fish<CR>', { noremap = true })
+vim.keymap.set('n', '<leader>tv', '<cmd>vnew term://zsh<CR>', { noremap = true })
+vim.keymap.set('n', '<leader>ts', '<cmd>split term://zsh<CR>', { noremap = true })
 
 -- Folding
 
@@ -755,24 +677,12 @@ local border = {
     { '│', 'FloatBorder' },
 }
 
-   -- local border = {
-   --    { "╭", "FloatBorder" },
-   --    { "─", "FloatBorder" },
-   --    { "╮", "FloatBorder" },
-   --    { "│", "FloatBorder" },
-   --    { "╯", "FloatBorder" },
-   --    { "─", "FloatBorder" },
-   --    { "╰", "FloatBorder" },
-   --    { "│", "FloatBorder" },
-   --  }
-
 -- Add the border on hover and on signature help popup window
 local handlers = {
     ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = border }),
     ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = border }),
 }
 
-vim.cmd("colorscheme cyberdream")
 vim.diagnostic.config({ 
   virtual_text = true,
 
@@ -809,7 +719,6 @@ end, { desc = 'Toggle diagnostic virtual_lines' })
 
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 
-
 -- tests
 vim.g['test#python#runner'] = 'pytest'
 vim.g['test#python#pytest#executable'] = 'pytest'
@@ -820,9 +729,29 @@ vim.keymap.set({'n', 'v'}, '<leader>rs', "<cmd>TestNearest<CR>", {})
 vim.keymap.set({'n', 'v'}, '<leader>rt', "<cmd>TestFile<CR>", {})
 vim.keymap.set({'n', 'v'}, '<leader>rl', "<cmd>TestLast<CR>", {})
 
+
+vim.cmd("colorscheme rose-pine-moon")
+
 if (vim.g.colors_name == 'nord') then
   vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3b4252", underline = false, bold = false })
   vim.api.nvim_set_hl(0, "TelescopePreviewBorder", { fg = "#3b4252", underline = false, bold = false })
   vim.api.nvim_set_hl(0, "TelescopeResultsBorder", { fg = "#3b4252", underline = false, bold = false })
   vim.api.nvim_set_hl(0, "TelescopePromptBorder", { fg = "#3b4252", underline = false, bold = false })
+  vim.api.nvim_set_hl(0, "FloatBorder", { fg = "#3b4252", underline = false, bold = false })
+end
+
+if (vim.g.colors_name == 'gruvbox') then
+  vim.api.nvim_set_hl(0, "SignColumn", { bg = "none", ctermbg = "none" })
+end
+
+if (vim.g.colors_name == 'cyberdream') then
+    vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
+    vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
+    vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
+    vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
+    vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3c4048", bg = "none" })
+    vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#7b8496" })
+    vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "#232429" })
+    vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bg = "#232429" })
+    vim.api.nvim_set_hl(0, "TreesitterContextBottom", { bg = "#232429", underline = true })
 end
