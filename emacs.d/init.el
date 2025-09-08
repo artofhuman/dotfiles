@@ -69,13 +69,17 @@
 )
 
 ;; (load-theme 'doom-tokyo-night)
-(load-theme 'doom-moonlight)
-(setq modus-themes-mode-line '(borderless))
+;; (load-theme 'doom-moonlight)
+;; (load-theme 'doom-nord)
+(load-theme 'modus-operandi-tinted)
 ;; (load-theme 'modus-operandi-deuteranopia)
-;;(load-theme 'modus-operandi-tinted)
+
+(setq modus-themes-mode-line '(borderless)
+      modus-themes-bold-constructs t)
 
 ;; (set-face-attribute 'default nil :font "Fragment Mono" :height 140);; :weight 'light) ;; :weight 'light)
-(set-face-attribute 'default nil :font "Iosevka" :height 155);; :weight 'light) ;; :weight 'light)
+(set-face-attribute 'default nil :font "Iosevka" :height 160)
+;;(set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
 ;; (set-face-attribute 'default nil :font "Whois" :height 170)  ;;# no cyrilic :(
 
 ;; default, fixed-pitch(mono), variable-pitch
@@ -171,9 +175,9 @@
 (package-initialize)
 
 ;;; Icons 
-(use-package all-the-icons
-  :ensure t
-  :if (display-graphic-p))
+;; (use-package all-the-icons
+;;   :ensure t
+;;   :if (display-graphic-p))
 
 ;; Minibuffer completion is essential to your Emacs workflow and
 ;; Vertico is currently one of the best out there. There's a lot to
@@ -605,6 +609,8 @@ If `project-current' cannot find a project, returns the `default-directory'."
 (setq pixel-scroll-precision-mode-map 1) ;; smoth scroling for gui emacs
 (setq x-select-enable-clipboard t) ;; enable copy to system clipboard
 
+(add-hook 'ruby-mode 'eglot-ensure)  ;; load lsp for riby on open rb files
+
 ;; eldoc load
 (use-package eldoc
   :defer t
@@ -645,3 +651,8 @@ Giving it a name so that I can target it in vertico mode and make it use buffer.
   :custom
   (completion-styles '(orderless basic partial-completion))
   (completion-category-overrides '((file (styles basic partial-completion)))))
+
+(setq org-confirm-babel-evaluate nil) ;; evalute without confirmation
+(org-babel-do-load-languages
+  'org-babel-load-languages
+    '((python . t)))
