@@ -28,7 +28,6 @@
 ;; Disable bell
 (setq ring-bell-function 'ignore)
 
-
 ;; Match mac os title bar with color scheme
 (when (memq window-system '(mac ns))
   (add-to-list 'default-frame-alist '(ns-appearance . dark)) ; nil for dark text
@@ -68,27 +67,19 @@
         doom-themes-enable-italic nil) ; if nil, italics is universally disabled
 )
 
+(setq modus-themes-mode-line '(borderless)
+      modus-themes-bold-constructs t)
 ;; (load-theme 'doom-tokyo-night)
 ;; (load-theme 'doom-moonlight)
 ;; (load-theme 'doom-nord)
-(load-theme 'modus-operandi-tinted)
-;; (load-theme 'modus-operandi-deuteranopia)
+;; (load-theme 'modus-operandi)
+(load-theme 'modus-operandi-deuteranopia)
 
-(setq modus-themes-mode-line '(borderless)
-      modus-themes-bold-constructs t)
-
-;; (set-face-attribute 'default nil :font "Fragment Mono" :height 140);; :weight 'light) ;; :weight 'light)
 (set-face-attribute 'default nil :font "Iosevka" :height 160)
-;;(set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
+;; (set-face-attribute 'default nil :font "Fragment Mono" :height 140);; :weight 'light) ;; :weight 'light)
+; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
 ;; (set-face-attribute 'default nil :font "Whois" :height 170)  ;;# no cyrilic :(
-
-;; default, fixed-pitch(mono), variable-pitch
-;; TODO: add variable
-;; (set-face-attribute 'default nil :font "iA Writer Mono S" :height 150)
 ;; (set-face-attribute 'default nil :font "JetBrains Mono" :height 155);; :weight 'light)
-;; (set-face-attribute 'default nil :font "Berkeley Mono" :height 160);; :weight 'light) ;; :weight 'light)
-;; (set-face-attribute 'default nil :font "IBM Plex Mono" :height 155)
-;; (set-face-attribute 'default nil :font "SF Mono" :height 150)
 
 (set-face-bold-p 'bold nil)  ;; disable bold globaly, so maybe only for progmode
 (mapc
@@ -165,7 +156,7 @@
 (setq search-whitespace-regexp ".*?")
 
 ;; Display line numbers only when in programming modes
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+;; (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -204,8 +195,19 @@
   :init
   (marginalia-mode))
 
+;; (use-package completion-preview
+;;   :straight (:type built-in)
+;;   :bind (:map completion-preview-active-mode-map
+;;               ("M-n" . completion-preview-next-candidate)
+;;               ("M-p" . completion-preview-prev-candidate))
+;;   :init
+;;   (global-completion-preview-mode 1))
+
+(global-completion-preview-mode 1)
+
 (use-package corfu
   ;; Optional customizations
+  :disabled t  ;; try new completion-preview-mode
   :config
   (setq corfu-count 10)
   :custom
@@ -226,7 +228,7 @@
   ;;        (eshell-mode . corfu-mode))
 
   :init
-  (global-corfu-mode)
+  ;; (global-corfu-mode)
   ;; Enable optional extension modes:
   (corfu-history-mode)
   (corfu-popupinfo-mode))
@@ -317,11 +319,21 @@
 ;; allow to use gg for comment lines
 (use-package evil-commentary :ensure t :init)
 (evil-commentary-mode)
-
-;; === my func staff
-;; (evil-define-key 'normal vterm-mode-map "k" ')
 ;;; END Evil section
 
+;; === my func staff
+;; https://karthinks.com/software/fringe-matters-finding-the-right-difference/
+(defun my/diff-hl-set-reference ()
+  "Set the reference revision for showing diff-hl changes.
+
+Do so buffer-locally."
+  (interactive)
+  (setq-local
+   diff-hl-reference-revision
+   (read-string
+    (format "Set reference revision (buffer %s): "
+            (buffer-name))))
+  (diff-hl-update))
 
 (defun testrun-core--root ()
   "Get root directory for compilation.
@@ -350,8 +362,7 @@ If `project-current' cannot find a project, returns the `default-directory'."
       (message command)
       (vterm-send-string command)
       (vterm-send-return)
-      (switch-to-buffer-other-window buf)
-      ))
+      (switch-to-buffer-other-window buf)))
 
 (defun my/vterm-toggle-run-pytest-current-file ()
   "Insert text of current line in vterm and execute."
@@ -388,9 +399,28 @@ If `project-current' cannot find a project, returns the `default-directory'."
       (insert debug-stmt)
       (indent-according-to-mode))))
 
+(defun my/get-project-root ()
+  (when (fboundp 'projectile-project-root)
+    (projectile-project-root)))
+
+(defun my/copy-current-buffer-file-name ()
+  "Get the relative file path from the project root."
+  (interactive)
+  (if buffer-file-name
+      (let* ((project (project-current))
+             (project-root (if project (project-root project)))
+             (relative-path (if project-root
+                                (file-relative-name buffer-file-name project-root)
+                              nil)))
+        (if relative-path
+            (progn
+              (message "Relative path from project root: %s" relative-path)
+              (kill-new relative-path)) ; copy to the clipboard
+          (message "File not in a project")))
+    (message "Buffer is not visiting a file")))
+
 ;; TODO: match word with _ as whole word (for search by start *)
 (modify-syntax-entry ?_ "w")
-
 ;; emacs redo
 (setq evil-undo-system "undo-redo")
 
@@ -414,14 +444,7 @@ If `project-current' cannot find a project, returns the `default-directory'."
   :config
   :config
   (setq vterm-max-scrollback 100000)
-  (vterm-timer-delay 0.01)
-  ;; :custom
-  ;; (vterm-keymap-exceptions
-  ;;  ;; vterm-default
-  ;;  '("C-c" "C-x" "C-u" "C-g" "C-h" "C-l" "M-x" "M-o" "C-y" "M-y"
-  ;;    ;; for use evil to move between windows
-  ;;    "C-k" "C-j"))
-  )
+  (vterm-timer-delay 0))
 
 (use-package vterm-toggle
   ;; :defer t
@@ -494,33 +517,13 @@ If `project-current' cannot find a project, returns the `default-directory'."
 (setq magit-blame-echo-style 'headings) ;; in echo mode show git message under each line
 
 (use-package gptel :ensure t :init)
-(setq-default gptel-model 'qwen25coder32b20480 ;Pick your default model
+(setq-default gptel-model 'qwen25coder32b20480
               gptel-backend (gptel-make-azure "kontur-llm"
                               :host "srs-litellm.kontur.host"
                               :stream t
                               :endpoint "/v1/chat/completions"
                               :key gptel-api-key
                               :models '("qwen25coder32b20480")))
-
-(defun my/get-project-root ()
-  (when (fboundp 'projectile-project-root)
-    (projectile-project-root)))
-
-(defun my/copy-current-buffer-file-name ()
-  "Get the relative file path from the project root."
-  (interactive)
-  (if buffer-file-name
-      (let* ((project (project-current))
-             (project-root (if project (project-root project)))
-             (relative-path (if project-root
-                                (file-relative-name buffer-file-name project-root)
-                              nil)))
-        (if relative-path
-            (progn
-              (message "Relative path from project root: %s" relative-path)
-              (kill-new relative-path)) ; copy to the clipboard
-          (message "File not in a project")))
-    (message "Buffer is not visiting a file")))
 
 ;; Ripgrep the current word from project root
 (defun consult-ripgrep-at-point ()
