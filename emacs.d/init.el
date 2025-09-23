@@ -621,6 +621,10 @@ If `project-current' cannot find a project, returns the `default-directory'."
   (define-key evil-normal-state-map (kbd "K") 'eldoc-print-current-symbol-info)
   (global-eldoc-mode nil))
 
+(use-package markdown-mode
+  :ensure t
+  :defer t)
+
 ;; Speed up eglot communication by translating to bycode externally
 (use-package eglot-booster
   :ensure t
