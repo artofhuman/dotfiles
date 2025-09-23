@@ -608,8 +608,6 @@ If `project-current' cannot find a project, returns the `default-directory'."
 ;; Don't hightlight under cursor
 (setq eglot-ignored-server-capabilites '(:documentHighlightProvider))
 ;; (setq eldoc-echo-area-use-multiline-p 1) ;; don't resize minibufer
-(pixel-scroll-mode)
-(setq pixel-scroll-precision-mode-map 1) ;; smoth scroling for gui emacs
 (setq x-select-enable-clipboard t) ;; enable copy to system clipboard
 
 (add-hook 'ruby-mode 'eglot-ensure)  ;; load lsp for riby on open rb files
@@ -630,6 +628,14 @@ If `project-current' cannot find a project, returns the `default-directory'."
   :config
   (setq eglot-booster-io-only t)
   (eglot-booster-mode))
+
+(use-package ultra-scroll
+  ;:vc (:url "https://github.com/jdtsmith/ultra-scroll") ; if desired (emacs>=v30)
+  :init
+  (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
+        scroll-margin 0)        ; important: scroll-margin>0 not yet supported
+  :config
+  (ultra-scroll-mode 1))
 
 ;; consult-eglot
 (use-package consult-eglot
