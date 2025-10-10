@@ -69,13 +69,9 @@
 
 (setq modus-themes-mode-line '(borderless)
       modus-themes-bold-constructs t)
-;; (load-theme 'doom-tokyo-night)
-;; (load-theme 'doom-moonlight)
-;; (load-theme 'doom-nord)
-;; (load-theme 'modus-operandi)
-(load-theme 'modus-operandi-deuteranopia)
+(load-theme 'modus-operandi)
 
-(set-face-attribute 'default nil :font "Iosevka" :height 160)
+(set-face-attribute 'default nil :font "Iosevka" :height 155)
 ;; (set-face-attribute 'default nil :font "Fragment Mono" :height 140);; :weight 'light) ;; :weight 'light)
 ; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
 ;; (set-face-attribute 'default nil :font "Whois" :height 170)  ;;# no cyrilic :(
@@ -204,34 +200,6 @@
 ;;   (global-completion-preview-mode 1))
 
 (global-completion-preview-mode 1)
-
-(use-package corfu
-  ;; Optional customizations
-  :disabled t  ;; try new completion-preview-mode
-  :config
-  (setq corfu-count 10)
-  :custom
-  (corfu-auto t)
-  (corfu-auto-prefix 1)
-  (corfu-auto-delay 0.1)
-  (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-quit-no-match 'separator)
-  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
-  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
-  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
-
-  ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
-  ;; :hook ((prog-mode . corfu-mode)
-  ;;        (shell-mode . corfu-mode)
-  ;;        (eshell-mode . corfu-mode))
-
-  :init
-  ;; (global-corfu-mode)
-  ;; Enable optional extension modes:
-  (corfu-history-mode)
-  (corfu-popupinfo-mode))
 
 ;; A few more useful configurations...
 (use-package emacs
@@ -530,8 +498,6 @@ If `project-current' cannot find a project, returns the `default-directory'."
   (interactive)
   (consult-ripgrep (my/get-project-root)(thing-at-point 'symbol)))
 
-(use-package zoom-window :ensure t :defer)
-
 (use-package browse-at-remote
   :defer t
   :ensure t
@@ -541,17 +507,6 @@ If `project-current' cannot find a project, returns the `default-directory'."
    :keymaps 'override
    "SPC o r" 'browse-at-remote)
   )
-
-;; (use-package browse-at-remote
-;;   :general
-;;   (:states '(normal visual)
-;;    :prefix my-leader-key
-;;    "gp" #'browse-at-remote
-;;    )
-;;   :config
-;;   (setq browse-at-remote-prefer-symbolic nil)
-;;   (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^gitlab\\." :type "gitlab"))
-;;   )
 
 (use-package consult
   :ensure t
