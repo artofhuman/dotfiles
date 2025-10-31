@@ -11,6 +11,14 @@ bind-key C-a send-prefix
 
 set-option -g default-shell /bin/zsh
 
+setw -g mode-keys vi
+# Setup 'v' to begin selection as in Vim
+bind-key -T copy-mode-vi v send -X begin-selection
+bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"
+
+bind-key [ copy-mode
+bind-key ] paste-buffer
+
 set -g mouse on
 set -g escape-time 10
 set -g focus-events on
@@ -77,8 +85,3 @@ setw -g window-status-current-format "#[fg=#5e81ac,bg=default] #I#[fg=brightwhit
 setw -g window-status-activity-style "none"
 setw -g window-status-separator ""
 setw -g window-status-style "none,fg=brightwhite,bg=default"
-
-# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
-# run '~/.tmux/plugins/tpm/tpm'
-
-# set -g @plugin "nordtheme/tmux"
