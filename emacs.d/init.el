@@ -1,3 +1,15 @@
+;; probably better to use early-init.el
+(setq package-enable-at-startup nil)
+
+;; Defer garbage collection further back in the startup process
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6)
+
+(add-hook 'emacs-startup-hook
+  (lambda ()
+    (setq gc-cons-threshold 16777216 ; 16mb
+          gc-cons-percentage 0.1)))
+
 ;; UI
 (setq inhibit-startup-message t)
 
@@ -68,7 +80,7 @@
 )
 
 (setq modus-themes-mode-line '(borderless)
-      modus-themes-bold-constructs t)
+      modus-themes-bold-constructs nil)
 (load-theme 'modus-operandi)
 
 (set-face-attribute 'default nil :font "Iosevka" :height 155)
@@ -129,8 +141,8 @@
 (setq-default indent-tabs-mode nil)
 
 ;; Scrol like in vim
-(setq scroll-step 1)
-(setq scroll-margin 15)
+;; (setq scroll-step 1)
+;; (setq scroll-margin 15)
 
 ;; Automatically save your place in files
 (save-place-mode 1)
@@ -387,8 +399,13 @@ If `project-current' cannot find a project, returns the `default-directory'."
           (message "File not in a project")))
     (message "Buffer is not visiting a file")))
 
+(defun my/close-all-buffers ()
+  (interactive)
+  (mapc 'kill-buffer (buffer-list)))
+
 ;; TODO: match word with _ as whole word (for search by start *)
 (modify-syntax-entry ?_ "w")
+
 ;; emacs redo
 (setq evil-undo-system "undo-redo")
 
@@ -410,8 +427,7 @@ If `project-current' cannot find a project, returns the `default-directory'."
   :defer t
   :ensure t
   :config
-  :config
-  (setq vterm-max-scrollback 100000)
+  ;; (setq vterm-max-scrollback 100000)
   (vterm-timer-delay 0))
 
 (use-package vterm-toggle
@@ -538,6 +554,7 @@ If `project-current' cannot find a project, returns the `default-directory'."
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 
 ;;;; Keybindings
+;; (global-set-key (kbd "C-c t")  'my/vterm-toggle-run-pytest-current-file)
 (use-package general :ensure t)
 
 (general-create-definer leader-spc
@@ -582,7 +599,7 @@ If `project-current' cannot find a project, returns the `default-directory'."
 
 ;; Speed up eglot communication by translating to bycode externally
 (use-package eglot-booster
-  :ensure t
+  ;; :ensure t
   :after eglot
   :config
   (setq eglot-booster-io-only t)
@@ -591,8 +608,8 @@ If `project-current' cannot find a project, returns the `default-directory'."
 (use-package ultra-scroll
   ;:vc (:url "https://github.com/jdtsmith/ultra-scroll") ; if desired (emacs>=v30)
   :init
-  (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
-        scroll-margin 0)        ; important: scroll-margin>0 not yet supported
+  ;; (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
+  ;;       scroll-margin 0)        ; important: scroll-margin>0 not yet supported
   :config
   (ultra-scroll-mode 1))
 
@@ -624,3 +641,11 @@ Giving it a name so that I can target it in vertico mode and make it use buffer.
 (org-babel-do-load-languages
   'org-babel-load-languages
     '((python . t)))
+
+(use-package typescript-mode
+  :ensure t)
+
+(use-package dtrt-indent
+  :ensure t
+  :config
+  (dtrt-indent-mode 1))
