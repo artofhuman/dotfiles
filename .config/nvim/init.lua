@@ -317,6 +317,8 @@ require("lazy").setup({
       opts_extend = { "sources.default" }
     },
   
+    -- { "sj2tpgk/nvim-eldoc" },
+
     {
       "neovim/nvim-lspconfig",
       dependencies = { 'saghen/blink.cmp' },
@@ -324,9 +326,13 @@ require("lazy").setup({
         local capabilities = vim.lsp.protocol.make_client_capabilities()
         capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities({}, false))
 
-        require'lspconfig'.pyright.setup({  handlers = handlers })
-        require'lspconfig'.solargraph.setup({ handlers = handlers  })
-        require'lspconfig'.ts_ls.setup({ handlers = handlers })
+        vim.lsp.enable('pyright')
+        vim.lsp.enable('solargraph')
+        vim.lsp.enable('ts_ls')
+
+        -- require'lspconfig'.pyright.setup({  handlers = handlers })
+        -- require'lspconfig'.solargraph.setup({ handlers = handlers  })
+        -- require'lspconfig'.ts_ls.setup({ handlers = handlers })
       end
     },
 
@@ -424,6 +430,9 @@ vim.opt.updatetime = 500 -- trigger cursorhold event faster.
 vim.opt.scrolloff = 8 -- annoying scroll fix
 vim.opt.signcolumn = "yes" -- show sign column so that text doesn't shift
 
+vim.o.cursorline = true
+vim.opt.cursorlineopt = { "number" }
+
 vim.keymap.set('n', '<Leader>w', ':write!<CR>') -- Fast saving
 vim.keymap.set('n', '<Esc><Esc>', ':nohlsearch<CR>') -- Disable search
 
@@ -451,7 +460,7 @@ local function add_debug()
   -- emulate press =
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("==", true, false, true), 'n', true) 
 end
-vim.keymap.set('n', '<Leader>d', add_debug, {noremap = true, silent = true}) -- Set debug point
+vim.keymap.set('n', '<leader>d', add_debug, { noremap = true, silent = true }) -- Set debug point
 -- rename the word under the cursor 
 vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 -- Better split switching
@@ -590,7 +599,6 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Open float
 vim.g['test#python#runner'] = 'pytest'
 vim.g['test#python#pytest#executable'] = 'pytest'
 vim.g['test#strategy'] = 'vimux'
--- let pipenv_prefix = "pytest"
 
 vim.keymap.set({'n', 'v'}, '<leader>rs', "<cmd>TestNearest<CR>", {})
 vim.keymap.set({'n', 'v'}, '<leader>rt', "<cmd>TestFile<CR>", {})
