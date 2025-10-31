@@ -18,145 +18,13 @@ vim.opt.rtp:prepend(lazypath)
 -- Setup lazy.nvim
 require("lazy").setup({
   spec = {
-    -- { 
-    --   "shaunsingh/nord.nvim", 
-    --   config = function()
-    --     vim.g.nord_bold = false
-    --     vim.g.nord_italic = false
-    --     vim.g.nord_disable_background = true
-    --     vim.g.nord_borders = false
-    --   end
-    -- },
-
-    {
-      "gbprod/nord.nvim",
-      lazy = false,
-      priority = 1000,
-      config = function()
-        require("nord").setup({
-          transparent = true
-        })
-      end,
-    },
-
-    {
-      "scottmckendry/cyberdream.nvim",
-      -- enabled = theme == "cyberdream",
+    { 
+      "p00f/alabaster.nvim",
       lazy = false,
       priority = 1000000,
-      opts = {
-        saturation = 0.95,
-        transparent = true,
-      },
-      init = function()
-        -- vim.cmd "colorscheme cyberdream"
-        -- vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
-        -- vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
-        -- vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
-        -- vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
-        -- vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3c4048", bg = "none" })
-        -- vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#7b8496" })
-        -- vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "#232429" })
-        -- vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bg = "#232429" })
-        -- vim.api.nvim_set_hl(0, "TreesitterContextBottom", { bg = "#232429", underline = true })
-      end,
     },
 
-    { 
-      "ellisonleao/gruvbox.nvim", 
-      priority = 1000, -- make sure to load this before all the other start plugins
-      lazy = false,
-      -- init = function()
-      --   vim.api.nvim_set_hl(0, "SignColumn", { bg = "none", ctermbg = "none" })
-      -- end,
-      config = function ()
-        require("gruvbox").setup({
-          contrast = "hard",
-          bold = false
-          -- transparent_mode = true,
-        })
-      end,
-    },
-  
-    { 
-      "rose-pine/neovim",
-      name = "rose-pine",
-      config = function()
-        require("rose-pine").setup({
-          variant = "moon",
-          variant = "auto",
-          dark_variant = "main", -- main, moon, or dawn
-          styles = {
-            bold = false,
-            italic = false,
-            transparency = true,
-          },
-        })
-      end
-    },
-
-    { "p00f/alabaster.nvim" },
-
-    {
-      "folke/tokyonight.nvim",
-      lazy = false,
-      priority = 1000,
-      -- opts = {},
-      config = function()
-        require("tokyonight").setup({
-          transparent = true,
-          on_highlights = function(hl, c)
-            -- set telescope-bg transparent
-              local prompt = "#2d3149"
-              hl.TelescopeNormal = {
-                bg = c.bg_dark,
-                fg = c.fg_dark,
-              }
-              hl.TelescopeBorder = {
-                bg = c.bg_dark,
-                fg = c.bg_dark,
-              }
-              hl.TelescopePromptNormal = {
-                bg = prompt,
-              }
-              hl.TelescopePromptBorder = {
-                bg = prompt,
-                fg = prompt,
-              }
-              hl.TelescopePromptTitle = {
-                bg = prompt,
-                fg = prompt,
-              }
-              hl.TelescopePreviewTitle = {
-                bg = c.bg_dark,
-                fg = c.bg_dark,
-              }
-              hl.TelescopeResultsTitle = {
-                bg = c.bg_dark,
-                fg = c.bg_dark,
-              }
-          end,
-          styles = {
-            sidebars = "transparent",
-            comments = { italic = false },
-            keywords = { italic = false },
-          }
-        })
-      end
-    },
-
-    -- { 'GustavoPrietoP/doom-themes.nvim' },
-    -- { 'davidosomething/vim-colors-meh' },
-    --
-    { 
-      'zenbones-theme/zenbones.nvim', dependencies = "rktjmp/lush.nvim",
-    },
-
-    -- { "savq/melange-nvim" },
-    --
-  
     { 'vim-test/vim-test' },
-
     -- save my last cursor position
     {
       "ethanholz/nvim-lastplace",
@@ -502,7 +370,6 @@ require("lazy").setup({
       end
     },
 
-    { 'sindrets/diffview.nvim' },
     { 'tpope/vim-fugitive' },
     ---
     {
@@ -729,29 +596,8 @@ vim.keymap.set({'n', 'v'}, '<leader>rs', "<cmd>TestNearest<CR>", {})
 vim.keymap.set({'n', 'v'}, '<leader>rt', "<cmd>TestFile<CR>", {})
 vim.keymap.set({'n', 'v'}, '<leader>rl', "<cmd>TestLast<CR>", {})
 
+vim.cmd("colorscheme alabaster")
 
-vim.cmd("colorscheme rose-pine-moon")
-
-if (vim.g.colors_name == 'nord') then
+if (vim.g.colors_name == 'alabaster') then
   vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3b4252", underline = false, bold = false })
-  vim.api.nvim_set_hl(0, "TelescopePreviewBorder", { fg = "#3b4252", underline = false, bold = false })
-  vim.api.nvim_set_hl(0, "TelescopeResultsBorder", { fg = "#3b4252", underline = false, bold = false })
-  vim.api.nvim_set_hl(0, "TelescopePromptBorder", { fg = "#3b4252", underline = false, bold = false })
-  vim.api.nvim_set_hl(0, "FloatBorder", { fg = "#3b4252", underline = false, bold = false })
-end
-
-if (vim.g.colors_name == 'gruvbox') then
-  vim.api.nvim_set_hl(0, "SignColumn", { bg = "none", ctermbg = "none" })
-end
-
-if (vim.g.colors_name == 'cyberdream') then
-    vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
-    vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
-    vim.api.nvim_set_hl(0, "TroubleNormal", { bg = "none", ctermbg = "none" })
-    vim.api.nvim_set_hl(0, "TroubleNormalNC", { bg = "none", ctermbg = "none" })
-    vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3c4048", bg = "none" })
-    vim.api.nvim_set_hl(0, "IndentBlanklineChar", { fg = "#7b8496" })
-    vim.api.nvim_set_hl(0, "TreesitterContext", { bg = "#232429" })
-    vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bg = "#232429" })
-    vim.api.nvim_set_hl(0, "TreesitterContextBottom", { bg = "#232429", underline = true })
 end
