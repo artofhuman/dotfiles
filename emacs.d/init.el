@@ -501,13 +501,13 @@ If `project-current' cannot find a project, returns the `default-directory'."
 (setq magit-blame-echo-style 'headings) ;; in echo mode show git message under each line
 
 (use-package gptel :ensure t :init)
-(setq-default gptel-model 'qwen25coder32b20480
+(setq-default gptel-model 'code-pro
               gptel-backend (gptel-make-azure "kontur-llm"
                               :host "srs-litellm.kontur.host"
                               :stream t
                               :endpoint "/v1/chat/completions"
                               :key gptel-api-key
-                              :models '("qwen25coder32b20480")))
+                              :models '("code-pro")))
 
 ;; Ripgrep the current word from project root
 (defun consult-ripgrep-at-point ()
