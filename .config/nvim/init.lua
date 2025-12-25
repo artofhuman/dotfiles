@@ -24,6 +24,31 @@ require("lazy").setup({
       priority = 1000000,
     },
 
+    {
+      "scottmckendry/cyberdream.nvim",
+      lazy = false,
+      priority = 1000,
+      disabled = true,
+      opts = {
+        transparent = true,
+        borderless_pickers = false,
+        -- saturation = 0.95,
+        cache = true,
+      },
+    },
+  
+    { 
+      "rose-pine/neovim", 
+      name = "rose-pine",
+      opts = {
+        styles = {
+          bold = false,
+          italic = false,
+          transparency = true,
+        },
+      }
+    },
+
     { 'vim-test/vim-test' },
     -- save my last cursor position
     {
@@ -35,6 +60,49 @@ require("lazy").setup({
           lastplace_open_folds = true
         })
       end,
+    },
+    {
+      "akinsho/toggleterm.nvim",
+      keys = {
+        {
+          "<D-j>",
+          function()
+            require("toggleterm").toggle()
+          end,
+          desc = "Toggle Terminal (Floating)",
+        },
+      },
+      opts = {
+        open_mapping = [[<D-j>]],
+        size = function(term)
+          if term.direction == "float" then
+            return 20 -- Height for floating terminal
+          end
+        end,
+        highlights = {
+          NormalFloat = {
+            guibg = "#16181a",
+          },
+          FloatBorder = {
+            guibg = "#16181a",
+          },
+        },
+        float_opts = {
+          border = "curved",
+          width = function()
+            return math.floor(vim.o.columns * 0.8)
+          end,
+          height = function()
+            return math.floor(vim.o.lines * 0.8)
+          end,
+          winblend = 0,
+        },
+        direction = "float",
+        shade_terminals = true,
+        start_in_insert = true,
+        insert_mappings = true,
+        terminal_mappings = true,
+      },
     },
 
     -- Highlight, edit, and navigate code
@@ -209,6 +277,33 @@ require("lazy").setup({
         telescope.load_extension("ui-select")
       end,
     },
+    --
+    -- {
+    --   'dmtrKovalenko/fff.nvim',
+    --   build = function()
+    --     -- this will download prebuild binary or try to use existing rustup toolchain to build from source
+    --     -- (if you are using lazy you can use gb for rebuilding a plugin if needed)
+    --     require("fff.download").download_or_build_binary()
+    --   end,
+    --   -- if you are using nixos
+    --   -- build = "nix run .#release",
+    --   opts = { -- (optional)
+    --     debug = {
+    --       enabled = true,     -- we expect your collaboration at least during the beta
+    --       show_scores = true, -- to help us optimize the scoring system, feel free to share your scores!
+    --     },
+    --   },
+    --   -- No need to lazy-load with lazy.nvim.
+    --   -- This plugin initializes itself lazily.
+    --   lazy = false,
+    --   keys = {
+    --     {
+    --       "ff", -- try it if you didn't it is a banger keybinding for a picker
+    --       function() require('fff').find_files() end,
+    --       desc = 'FFFind files',
+    --     }
+    --   }
+    -- },
 
     -- file explorer
     {
@@ -317,16 +412,27 @@ require("lazy").setup({
       opts_extend = { "sources.default" }
     },
   
-    -- { "sj2tpgk/nvim-eldoc" },
-
     {
       "neovim/nvim-lspconfig",
       dependencies = { 'saghen/blink.cmp' },
       config = function ()
         local capabilities = vim.lsp.protocol.make_client_capabilities()
         capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities({}, false))
+    
+        -- vim.lsp.enable('pyright')
+        vim.lsp.enable('pyrefly')
+        -- vim.lsp.enable('basedpyright')
+        --
+  
+        -- vim.lsp.config('ty', {
+        --   settings = {
+        --     ty = {
+        --       diagnosticMode = 'openFilesOnly',
+        --     },
+        --   },
+        -- })
+        -- vim.lsp.enable('ty')
 
-        vim.lsp.enable('pyright')
         vim.lsp.enable('solargraph')
         vim.lsp.enable('ts_ls')
 
@@ -335,6 +441,13 @@ require("lazy").setup({
         -- require'lspconfig'.ts_ls.setup({ handlers = handlers })
       end
     },
+
+    -- {
+    --   "sj2tpgk/nvim-eldoc",
+    --   config = function()
+    --     require("nvim-eldoc").setup()
+    --   end
+    -- },
 
     { 'bogado/file-line' },
 
@@ -451,9 +564,9 @@ local function add_debug()
   local st = ""
 
   if filetype == "ruby" then
-    st = "binding.pry"
+    st = " binding.pry"
   elseif filetype == "python" then
-    st = "breakpoint()"
+    st = " breakpoint()"
   end
 
   vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { st })
@@ -503,6 +616,10 @@ vim.keymap.set('n', '<C-e>', ':NvimTreeFindFile!<CR>', { noremap = true })
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
+
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    client.server_capabilities.semanticTokensProvider = nil
+
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     local opts = { buffer = ev.buf }

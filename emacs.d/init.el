@@ -84,8 +84,8 @@
 (load-theme 'modus-operandi)
 
 (set-face-attribute 'default nil :font "Iosevka" :height 155)
+;; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
 ;; (set-face-attribute 'default nil :font "Fragment Mono" :height 140);; :weight 'light) ;; :weight 'light)
-; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
 ;; (set-face-attribute 'default nil :font "Whois" :height 170)  ;;# no cyrilic :(
 ;; (set-face-attribute 'default nil :font "JetBrains Mono" :height 155);; :weight 'light)
 
@@ -403,6 +403,19 @@ If `project-current' cannot find a project, returns the `default-directory'."
   (interactive)
   (mapc 'kill-buffer (buffer-list)))
 
+(defun my/jump-to-file-and-line ()
+  "Reads a line in the form FILENAME:LINE and, assuming a
+relative path, opens that file in another window and jumps to the
+line."
+  (interactive)
+  (let ((line (buffer-substring-no-properties (point-at-bol) (point-at-eol))))
+    (string-match "\\(.*\\):\\([0-9]+\\)" line)
+    (let ((file (match-string 1 line))
+          (lnum (match-string 2 line)))
+      (when (and file (file-exists-p (concat default-directory file)))
+        (find-file-other-window (concat default-directory file))
+        (and lnum (goto-line (string-to-number lnum)))))))
+
 ;; TODO: match word with _ as whole word (for search by start *)
 (modify-syntax-entry ?_ "w")
 
@@ -517,12 +530,12 @@ If `project-current' cannot find a project, returns the `default-directory'."
 (use-package browse-at-remote
   :defer t
   :ensure t
-  ;; :init (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^git\\.skbkontur\\.ru$" :type "gitlab"))
+  :config
+  (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^git\\.skbkontur\\.ru.*$" :type "gitlab")))
   :general
   (:states '(normal visual)
    :keymaps 'override
-   "SPC o r" 'browse-at-remote)
-  )
+   "SPC o r" 'browse-at-remote))
 
 (use-package consult
   :ensure t
@@ -575,6 +588,7 @@ If `project-current' cannot find a project, returns the `default-directory'."
   "t g" 'magit
   "t b" 'magit-blame-echo
   "t h" 'diff-hl-show-hunk
+  "j j" 'my/jump-to-file-and-line
   )
 
 ;; Don't hightlight under cursor
