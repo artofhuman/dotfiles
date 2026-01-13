@@ -1,24 +1,3 @@
-;; probably better to use early-init.el
-(setq package-enable-at-startup nil)
-
-;; Defer garbage collection further back in the startup process
-(setq gc-cons-threshold most-positive-fixnum
-      gc-cons-percentage 0.6)
-
-(add-hook 'emacs-startup-hook
-  (lambda ()
-    (setq gc-cons-threshold 16777216 ; 16mb
-          gc-cons-percentage 0.1)))
-
-;; UI
-(setq inhibit-startup-message t)
-
-;; Remove extra UI clutter by hiding the scrollbar, menubar, and toolbar.
-(menu-bar-mode -1)          ; Disable the menu bar
-(scroll-bar-mode -1)        ; Disable visible scrollbar
-(tool-bar-mode -1)          ; Disable the toolbar
-(tooltip-mode -1)           ; Disable tooltips
-
 (setq make-backup-files nil)
 (setq auto-save-default nil)
 (setq create-lockfiles nil)
@@ -81,7 +60,7 @@
 
 (setq modus-themes-mode-line '(borderless)
       modus-themes-bold-constructs nil)
-(load-theme 'modus-operandi)
+(load-theme 'modus-operandi-deuteranopia)
 
 (set-face-attribute 'default nil :font "Iosevka" :height 155)
 ;; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
@@ -277,7 +256,23 @@
   )
   :config
   (evil-set-undo-system 'undo-fu)
-  (evil-mode 1))
+  (evil-mode 1)
+
+  (evil-set-leader nil (kbd "<SPC>"))
+  (define-key evil-normal-state-map (kbd "<leader>p") #'project-find-file)
+  (define-key evil-normal-state-map (kbd "<leader><SPC>") #'execute-extended-command)
+  (define-key evil-normal-state-map (kbd "<leader>b") #'consult-buffer)
+  (define-key evil-normal-state-map (kbd "<leader>f") #'consult-find)
+  (define-key evil-normal-state-map (kbd "<leader>g") #'consult-ripgrep)
+  (define-key evil-normal-state-map (kbd "<leader>s") #'consult-ripgrep-at-point)
+  (define-key evil-normal-state-map (kbd "<leader>r") #'xref-find-references)
+  (define-key evil-normal-state-map (kbd "<leader>t g") #'magit)
+  (define-key evil-normal-state-map (kbd "<leader>t b") #'magit-blame-echo)
+  (define-key evil-normal-state-map (kbd "<leader>t h") #'diff-hl-show-hunk)
+  (define-key evil-normal-state-map (kbd "<leader>y") #'my/copy-current-buffer-file-name)
+  (define-key evil-normal-state-map (kbd "<leader>d") #'my/insert-debug-stmt)
+  (define-key evil-normal-state-map (kbd "<leader>j j") #'my/jump-to-file-and-line)
+  )
 
 ;; add undo redo actions for C-u C-r
 (use-package undo-fu
@@ -475,7 +470,6 @@ line."
 ;;     (reusable-frames . visible)
 ;;     (window-height . 0.7)))
 ;;---
-
 (global-set-key (kbd "s-j")  'vterm-toggle)
 
 ;; set PATH from env to emacs
@@ -566,37 +560,16 @@ line."
   :after (embark consult)
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 
-;;;; Keybindings
-;; (global-set-key (kbd "C-c t")  'my/vterm-toggle-run-pytest-current-file)
-(use-package general :ensure t)
-
-(general-create-definer leader-spc
-  :states 'motion
-  :keymaps 'override
-  :prefix "SPC")
-
-(leader-spc
-  "SPC" 'execute-extended-command
-  "b" 'consult-buffer
-  "f" 'consult-find
-  "g" 'consult-ripgrep
-  "s" 'consult-ripgrep-at-point
-  "p" 'project-find-file
-  "y" 'my/copy-current-buffer-file-name
-  "r" 'xref-find-references
-  "d" 'my/insert-debug-stmt
-  "t g" 'magit
-  "t b" 'magit-blame-echo
-  "t h" 'diff-hl-show-hunk
-  "j j" 'my/jump-to-file-and-line
-  )
-
-;; Don't hightlight under cursor
+;; Don't highlight under cursor
 (setq eglot-ignored-server-capabilites '(:documentHighlightProvider))
 ;; (setq eldoc-echo-area-use-multiline-p 1) ;; don't resize minibufer
 (setq x-select-enable-clipboard t) ;; enable copy to system clipboard
 
 (add-hook 'ruby-mode 'eglot-ensure)  ;; load lsp for riby on open rb files
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               `((cperl-mode perl-mode) . ("/usr/local/bin/perlnavigator-server", "--stdio"))))
 
 ;; eldoc load
 (use-package eldoc
@@ -659,7 +632,12 @@ Giving it a name so that I can target it in vertico mode and make it use buffer.
 (use-package typescript-mode
   :ensure t)
 
-(use-package dtrt-indent
-  :ensure t
-  :config
-  (dtrt-indent-mode 1))
+;; (use-package dtrt-indent
+;;   :ensure t
+;; :config
+
+;; (dtrt-indent-mode 1))
+
+;; sync buffers with file system
+;; (global-auto-revert-mode t)
+;; (setq global-auto-revert-non-file-buffers t)
