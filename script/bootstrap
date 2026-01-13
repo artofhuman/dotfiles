@@ -34,6 +34,7 @@ install_configs () {
 install_emacs () {
   printf "INSTALL EMACS"
   link_files "$DOTFILES_ROOT/emacs.d/init.el" "$HOME/.emacs.d/init.el"
+  link_files "$DOTFILES_ROOT/emacs.d/early-init.el" "$HOME/.emacs.d/early-init.el"
 }
 
 install_vim () {
