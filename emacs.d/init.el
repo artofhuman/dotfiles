@@ -525,7 +525,7 @@ line."
   :defer t
   :ensure t
   :config
-  (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^git\\.skbkontur\\.ru.*$" :type "gitlab")))
+  (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^git\\.skbkontur\\.ru.*$" :type "gitlab"))
   :general
   (:states '(normal visual)
    :keymaps 'override
@@ -560,25 +560,17 @@ line."
   :after (embark consult)
   :hook (embark-collect-mode . consult-preview-at-point-mode))
 
-;; Don't highlight under cursor
-(setq eglot-ignored-server-capabilites '(:documentHighlightProvider))
-;; (setq eldoc-echo-area-use-multiline-p 1) ;; don't resize minibufer
+(use-package eglot
+  :commands (eglot eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs `((cperl-mode perl-mode) . ("/usr/local/bin/perlnavigator-server" "--stdio")))
+  (setq eldoc-documentation-strategy 'eldoc-documentation-compose-eagerly)
+  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider))
+  (setq eldoc-echo-area-use-multiline-p nil))
+
 (setq x-select-enable-clipboard t) ;; enable copy to system clipboard
 
-(add-hook 'ruby-mode 'eglot-ensure)  ;; load lsp for riby on open rb files
 
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-               `((cperl-mode perl-mode) . ("/usr/local/bin/perlnavigator-server", "--stdio"))))
-
-;; eldoc load
-(use-package eldoc
-  :defer t
-  :after (evil)
-  :config
-  (setq eldoc-echo-area-use-multiline-p nil)
-  (define-key evil-normal-state-map (kbd "K") 'eldoc-print-current-symbol-info)
-  (global-eldoc-mode nil))
 
 (use-package markdown-mode
   :ensure t
