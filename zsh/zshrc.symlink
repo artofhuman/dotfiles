@@ -120,3 +120,6 @@ PERL_MM_OPT="INSTALL_BASE=/Users/semyonpupkov/perl5"; export PERL_MM_OPT;
 
 # opencode
 export PATH=/Users/semyonpupkov/.opencode/bin:$PATH
+
+# Amp CLI
+export PATH="/Users/semyonpupkov/.amp/bin:$PATH"
