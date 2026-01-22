@@ -419,8 +419,8 @@ require("lazy").setup({
         local capabilities = vim.lsp.protocol.make_client_capabilities()
         capabilities = vim.tbl_deep_extend("force", capabilities, require("blink.cmp").get_lsp_capabilities({}, false))
     
-        -- vim.lsp.enable('pyright')
-        vim.lsp.enable('pyrefly')
+        vim.lsp.enable('pyright')
+        -- vim.lsp.enable('pyrefly')
         -- vim.lsp.enable('basedpyright')
         --
   
@@ -435,6 +435,10 @@ require("lazy").setup({
 
         vim.lsp.enable('solargraph')
         vim.lsp.enable('ts_ls')
+        vim.lsp.enable('perlnavigator', {
+          cmd = {"/usr/local/bin/perlnavigator-server --stdio"}
+        })
+        -- require'lspconfig'.perlnavigator.setup{ cmd = { "perlnavigator" } }
 
         -- require'lspconfig'.pyright.setup({  handlers = handlers })
         -- require'lspconfig'.solargraph.setup({ handlers = handlers  })
