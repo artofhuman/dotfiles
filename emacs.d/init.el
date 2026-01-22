@@ -571,6 +571,32 @@ line."
 (setq x-select-enable-clipboard t) ;; enable copy to system clipboard
 
 
+(defvar my/python-setup-done-projects nil
+  "List of projects where Python setup was already done.")
+
+;; TODO: нужно укзать какой сервер запускать. Сейчас если открыть сорс- запускается отдельный сервер, это не должно происходить
+(defun my/python-setup ()
+  "Setup Python environment: activate venv and start eglot.
+Runs once per project."
+  (interactive)
+  (when-let* ((project (project-current))
+              (root (project-root project)))
+    ;; Проверяем, не настроен ли уже этот проект
+    (unless (member root my/python-setup-done-projects)
+      (push root my/python-setup-done-projects)
+
+      (let ((venv-candidates (list (concat root ".venv")
+                                   (concat root "venv"))))
+        (when-let ((venv-path (seq-find #'file-directory-p venv-candidates)))
+          (pyvenv-activate venv-path)
+          (message "Activated venv: %s" venv-path))))
+
+    ;; eglot-ensure сам проверяет, запущен ли уже сервер
+    ;; (eglot-ensure)
+    ))
+
+;; (add-hook 'python-mode-hook #'my/python-setup)
+;; (add-hook 'python-ts-mode-hook #'my/python-setup)
 
 (use-package markdown-mode
   :ensure t

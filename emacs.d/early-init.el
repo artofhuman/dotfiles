@@ -10,7 +10,8 @@
 ;; make the window undecorated and round by default
 (add-to-list 'default-frame-alist '(undecorated-round . t))
 
-(setq package-enable-at-startup nil)
+; this breaks modus-themes
+; (setq package-enable-at-startup nil)
 
 ;; Defer garbage collection further back in the startup process
 (setq gc-cons-threshold most-positive-fixnum gc-cons-percentage 0.6)
