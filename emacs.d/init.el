@@ -562,11 +562,15 @@ line."
 
 (use-package eglot
   :commands (eglot eglot-ensure)
+  :hook ((typescript-mode . eglot-ensure)
+         (js-mode . eglot-ensure))
   :config
   (add-to-list 'eglot-server-programs `((cperl-mode perl-mode) . ("/usr/local/bin/perlnavigator-server" "--stdio")))
+  (add-to-list 'eglot-server-programs '((typescript-mode js-mode) . ("typescript-language-server" "--stdio")))
   (setq eldoc-documentation-strategy 'eldoc-documentation-compose-eagerly)
-  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider))
-  (setq eldoc-echo-area-use-multiline-p nil))
+  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :semanticTokensProvider :codeLensProvider))
+  (setq eldoc-echo-area-use-multiline-p nil)
+  (setq eglot-code-action-indicator ""))  ;; disable lightbulb, keep code actions
 
 (setq x-select-enable-clipboard t) ;; enable copy to system clipboard
 
