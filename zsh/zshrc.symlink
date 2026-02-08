@@ -62,36 +62,30 @@ rbenv() {
 
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
+# Add default node to PATH instantly (for Emacs and other tools)
+if [ -f "$NVM_DIR/alias/default" ]; then
+  DEFAULT_NODE_VERSION=$(cat "$NVM_DIR/alias/default")
+  DEFAULT_NODE_PATH=$(ls -d "$NVM_DIR/versions/node/v${DEFAULT_NODE_VERSION}"* 2>/dev/null | tail -1)
+  [ -n "$DEFAULT_NODE_PATH" ] && export PATH="$DEFAULT_NODE_PATH/bin:$PATH"
+fi
 
-# pyenv () {
-#   eval "$(pyenv init -)"
-#   pyenv "$@"
-# }
-
-# nvm () {
-#   unset -f nvm
-#   export NVM_DIR=~/.nvm
-#   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-#   nvm "$@"
-# }
-
+# Lazy load nvm (only when needed)
+nvm() {
+  unset -f nvm node npm
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
+  nvm "$@"
+}
 
 node() {
-  unset -f node npm
-  export NVM_DIR="$HOME/.nvm"
+  unset -f nvm node npm
   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
-  nvm use default --silent
   node "$@"
 }
 
 npm() {
-  unset -f node npm
-  export NVM_DIR="$HOME/.nvm"
+  unset -f nvm node npm
   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
-  nvm use default --silent
   npm "$@"
 }
 

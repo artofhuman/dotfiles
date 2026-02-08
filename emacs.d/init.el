@@ -50,6 +50,14 @@
   (mapc 'disable-theme custom-enabled-themes))
 (advice-add 'load-theme :before #'disable-custom-themes)
 
+(use-package alabaster-themes
+  :ensure t
+  :config
+  ;; Load the light theme
+  ;; (load-theme 'alabaster-themes-light t)
+  ;; Interactively select a theme
+  :commands (alabaster-themes-select))
+
 (use-package doom-themes
   :ensure t
   :config
@@ -60,9 +68,10 @@
 
 (setq modus-themes-mode-line '(borderless)
       modus-themes-bold-constructs nil)
-(load-theme 'modus-operandi-deuteranopia)
+(load-theme 'alabaster-themes-light-bg)
 
-(set-face-attribute 'default nil :font "Iosevka" :height 155)
+(set-face-attribute 'default nil :font "Iosevka" :height 160)
+(set-face-attribute 'fixed-pitch nil :family "Iosevka")
 ;; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
 ;; (set-face-attribute 'default nil :font "Fragment Mono" :height 140);; :weight 'light) ;; :weight 'light)
 ;; (set-face-attribute 'default nil :font "Whois" :height 170)  ;;# no cyrilic :(
@@ -500,7 +509,7 @@ line."
   :config
   ;; (diff-hl-flydiff-mode)
   (global-diff-hl-mode)
-  (set-frame-parameter nil 'left-fringe 3)  ;; thin line
+  (fringe-mode '(8 . 8))  ;; fixed width to prevent shifting from code action icons
   (add-hook 'dired-mode-hook 'diff-hl-dired-mode-unless-remote)
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
   (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
