@@ -73,6 +73,8 @@
 (set-face-attribute 'default nil :font "Iosevka" :height 160)
 (set-face-attribute 'fixed-pitch nil :family "Iosevka")
 ;; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
+;; (set-face-attribute 'default nil :font "Terminess Nerd Font" :height 170 :weight 'medium)
+;; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
 ;; (set-face-attribute 'default nil :font "Fragment Mono" :height 140);; :weight 'light) ;; :weight 'light)
 ;; (set-face-attribute 'default nil :font "Whois" :height 170)  ;;# no cyrilic :(
 ;; (set-face-attribute 'default nil :font "JetBrains Mono" :height 155);; :weight 'light)
@@ -353,7 +355,174 @@ If `project-current' cannot find a project, returns the `default-directory'."
   (interactive)
   (my/vterm-run-command (concat "pytest " (testrun-core--file-name))))
 
-(global-set-key (kbd "C-c t")  'my/vterm-toggle-run-pytest-current-file)
+;; Tree-sitter based test running functions
+(defun testrun--treesit-available-p ()
+  "Check if tree-sitter is available for the current buffer's language."
+  (and (fboundp 'treesit-available-p)
+       (treesit-available-p)
+       (treesit-language-at (point))))
+
+(defun testrun-python--find-test-function-name-treesit ()
+  "Find test function name using tree-sitter.
+Returns the function name as a string, or nil if not found."
+  (when-let* ((defun-node (treesit-defun-at-point))
+              (func-name (treesit-defun-name defun-node)))
+    ;; Check if function name starts with "test_"
+    (when (string-prefix-p "test_" func-name)
+      func-name)))
+
+(defun testrun-python--find-test-class-name-treesit ()
+  "Find enclosing test class name using tree-sitter.
+Returns the class name as a string, or nil if not in a test class."
+  (when-let* ((current-node (treesit-node-at (point)))
+              (class-node (treesit-parent-until
+                          current-node
+                          (lambda (node)
+                            (equal (treesit-node-type node) "class_definition"))))
+              (name-node (treesit-node-child-by-field-name class-node "name"))
+              (class-name (treesit-node-text name-node t)))
+    ;; Check if class name starts with "Test"
+    (when (string-prefix-p "Test" class-name)
+      class-name)))
+
+(defun testrun-python--find-test-function-name-regex ()
+  "Find test function name using regex fallback.
+Returns the function name as a string, or nil if not found."
+  (save-excursion
+    (when (re-search-backward "^\\s-*\\(async \\)?def \\(test_[a-zA-Z0-9_]+\\)" nil t)
+      (match-string 2))))
+
+(defun testrun-python--find-test-class-name-regex ()
+  "Find enclosing test class name using regex fallback.
+Returns the class name as a string, or nil if not in a test class."
+  (save-excursion
+    (let ((current-indent (current-indentation)))
+      (when (re-search-backward "^\\s-*class \\(Test[a-zA-Z0-9_]*\\)" nil t)
+        (when (< (current-indentation) current-indent)
+          (match-string 1))))))
+
+(defun testrun-python--find-test-function-name ()
+  "Find test function name using tree-sitter or regex fallback."
+  (if (testrun--treesit-available-p)
+      (testrun-python--find-test-function-name-treesit)
+    (testrun-python--find-test-function-name-regex)))
+
+(defun testrun-python--find-test-class-name ()
+  "Find enclosing test class name using tree-sitter or regex fallback."
+  (if (testrun--treesit-available-p)
+      (testrun-python--find-test-class-name-treesit)
+    (testrun-python--find-test-class-name-regex)))
+
+(defun testrun-python--construct-test-path ()
+  "Construct pytest-compatible test path for the test at cursor.
+Returns string in format: 'file.py::TestClass::test_function' or 'file.py::test_function'."
+  (let* ((file-name (testrun-core--file-name))
+         (test-function (testrun-python--find-test-function-name))
+         (test-class (testrun-python--find-test-class-name)))
+    (cond
+     ;; Both class and function found
+     ((and test-class test-function)
+      (format "%s::%s::%s" file-name test-class test-function))
+     ;; Only function found (no class)
+     (test-function
+      (format "%s::%s" file-name test-function))
+     ;; No test found, fallback to file
+     (t file-name))))
+
+(defun my/vterm-toggle-run-pytest-current-test ()
+  "Run pytest for the test function at cursor position in vterm."
+  (interactive)
+  (let ((test-path (testrun-python--construct-test-path)))
+    (my/vterm-run-command (concat "pytest " test-path))
+    (message "Running pytest: %s" test-path)))
+
+;; Jest test runner functions
+(defun testrun-jest--nearest-test ()
+  "Find nearest test context: returns (type . pattern) where type is 'test, 'describe, or nil.
+Searches backward tracking indentation like vim-test does."
+  (save-excursion
+    (let ((start-line (line-number-at-pos))
+          (start-col (current-column))
+          (max-indent most-positive-fixnum)
+          test-name
+          test-indent
+          describes)
+      ;; First check current line for it/test/describe
+      (beginning-of-line)
+      (cond
+       ((looking-at "^\\s-*\\(it\\|test\\)(\\s-*['\"]\\([^'\"]+\\)['\"]")
+        (setq test-name (match-string 2)
+              test-indent (current-indentation)
+              max-indent (current-indentation)))
+       ((looking-at "^\\s-*describe(\\s-*['\"]\\([^'\"]+\\)['\"]")
+        (push (match-string 1) describes)
+        (setq max-indent (current-indentation))))
+      ;; Search backward for enclosing blocks
+      (while (re-search-backward "^\\s-*\\(it\\|test\\|describe\\)(\\s-*['\"]\\([^'\"]+\\)['\"]" nil t)
+        (let ((indent (current-indentation))
+              (block-type (match-string 1))
+              (block-name (match-string 2)))
+          (when (< indent max-indent)
+            (setq max-indent indent)
+            (cond
+             ;; Found enclosing it/test (only if we don't have one yet)
+             ((and (not test-name) (member block-type '("it" "test")))
+              (setq test-name block-name
+                    test-indent indent))
+             ;; Found enclosing describe
+             ((string= block-type "describe")
+              (push block-name describes))))))
+      ;; Build result
+      (cond
+       (test-name
+        (cons 'test (mapconcat #'identity (append describes (list test-name)) " ")))
+       (describes
+        (cons 'describe (mapconcat #'identity describes " ")))
+       (t nil)))))
+
+(defun my/vterm-toggle-run-jest-current-test ()
+  "Run Jest test at cursor. it/test > describe > whole file."
+  (interactive)
+  (let* ((file-name (testrun-core--file-name))
+         (nearest (testrun-jest--nearest-test))
+         (pattern (cdr nearest)))
+    (if pattern
+        (let ((cmd (format "npx jest %s -t '%s'" file-name pattern)))
+          (my/vterm-run-command cmd)
+          (message "Running jest: %s" cmd))
+      (my/vterm-run-command (concat "npx jest " file-name))
+      (message "Running jest file: %s" file-name))))
+
+(defun my/vterm-toggle-run-jest-current-file ()
+  "Run Jest for the current file in vterm."
+  (interactive)
+  (let ((file-name (testrun-core--file-name)))
+    (my/vterm-run-command (concat "npx jest " file-name))
+    (message "Running jest file: %s" file-name)))
+
+;; Dispatch test commands based on major mode
+(defun my/run-test-at-cursor ()
+  "Run the test at cursor, dispatching to pytest or jest based on major mode."
+  (interactive)
+  (cond
+   ((derived-mode-p 'typescript-ts-mode 'typescript-mode 'tsx-ts-mode)
+    (my/vterm-toggle-run-jest-current-test))
+   ((derived-mode-p 'python-ts-mode 'python-mode)
+    (my/vterm-toggle-run-pytest-current-test))
+   (t (message "No test runner configured for %s" major-mode))))
+
+(defun my/run-test-file ()
+  "Run all tests in current file, dispatching to pytest or jest based on major mode."
+  (interactive)
+  (cond
+   ((derived-mode-p 'typescript-ts-mode 'typescript-mode 'tsx-ts-mode)
+    (my/vterm-toggle-run-jest-current-file))
+   ((derived-mode-p 'python-ts-mode 'python-mode)
+    (my/vterm-toggle-run-pytest-current-file))
+   (t (message "No test runner configured for %s" major-mode))))
+
+(global-set-key (kbd "C-c t t") 'my/run-test-at-cursor)  ; test at cursor
+(global-set-key (kbd "C-c t f") 'my/run-test-file)        ; entire file
   
 ;; Quit out of everything with esc, in default we need 3 time press esc
 ;; stolen from here https://github.com/meain/dotfiles/blob/7ee3c3006dd7fe6506c68bc09a0d3194d8ea7923/emacs/.config/emacs/init.el#L703
@@ -375,7 +544,7 @@ If `project-current' cannot find a project, returns the `default-directory'."
   (let ((debug-stmt
          (cond
           ((eq major-mode 'ruby-mode) "binding.pry")
-          ((eq major-mode 'python-mode) "breakpoint()"))))
+          ((derived-mode-p 'python-mode 'python-ts-mode) "breakpoint()"))))
     (when debug-stmt
       (beginning-of-line)
       (open-line 1)
@@ -408,17 +577,19 @@ If `project-current' cannot find a project, returns the `default-directory'."
   (mapc 'kill-buffer (buffer-list)))
 
 (defun my/jump-to-file-and-line ()
-  "Reads a line in the form FILENAME:LINE and, assuming a
-relative path, opens that file in another window and jumps to the
-line."
+  "Reads a line containing FILENAME:LINE[:COL] and opens that file
+in another window, jumping to the line and optional column."
   (interactive)
   (let ((line (buffer-substring-no-properties (point-at-bol) (point-at-eol))))
-    (string-match "\\(.*\\):\\([0-9]+\\)" line)
-    (let ((file (match-string 1 line))
-          (lnum (match-string 2 line)))
-      (when (and file (file-exists-p (concat default-directory file)))
-        (find-file-other-window (concat default-directory file))
-        (and lnum (goto-line (string-to-number lnum)))))))
+    (when (or (string-match "\\([^ \t:]+\\):\\([0-9]+\\):\\([0-9]+\\)" line)
+              (string-match "\\([^ \t:]+\\):\\([0-9]+\\)" line))
+      (let ((file (match-string 1 line))
+            (lnum (match-string 2 line))
+            (col (match-string 3 line)))
+        (when (and file (file-exists-p (concat default-directory file)))
+          (find-file-other-window (concat default-directory file))
+          (when lnum (goto-line (string-to-number lnum)))
+          (when col (move-to-column (1- (string-to-number col)))))))))
 
 ;; TODO: match word with _ as whole word (for search by start *)
 (modify-syntax-entry ?_ "w")
@@ -445,7 +616,9 @@ line."
   :ensure t
   :config
   ;; (setq vterm-max-scrollback 100000)
-  (vterm-timer-delay 0))
+  (vterm-timer-delay 0)
+  :bind (:map vterm-mode-map
+              ("C-SPC" . zoom-window-zoom)))
 
 (use-package vterm-toggle
   ;; :defer t
@@ -485,6 +658,10 @@ line."
 (use-package exec-path-from-shell :ensure t)
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
+
+;; Enable python-ts-mode by default for tree-sitter support
+(setq major-mode-remap-alist
+      '((python-mode . python-ts-mode)))
 
  ;; active virtualenv for cur dir
 (use-package pyvenv
@@ -663,12 +840,12 @@ Giving it a name so that I can target it in vertico mode and make it use buffer.
 (use-package typescript-mode
   :ensure t)
 
-;; (use-package dtrt-indent
-;;   :ensure t
-;; :config
-
-;; (dtrt-indent-mode 1))
-
+(use-package zoom-window
+  :init
+  :ensure t
+  :config
+  (global-set-key (kbd "C-SPC")  'zoom-window-zoom)
+  )
 ;; sync buffers with file system
 ;; (global-auto-revert-mode t)
 ;; (setq global-auto-revert-non-file-buffers t)
