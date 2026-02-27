@@ -54,7 +54,7 @@
   :ensure t
   :config
   ;; Load the light theme
-  ;; (load-theme 'alabaster-themes-light t)
+  ;; (load-theme 'alabaster-themes-light-bg t)
   ;; Interactively select a theme
   :commands (alabaster-themes-select))
 
@@ -66,25 +66,13 @@
         doom-themes-enable-italic nil) ; if nil, italics is universally disabled
 )
 
-(setq modus-themes-mode-line '(borderless)
-      modus-themes-bold-constructs nil)
 (load-theme 'alabaster-themes-light-bg)
 
 (set-face-attribute 'default nil :font "Iosevka" :height 160)
 (set-face-attribute 'fixed-pitch nil :family "Iosevka")
 ;; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
 ;; (set-face-attribute 'default nil :font "Terminess Nerd Font" :height 170 :weight 'medium)
-;; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
-;; (set-face-attribute 'default nil :font "Fragment Mono" :height 140);; :weight 'light) ;; :weight 'light)
-;; (set-face-attribute 'default nil :font "Whois" :height 170)  ;;# no cyrilic :(
 ;; (set-face-attribute 'default nil :font "JetBrains Mono" :height 155);; :weight 'light)
-
-(set-face-bold-p 'bold nil)  ;; disable bold globaly, so maybe only for progmode
-(mapc
- (lambda (face)
-        (when (eq (face-attribute face :weight) 'bold)
-          (set-face-attribute face nil :weight 'normal)))
- (face-list))
 
 ;; (use-package mode-line-idle :ensure t :commands (mode-line-idle))
 
@@ -303,8 +291,10 @@
 
 
 ;; allow to use gg for comment lines
-(use-package evil-commentary :ensure t :init)
-(evil-commentary-mode)
+(use-package evil-commentary
+  :ensure t
+  :config
+  (evil-commentary-mode))
 ;;; END Evil section
 
 ;; === my func staff
@@ -595,7 +585,7 @@ in another window, jumping to the line and optional column."
 (modify-syntax-entry ?_ "w")
 
 ;; emacs redo
-(setq evil-undo-system "undo-redo")
+(setq evil-undo-system 'undo-redo)
 
 ;; Add paddings 
 (use-package spacious-padding
@@ -616,9 +606,24 @@ in another window, jumping to the line and optional column."
   :ensure t
   :config
   ;; (setq vterm-max-scrollback 100000)
-  (vterm-timer-delay 0)
+  (setq vterm-timer-delay 0)
   :bind (:map vterm-mode-map
               ("C-SPC" . zoom-window-zoom)))
+
+;; TODO: check if color scheme is alabaster
+(with-eval-after-load 'vterm
+  (set-face-attribute 'vterm-color-red nil :foreground "#aa3731") ;; color1
+  (set-face-attribute 'vterm-color-bright-red nil :foreground "#f05050") ;; color9
+  (set-face-attribute 'vterm-color-yellow nil :foreground "#cb9000") ;; color3
+  (set-face-attribute 'vterm-color-blue nil :foreground "#325cc0") ;; color4
+  (set-face-attribute 'vterm-color-bright-blue nil :foreground "#007acc") ;; color12
+  (set-face-attribute 'vterm-color-cyan nil :foreground "#0083b2") ;; color6
+  (set-face-attribute 'vterm-color-white nil :foreground "#000000") ;; color7
+  (set-face-attribute 'vterm-color-bright-white nil :foreground "#000000") ;; color15
+  (set-face-attribute 'vterm-color-green nil :foreground "#448c37") ;; color2
+  (set-face-attribute 'vterm-color-bright-green nil :foreground "#60cb00") ;; color10
+  (set-face-attribute 'vterm-color-magenta nil :foreground "#7a3e9d") ;; color5
+  (set-face-attribute 'vterm-color-bright-magenta nil :foreground "#e64ce6")) ;; color13
 
 (use-package vterm-toggle
   ;; :defer t
