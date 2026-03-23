@@ -806,6 +806,7 @@ Runs once per project."
   (eglot-booster-mode))
 
 (use-package ultra-scroll
+  :ensure t
   ;:vc (:url "https://github.com/jdtsmith/ultra-scroll") ; if desired (emacs>=v30)
   :init
   ;; (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
