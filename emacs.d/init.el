@@ -247,6 +247,12 @@
   (setq evil-kill-on-visual-paste nil)
   (setq evil-respect-visual-line-mode nil)
   (setq evil-symbol-word-search t)
+
+  ;; Vim like search
+  (setq evil-search-module 'evil-search)
+  (setq evil-ex-search-vim-style-regexp t)
+  (setq evil-symbol-word-search t)  ;; More vim-like behavior
+
   :bind (
     ("C-l" . evil-window-right)
     ("C-h" . evil-window-left)
@@ -271,6 +277,7 @@
   (define-key evil-normal-state-map (kbd "<leader>y") #'my/copy-current-buffer-file-name)
   (define-key evil-normal-state-map (kbd "<leader>d") #'my/insert-debug-stmt)
   (define-key evil-normal-state-map (kbd "<leader>j j") #'my/jump-to-file-and-line)
+  (define-key evil-normal-state-map (kbd "<escape>") #'evil-ex-nohighlight)
   )
 
 ;; add undo redo actions for C-u C-r
@@ -523,6 +530,7 @@ Searches backward tracking indentation like vim-test does."
   (if (and (equal (cdr (assq 'name (frame-parameters))) "emacs-popup")
            (equal (cdr (assq 'minibuffer (frame-parameters))) 'only))
       (delete-frame))
+  (evil-ex-nohighlight)
   (keyboard-escape-quit)
   (minibuffer-keyboard-quit)
   (keyboard-quit))
