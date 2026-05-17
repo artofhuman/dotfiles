@@ -50,6 +50,22 @@
   (mapc 'disable-theme custom-enabled-themes))
 (advice-add 'load-theme :before #'disable-custom-themes)
 
+
+;; Some perf tweeks
+;; If you don’t edit right-to-left languages (Arabic, Hebrew, etc.), Emacs is doing a bunch of work on every redisplay cycle for nothing. These settings tell Emacs to assume left-to-right text everywhere and skip the bidirectional parenthesis algorithm:
+(setq-default bidi-display-reordering 'left-to-right
+              bidi-paragraph-direction 'left-to-right)
+(setq bidi-inhibit-bpa t)
+
+;; Emacs normally fontifies (syntax-highlights) text even while you’re actively typing. This can cause micro-stutters, especially in tree-sitter modes or large buffers. One setting fixes it:
+(setq redisplay-skip-fontification-on-input t)
+
+;; The default read-process-output-max is 64KB, which is still quite conservative. Modern LSP servers like rust-analyzer or clangd routinely send multi-megabyte responses. Bumping this reduces the number of read calls Emacs has to make:
+(setq read-process-output-max (* 4 1024 1024)) ; 4MB
+
+;; end perf tweeks
+
+
 (use-package alabaster-themes
   :ensure t
   :config
@@ -190,47 +206,12 @@
 ;;   (global-completion-preview-mode 1))
 
 (global-completion-preview-mode 1)
+(setq completion-preview-idle-delay 0.2)
 
-;; A few more useful configurations...
 (use-package emacs
   :custom
-  ;; TAB cycle if there are only few candidates
-  ;; (completion-cycle-threshold 3)
-
-  ;; Enable indentation+completion using the TAB key.
-  ;; `completion-at-point' is often bound to M-TAB.
   (tab-always-indent 'complete)
-
-  ;; Emacs 30 and newer: Disable Ispell completion function.
-  ;; Try `cape-dict' as an alternative.
-  (text-mode-ispell-word-completion nil)
-
-  ;; Hide commands in M-x which do not apply to the current mode.  Corfu
-  ;; commands are hidden, since they are not used via M-x. This setting is
-  ;; useful beyond Corfu.
   (read-extended-command-predicate #'command-completion-default-include-p))
-
-;; Add extensions
-(use-package cape
-  :ensure t
-  ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
-  ;; Press C-c p ? to for help.
-  :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
-  ;; Alternatively bind Cape commands individually.
-  ;; :bind (("C-c p d" . cape-dabbrev)
-  ;;        ("C-c p h" . cape-history)
-  ;;        ("C-c p f" . cape-file)
-  ;;        ...)
-  :init
-  ;; Add to the global default value of `completion-at-point-functions' which is
-  ;; used by `completion-at-point'.  The order of the functions matters, the
-  ;; first function returning a result wins.  Note that the list of buffer-local
-  ;; completion functions takes precedence over the global list.
-  (add-hook 'completion-at-point-functions #'cape-dabbrev)
-  (add-hook 'completion-at-point-functions #'cape-file)
-  ;; (add-hook 'completion-at-point-functions #'cape-history)
-  ;; ...
-  )
 
 ;;; EVIL section
 (unless (package-installed-p 'evil)
@@ -764,10 +745,14 @@ in another window, jumping to the line and optional column."
   :hook ((typescript-mode . eglot-ensure)
          (js-mode . eglot-ensure))
   :config
+  ;; Try to increase completion perf
+  (setq-default eglot-events-buffer-size 0) ;; disable logs to increase perf
+  ;; (eglot-inline-hints-mode 0)
+
   (add-to-list 'eglot-server-programs `((cperl-mode perl-mode) . ("/usr/local/bin/perlnavigator-server" "--stdio")))
   (add-to-list 'eglot-server-programs '((typescript-mode js-mode) . ("typescript-language-server" "--stdio")))
   (setq eldoc-documentation-strategy 'eldoc-documentation-compose-eagerly)
-  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :semanticTokensProvider :codeLensProvider))
+  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :semanticTokensProvider :codeLensProvider :inlayHintProvider))
   (setq eldoc-echo-area-use-multiline-p nil)
   (setq eglot-code-action-indicator ""))  ;; disable lightbulb, keep code actions
 
