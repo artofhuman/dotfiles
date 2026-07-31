@@ -24,6 +24,8 @@ require("lazy").setup({
       priority = 1000000,
     },
 
+    { "nordtheme/vim", lazy = false },
+
     {
       "scottmckendry/cyberdream.nvim",
       lazy = false,
@@ -48,6 +50,10 @@ require("lazy").setup({
         },
       }
     },
+    -- / themes
+
+
+    { "airblade/vim-rooter" },
 
     { 'vim-test/vim-test' },
     -- save my last cursor position
