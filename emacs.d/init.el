@@ -635,6 +635,14 @@ in another window, jumping to the line and optional column."
           (when lnum (goto-line (string-to-number lnum)))
           (when col (move-to-column (1- (string-to-number col)))))))))
 
+
+(defun my/kill-other-buffers ()
+    "Kill all other buffers."
+    (interactive)
+    (mapc 'kill-buffer 
+          (delq (current-buffer) 
+                (remove-if-not 'buffer-file-name (buffer-list)))))
+
 ;; TODO: match word with _ as whole word (for search by start *)
 (modify-syntax-entry ?_ "w")
 
