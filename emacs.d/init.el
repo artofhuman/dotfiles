@@ -340,13 +340,23 @@ If `project-current' cannot find a project, returns the `default-directory'."
        (treesit-available-p)
        (treesit-language-at (point))))
 
+(defun testrun-python--test-function-name-p (name)
+  "Return non-nil if NAME looks like a pytest test function.
+Accepts the standard `test_' prefix, the pytest-describe `it_' prefix,
+or any non-private name when inside a `describe_' block."
+  (and name
+       (not (string-prefix-p "_" name))
+       (not (string-prefix-p "describe_" name))
+       (or (string-prefix-p "test_" name)
+           (string-prefix-p "it_" name)
+           (testrun-python--find-describe-chain))))
+
 (defun testrun-python--find-test-function-name-treesit ()
   "Find test function name using tree-sitter.
 Returns the function name as a string, or nil if not found."
   (when-let* ((defun-node (treesit-defun-at-point))
               (func-name (treesit-defun-name defun-node)))
-    ;; Check if function name starts with "test_"
-    (when (string-prefix-p "test_" func-name)
+    (when (testrun-python--test-function-name-p func-name)
       func-name)))
 
 (defun testrun-python--find-test-class-name-treesit ()
@@ -367,8 +377,59 @@ Returns the class name as a string, or nil if not in a test class."
   "Find test function name using regex fallback.
 Returns the function name as a string, or nil if not found."
   (save-excursion
-    (when (re-search-backward "^\\s-*\\(async \\)?def \\(test_[a-zA-Z0-9_]+\\)" nil t)
-      (match-string 2))))
+    (let (found)
+      (while (and (not found)
+                  (re-search-backward
+                   "^\\s-*\\(async \\)?def \\([a-zA-Z][a-zA-Z0-9_]*\\)" nil t))
+        (let ((name (match-string 2)))
+          (cond
+           ((string-prefix-p "describe_" name) nil)
+           ((testrun-python--test-function-name-p name)
+            (setq found name)))))
+      found)))
+
+(defun testrun-python--find-describe-chain-treesit ()
+  "Find enclosing pytest-describe functions using tree-sitter.
+Returns a list of describe function names from outermost to innermost,
+or nil if none found."
+  (let ((current-node (treesit-node-at (point)))
+        (chain '()))
+    (while current-node
+      (when (equal (treesit-node-type current-node) "function_definition")
+        (when-let* ((name-node (treesit-node-child-by-field-name current-node "name"))
+                    (name (treesit-node-text name-node t)))
+          (when (string-prefix-p "describe_" name)
+            (push name chain))))
+      (setq current-node (treesit-node-parent current-node)))
+    chain))
+
+(defun testrun-python--find-describe-chain-regex ()
+  "Find enclosing pytest-describe functions using regex fallback.
+Returns a list of describe function names from outermost to innermost."
+  (save-excursion
+    (let ((chain '())
+          (current-indent (current-indentation))
+          (start-pos (point)))
+      ;; If point is on a def line, use its indent as starting reference
+      (save-excursion
+        (beginning-of-line)
+        (when (looking-at "^\\s-*\\(async \\)?def ")
+          (setq current-indent (current-indentation))))
+      (goto-char start-pos)
+      (while (re-search-backward
+              "^\\(\\s-*\\)\\(async \\)?def \\(describe_[a-zA-Z0-9_]*\\)"
+              nil t)
+        (let ((indent (length (match-string 1))))
+          (when (< indent current-indent)
+            (push (match-string 3) chain)
+            (setq current-indent indent))))
+      chain)))
+
+(defun testrun-python--find-describe-chain ()
+  "Find enclosing pytest-describe functions using tree-sitter or regex fallback."
+  (if (testrun--treesit-available-p)
+      (testrun-python--find-describe-chain-treesit)
+    (testrun-python--find-describe-chain-regex)))
 
 (defun testrun-python--find-test-class-name-regex ()
   "Find enclosing test class name using regex fallback.
@@ -393,19 +454,19 @@ Returns the class name as a string, or nil if not in a test class."
 
 (defun testrun-python--construct-test-path ()
   "Construct pytest-compatible test path for the test at cursor.
-Returns string in format: 'file.py::TestClass::test_function' or 'file.py::test_function'."
+Supports plain functions, TestClass methods, and pytest-describe nested
+describe blocks. Returns e.g. 'file.py::describe_x::describe_y::test_z'."
   (let* ((file-name (testrun-core--file-name))
          (test-function (testrun-python--find-test-function-name))
-         (test-class (testrun-python--find-test-class-name)))
-    (cond
-     ;; Both class and function found
-     ((and test-class test-function)
-      (format "%s::%s::%s" file-name test-class test-function))
-     ;; Only function found (no class)
-     (test-function
-      (format "%s::%s" file-name test-function))
-     ;; No test found, fallback to file
-     (t file-name))))
+         (test-class (testrun-python--find-test-class-name))
+         (describe-chain (testrun-python--find-describe-chain))
+         (segments (delq nil
+                         (append (list test-class)
+                                 describe-chain
+                                 (list test-function)))))
+    (if segments
+        (mapconcat #'identity (cons file-name segments) "::")
+      file-name)))
 
 (defun my/vterm-toggle-run-pytest-current-test ()
   "Run pytest for the test function at cursor position in vterm."
