@@ -553,6 +553,20 @@ vim.opt.cursorlineopt = { "number" }
 vim.keymap.set('n', '<Leader>w', ':write!<CR>') -- Fast saving
 vim.keymap.set('n', '<Esc><Esc>', ':nohlsearch<CR>') -- Disable search
 
+-- Copy relative path (from project root) of the current buffer to the clipboard
+local function copy_relative_path()
+  local file = vim.api.nvim_buf_get_name(0)
+  if file == "" then
+    vim.notify("Buffer is not visiting a file", vim.log.levels.WARN)
+    return
+  end
+  local root = vim.fs.root(file, { ".git" }) or vim.fn.getcwd()
+  local relative = vim.fs.relpath(root, file) or vim.fn.fnamemodify(file, ":.")
+  vim.fn.setreg("+", relative)
+  -- vim.notify("Relative path from project root: " .. relative)
+end
+vim.keymap.set('n', '<leader>y', copy_relative_path, { noremap = true, silent = true })
+
 -- Don't jump forward if I higlight and search for a word
 local function stay_star()
   local sview = vim.fn.winsaveview()
