@@ -721,6 +721,59 @@ in another window, jumping to the line and optional column."
 ;;---
 (global-set-key (kbd "s-j")  'vterm-toggle)
 
+;; Project-scoped vterm switching built on plain `vterm' + `vterm-toggle'.
+;; Cycle over every live vterm buffer that belongs to the current project,
+;; regardless of how it was created, so it works for both `vterm-toggle'
+;; and extra terminals opened with `my/vterm-new'.
+(defun my/vterm-project-root (buffer)
+  "Return the project root associated with vterm BUFFER, or its directory."
+  (with-current-buffer buffer
+    (if-let ((proj (project-current nil default-directory)))
+        (project-root proj)
+      default-directory)))
+
+(defun my/vterm-project-buffers ()
+  "Live vterm buffers sharing the current buffer's project, sorted by name."
+  (let ((root (my/vterm-project-root (current-buffer))))
+    (sort
+     (seq-filter
+      (lambda (buf)
+        (and (provided-mode-derived-p
+              (buffer-local-value 'major-mode buf) 'vterm-mode)
+             (equal (my/vterm-project-root buf) root)))
+      (buffer-list))
+     (lambda (a b) (string< (buffer-name a) (buffer-name b))))))
+
+(defun my/vterm-cycle (offset)
+  "Switch to another project vterm buffer by OFFSET (1 next, -1 prev)."
+  (let* ((buffers (my/vterm-project-buffers))
+         (len (length buffers)))
+    (if (<= len 1)
+        (message "No other vterm buffer in this project")
+      (let ((idx (or (cl-position (current-buffer) buffers) 0)))
+        (switch-to-buffer (nth (mod (+ idx offset) len) buffers))))))
+
+(defun my/vterm-next ()
+  "Switch to the next vterm buffer in the current project."
+  (interactive)
+  (my/vterm-cycle 1))
+
+(defun my/vterm-prev ()
+  "Switch to the previous vterm buffer in the current project."
+  (interactive)
+  (my/vterm-cycle -1))
+
+(defun my/vterm-new ()
+  "Open a new vterm buffer rooted at the current project."
+  (interactive)
+  (let ((default-directory (my/vterm-project-root (current-buffer))))
+    (vterm (generate-new-buffer-name vterm-buffer-name))))
+
+(with-eval-after-load 'vterm
+  (evil-define-key 'normal vterm-mode-map (kbd "C-n") #'my/vterm-next)
+  (evil-define-key 'normal vterm-mode-map (kbd "C-p") #'my/vterm-prev)
+  (evil-define-key 'normal vterm-mode-map (kbd "C-t") #'my/vterm-new))
+
 ;; set PATH from env to emacs
 (use-package exec-path-from-shell :ensure t)
 (when (memq window-system '(mac ns x))
