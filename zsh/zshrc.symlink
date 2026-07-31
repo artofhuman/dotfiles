@@ -44,6 +44,15 @@ autoload -Uz compinit && compinit
 autoload -U promptinit; promptinit
 prompt pure
 
+# Ghostel's OSC 133 prompt wrapper injects a marker between the "\n" and the
+# "%{\r%}" of Pure's $prompt_newline sentinel, so Pure stops recognizing it and
+# no longer strips the old preprompt — the preprompt line then renders twice.
+# Drop that one hook; OSC 7 (cwd), 133;C/D (command tracking) and the
+# zle-line-init 133;P/B fallback keep working.
+if [[ "${${INSIDE_EMACS-}%%,*}" = 'ghostel' ]]; then
+    precmd_functions=(${precmd_functions:#__ghostel_ensure_prompt_wrap})
+fi
+
 # DISABLE_UPDATE_PROMPT=true
 
 # KEY BINDINGS

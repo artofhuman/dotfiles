@@ -86,6 +86,8 @@
 
 (set-face-attribute 'default nil :font "Iosevka" :height 160)
 (set-face-attribute 'fixed-pitch nil :family "Iosevka")
+
+;; (set-face-attribute 'default nil :font "Victor Mono" :height 150 :weight 'medium)
 ;; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
 ;; (set-face-attribute 'default nil :font "Terminess Nerd Font" :height 170 :weight 'medium)
 ;; (set-face-attribute 'default nil :font "JetBrains Mono" :height 155);; :weight 'light)
@@ -317,25 +319,26 @@ If `project-current' cannot find a project, returns the `default-directory'."
   "Get the buffer filename relative to the compilation root."
   (file-relative-name buffer-file-name (testrun-core--root)))
 
-(defun my/vterm-run-command (command)
-  "Insert text of current line in vterm and execute."
+(defun my/ghostel-run-command (command)
+  "Run COMMAND in the current project's ghostel terminal.
+Shows the terminal in another window and keeps point in the current buffer."
   (interactive)
-  (require 'vterm)
-    (let ((buf (current-buffer)))
-      (unless (get-buffer vterm-buffer-name)
-        (vterm))
-      (display-buffer vterm-buffer-name t)
-      (switch-to-buffer-other-window vterm-buffer-name)
-      (vterm--goto-line -1)
+  (require 'ghostel)
+  (let* ((origin (selected-window))
+         (display-buffer-overriding-action
+          '(display-buffer-use-some-window (inhibit-same-window . t)))
+         (term (if (project-current) (ghostel-project) (ghostel))))
+    (with-current-buffer term
       (message command)
-      (vterm-send-string command)
-      (vterm-send-return)
-      (switch-to-buffer-other-window buf)))
+      (ghostel-send-string command)
+      (ghostel-send-key "return"))
+    (when (window-live-p origin)
+      (select-window origin))))
 
-(defun my/vterm-toggle-run-pytest-current-file ()
-  "Insert text of current line in vterm and execute."
+(defun my/ghostel-run-pytest-current-file ()
+  "Run pytest for the current file in the project terminal."
   (interactive)
-  (my/vterm-run-command (concat "pytest " (testrun-core--file-name))))
+  (my/ghostel-run-command (concat "pytest " (testrun-core--file-name))))
 
 ;; Tree-sitter based test running functions
 (defun testrun--treesit-available-p ()
@@ -472,11 +475,11 @@ describe blocks. Returns e.g. 'file.py::describe_x::describe_y::test_z'."
         (mapconcat #'identity (cons file-name segments) "::")
       file-name)))
 
-(defun my/vterm-toggle-run-pytest-current-test ()
-  "Run pytest for the test function at cursor position in vterm."
+(defun my/ghostel-run-pytest-current-test ()
+  "Run pytest for the test function at cursor position in the project terminal."
   (interactive)
   (let ((test-path (testrun-python--construct-test-path)))
-    (my/vterm-run-command (concat "pytest " test-path))
+    (my/ghostel-run-command (concat "pytest " test-path))
     (message "Running pytest: %s" test-path)))
 
 ;; Jest test runner functions
@@ -523,7 +526,7 @@ Searches backward tracking indentation like vim-test does."
         (cons 'describe (mapconcat #'identity describes " ")))
        (t nil)))))
 
-(defun my/vterm-toggle-run-jest-current-test ()
+(defun my/ghostel-run-jest-current-test ()
   "Run Jest test at cursor. it/test > describe > whole file."
   (interactive)
   (let* ((file-name (testrun-core--file-name))
@@ -531,16 +534,16 @@ Searches backward tracking indentation like vim-test does."
          (pattern (cdr nearest)))
     (if pattern
         (let ((cmd (format "npx jest %s -t '%s'" file-name pattern)))
-          (my/vterm-run-command cmd)
+          (my/ghostel-run-command cmd)
           (message "Running jest: %s" cmd))
-      (my/vterm-run-command (concat "npx jest " file-name))
+      (my/ghostel-run-command (concat "npx jest " file-name))
       (message "Running jest file: %s" file-name))))
 
-(defun my/vterm-toggle-run-jest-current-file ()
-  "Run Jest for the current file in vterm."
+(defun my/ghostel-run-jest-current-file ()
+  "Run Jest for the current file in the project terminal."
   (interactive)
   (let ((file-name (testrun-core--file-name)))
-    (my/vterm-run-command (concat "npx jest " file-name))
+    (my/ghostel-run-command (concat "npx jest " file-name))
     (message "Running jest file: %s" file-name)))
 
 ;; Dispatch test commands based on major mode
@@ -549,9 +552,9 @@ Searches backward tracking indentation like vim-test does."
   (interactive)
   (cond
    ((derived-mode-p 'typescript-ts-mode 'typescript-mode 'tsx-ts-mode)
-    (my/vterm-toggle-run-jest-current-test))
+    (my/ghostel-run-jest-current-test))
    ((derived-mode-p 'python-ts-mode 'python-mode)
-    (my/vterm-toggle-run-pytest-current-test))
+    (my/ghostel-run-pytest-current-test))
    (t (message "No test runner configured for %s" major-mode))))
 
 (defun my/run-test-file ()
@@ -559,9 +562,9 @@ Searches backward tracking indentation like vim-test does."
   (interactive)
   (cond
    ((derived-mode-p 'typescript-ts-mode 'typescript-mode 'tsx-ts-mode)
-    (my/vterm-toggle-run-jest-current-file))
+    (my/ghostel-run-jest-current-file))
    ((derived-mode-p 'python-ts-mode 'python-mode)
-    (my/vterm-toggle-run-pytest-current-file))
+    (my/ghostel-run-pytest-current-file))
    (t (message "No test runner configured for %s" major-mode))))
 
 (global-set-key (kbd "C-c t t") 'my/run-test-at-cursor)  ; test at cursor
@@ -663,116 +666,64 @@ in another window, jumping to the line and optional column."
          :scroll-bar-width 0))
  (spacious-padding-mode))
 
-(use-package vterm
-  :defer t
+(use-package ghostel
   :ensure t
-  :config
-  ;; (setq vterm-max-scrollback 100000)
-  (setq vterm-timer-delay 0)
-  :bind (:map vterm-mode-map
+  :bind (:map ghostel-mode-map
               ("C-SPC" . zoom-window-zoom)))
 
-;; TODO: check if color scheme is alabaster
-(with-eval-after-load 'vterm
-  (set-face-attribute 'vterm-color-red nil :foreground "#aa3731") ;; color1
-  (set-face-attribute 'vterm-color-bright-red nil :foreground "#f05050") ;; color9
-  (set-face-attribute 'vterm-color-yellow nil :foreground "#cb9000") ;; color3
-  (set-face-attribute 'vterm-color-blue nil :foreground "#325cc0") ;; color4
-  (set-face-attribute 'vterm-color-bright-blue nil :foreground "#007acc") ;; color12
-  (set-face-attribute 'vterm-color-cyan nil :foreground "#0083b2") ;; color6
-  (set-face-attribute 'vterm-color-white nil :foreground "#000000") ;; color7
-  (set-face-attribute 'vterm-color-bright-white nil :foreground "#000000") ;; color15
-  (set-face-attribute 'vterm-color-green nil :foreground "#448c37") ;; color2
-  (set-face-attribute 'vterm-color-bright-green nil :foreground "#60cb00") ;; color10
-  (set-face-attribute 'vterm-color-magenta nil :foreground "#7a3e9d") ;; color5
-  (set-face-attribute 'vterm-color-bright-magenta nil :foreground "#e64ce6")) ;; color13
-
-(use-package vterm-toggle
-  ;; :defer t
+(use-package evil-ghostel
   :ensure t
-  :custom
-  (vterm-toggle-scope 'project)
-  (vterm-toggle-hide-method 'reset-window-configration)
-  ;; :custom
-  ;;  open on bottom
-  ;; (setq vterm-toggle-fullscreen-p nil)
-  ;; (add-to-list 'display-buffer-alist
-  ;;   '((lambda (bufname _)
-  ;;       (with-current-buffer bufname
-  ;;           (equal major-mode 'vterm-mode)))
-  ;;       (display-buffer-reuse-window display-buffer-at-bottom)
-  ;;       (reusable-frames . visible)
-  ;;       (window-height . 0.7)))
-  )
+  :after (ghostel evil)
+  :hook (ghostel-mode . evil-ghostel-mode))
 
-;; toggle vterm at bottom
-;; (setq vterm-toggle-fullscreen-p nil)
-;; (add-to-list 'display-buffer-alist
-;;     '((lambda (buffer-or-name _)
-;;         (let ((buffer (get-buffer buffer-or-name)))
-;;             (with-current-buffer buffer
-;;             (or (equal major-mode 'vterm-mode)
-;;                 (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
-;;     (display-buffer-reuse-window display-buffer-in-side-window)
-;;     (side . bottom)
-;;     ;;(dedicated . t) ;dedicated is supported in emacs27
-;;     (reusable-frames . visible)
-;;     (window-height . 0.7)))
-;;---
-(global-set-key (kbd "s-j")  'vterm-toggle)
+;; TODO: check if color scheme is alabaster
+(with-eval-after-load 'ghostel
+  (set-face-attribute 'ghostel-color-red nil :foreground "#aa3731") ;; color1
+  (set-face-attribute 'ghostel-color-bright-red nil :foreground "#f05050") ;; color9
+  (set-face-attribute 'ghostel-color-yellow nil :foreground "#cb9000") ;; color3
+  (set-face-attribute 'ghostel-color-blue nil :foreground "#325cc0") ;; color4
+  (set-face-attribute 'ghostel-color-bright-blue nil :foreground "#007acc") ;; color12
+  (set-face-attribute 'ghostel-color-cyan nil :foreground "#0083b2") ;; color6
+  (set-face-attribute 'ghostel-color-white nil :foreground "#000000") ;; color7
+  (set-face-attribute 'ghostel-color-bright-white nil :foreground "#000000") ;; color15
+  (set-face-attribute 'ghostel-color-green nil :foreground "#448c37") ;; color2
+  (set-face-attribute 'ghostel-color-bright-green nil :foreground "#60cb00") ;; color10
+  (set-face-attribute 'ghostel-color-magenta nil :foreground "#7a3e9d") ;; color5
+  (set-face-attribute 'ghostel-color-bright-magenta nil :foreground "#e64ce6")) ;; color13
 
-;; Project-scoped vterm switching built on plain `vterm' + `vterm-toggle'.
-;; Cycle over every live vterm buffer that belongs to the current project,
-;; regardless of how it was created, so it works for both `vterm-toggle'
-;; and extra terminals opened with `my/vterm-new'.
-(defun my/vterm-project-root (buffer)
-  "Return the project root associated with vterm BUFFER, or its directory."
-  (with-current-buffer buffer
-    (if-let ((proj (project-current nil default-directory)))
-        (project-root proj)
-      default-directory)))
+;; Project-scoped terminal toggle, replacing `vterm-toggle' with scope
+;; `project' and hide-method `reset-window-configration': `s-j' pops the
+;; project terminal fullscreen, `s-j' again restores the window layout.
+(defvar my/ghostel-window-configuration nil
+  "Window configuration saved before a ghostel terminal took over the frame.")
 
-(defun my/vterm-project-buffers ()
-  "Live vterm buffers sharing the current buffer's project, sorted by name."
-  (let ((root (my/vterm-project-root (current-buffer))))
-    (sort
-     (seq-filter
-      (lambda (buf)
-        (and (provided-mode-derived-p
-              (buffer-local-value 'major-mode buf) 'vterm-mode)
-             (equal (my/vterm-project-root buf) root)))
-      (buffer-list))
-     (lambda (a b) (string< (buffer-name a) (buffer-name b))))))
-
-(defun my/vterm-cycle (offset)
-  "Switch to another project vterm buffer by OFFSET (1 next, -1 prev)."
-  (let* ((buffers (my/vterm-project-buffers))
-         (len (length buffers)))
-    (if (<= len 1)
-        (message "No other vterm buffer in this project")
-      (let ((idx (or (cl-position (current-buffer) buffers) 0)))
-        (switch-to-buffer (nth (mod (+ idx offset) len) buffers))))))
-
-(defun my/vterm-next ()
-  "Switch to the next vterm buffer in the current project."
+(defun my/ghostel-toggle ()
+  "Toggle the current project's ghostel terminal."
   (interactive)
-  (my/vterm-cycle 1))
+  (require 'ghostel)
+  (if (derived-mode-p 'ghostel-mode)
+      (if my/ghostel-window-configuration
+          (progn
+            (set-window-configuration my/ghostel-window-configuration)
+            (setq my/ghostel-window-configuration nil))
+        (bury-buffer))
+    (setq my/ghostel-window-configuration (current-window-configuration))
+    (if (project-current) (ghostel-project) (ghostel))
+    (delete-other-windows)))
 
-(defun my/vterm-prev ()
-  "Switch to the previous vterm buffer in the current project."
+(global-set-key (kbd "s-j") 'my/ghostel-toggle)
+
+(defun my/ghostel-new ()
+  "Open an additional ghostel terminal rooted at the current project."
   (interactive)
-  (my/vterm-cycle -1))
+  (if (project-current) (ghostel-project '(4)) (ghostel '(4))))
 
-(defun my/vterm-new ()
-  "Open a new vterm buffer rooted at the current project."
-  (interactive)
-  (let ((default-directory (my/vterm-project-root (current-buffer))))
-    (vterm (generate-new-buffer-name vterm-buffer-name))))
-
-(with-eval-after-load 'vterm
-  (evil-define-key 'normal vterm-mode-map (kbd "C-n") #'my/vterm-next)
-  (evil-define-key 'normal vterm-mode-map (kbd "C-p") #'my/vterm-prev)
-  (evil-define-key 'normal vterm-mode-map (kbd "C-t") #'my/vterm-new))
+;; Ghostel scopes buffers to the project itself (`ghostel-project-buffer-scope'
+;; defaults to `both': current directory or creation-time project).
+(with-eval-after-load 'ghostel
+  (evil-define-key 'normal ghostel-mode-map (kbd "C-n") #'ghostel-project-next)
+  (evil-define-key 'normal ghostel-mode-map (kbd "C-p") #'ghostel-project-previous)
+  (evil-define-key 'normal ghostel-mode-map (kbd "C-t") #'my/ghostel-new))
 
 ;; set PATH from env to emacs
 (use-package exec-path-from-shell :ensure t)
