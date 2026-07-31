@@ -197,6 +197,10 @@
   :init
   (marginalia-mode))
 
+(with-eval-after-load 'marginalia
+  (advice-add 'seconds-to-string :around
+              (lambda (orig &rest args) (funcall orig (car args)))))
+
 ;; (use-package completion-preview
 ;;   :straight (:type built-in)
 ;;   :bind (:map completion-preview-active-mode-map
