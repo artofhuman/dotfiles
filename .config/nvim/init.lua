@@ -446,12 +446,41 @@ require("lazy").setup({
       end
     },
 
-    -- {
-    --   "sj2tpgk/nvim-eldoc",
-    --   config = function()
-    --     require("nvim-eldoc").setup()
-    --   end
-    -- },
+    {
+      "sj2tpgk/nvim-eldoc",
+      config = function()
+        require("nvim-eldoc").setup()
+
+        -- Override the plugin's echo helper so a long/multi-line signature
+        -- never overflows the command line (which triggers the hit-enter
+        -- prompt and makes the cursor "jump" into the cmdline).
+        function nvim_echo_no_hitenter(chunks, history, opts)
+          -- Usable command-line width. With no statusline (laststatus < 2) the
+          -- ruler and showcmd are drawn at the right end of the command line,
+          -- stealing space; a message wider than what's left wraps and triggers
+          -- the hit-enter prompt. Reserve that space so it never overflows.
+          local reserve = 2
+          if vim.o.showcmd then reserve = reserve + 11 end
+          if vim.o.ruler and vim.o.laststatus < 2 then reserve = reserve + 18 end
+          local maxw = vim.o.columns - reserve
+          local out, used = {}, 0
+          for _, chunk in ipairs(chunks) do
+            -- flatten any embedded newlines (LSP labels are often multi-line)
+            local text = chunk[1]:gsub("[\r\n]", " ")
+            local taken = {}
+            for _, ch in ipairs(vim.fn.split(text, "\\zs")) do
+              local w = vim.fn.strdisplaywidth(ch)
+              if used + w > maxw then break end
+              taken[#taken + 1] = ch
+              used = used + w
+            end
+            out[#out + 1] = { table.concat(taken), chunk[2] }
+            if used >= maxw then break end
+          end
+          vim.api.nvim_echo(out, history, opts)
+        end
+      end
+    },
 
     { 'bogado/file-line' },
 
