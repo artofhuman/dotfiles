@@ -28,7 +28,7 @@
 (setq frame-title-format nil)
 
 ;; space between lines
-(setq-default line-spacing 3)
+(setq-default line-spacing 2)
 (setq-default truncate-lines t)
 
 ;; Quicker yes or no
@@ -692,24 +692,23 @@ in another window, jumping to the line and optional column."
   (set-face-attribute 'ghostel-color-bright-magenta nil :foreground "#e64ce6")) ;; color13
 
 ;; Project-scoped terminal toggle, replacing `vterm-toggle' with scope
-;; `project' and hide-method `reset-window-configration': `s-j' pops the
-;; project terminal fullscreen, `s-j' again restores the window layout.
-(defvar my/ghostel-window-configuration nil
-  "Window configuration saved before a ghostel terminal took over the frame.")
-
+;; `project': `s-j' pops the project terminal in a split to the right,
+;; `s-j' again hides that window (like the old `vterm-toggle').
 (defun my/ghostel-toggle ()
-  "Toggle the current project's ghostel terminal."
+  "Toggle the current project's ghostel terminal in a right split."
   (interactive)
   (require 'ghostel)
-  (if (derived-mode-p 'ghostel-mode)
-      (if my/ghostel-window-configuration
-          (progn
-            (set-window-configuration my/ghostel-window-configuration)
-            (setq my/ghostel-window-configuration nil))
-        (bury-buffer))
-    (setq my/ghostel-window-configuration (current-window-configuration))
-    (if (project-current) (ghostel-project) (ghostel))
-    (delete-other-windows)))
+  (let ((win (seq-find (lambda (w)
+                         (with-current-buffer (window-buffer w)
+                           (derived-mode-p 'ghostel-mode)))
+                       (window-list))))
+    (if win
+        (delete-window win)
+      (let ((display-buffer-overriding-action
+             '((display-buffer-in-direction)
+               (direction . right)
+               (window-width . 0.5))))
+        (if (project-current) (ghostel-project) (ghostel))))))
 
 (global-set-key (kbd "s-j") 'my/ghostel-toggle)
 
