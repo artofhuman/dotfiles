@@ -265,6 +265,7 @@
   (define-key evil-normal-state-map (kbd "<leader>y") #'my/copy-current-buffer-file-name)
   (define-key evil-normal-state-map (kbd "<leader>d") #'my/insert-debug-stmt)
   (define-key evil-normal-state-map (kbd "<leader>j j") #'my/jump-to-file-and-line)
+  (define-key evil-normal-state-map (kbd "<leader>c") #'my/sql-connect)
   (define-key evil-normal-state-map (kbd "<escape>") #'evil-ex-nohighlight)
   )
 
@@ -922,6 +923,62 @@ Giving it a name so that I can target it in vertico mode and make it use buffer.
   :config
   (global-set-key (kbd "C-SPC")  'zoom-window-zoom)
   )
+;; SQL: connections live in ~/.pg_service.conf, libpq's own named-connection
+;; file, so Emacs and psql in the terminal share one list and one set of
+;; credentials.  `<leader>c' prompts with the service names. Example:
+;;
+;; [local]
+;; host=localhost
+;; port=5432
+;; dbname=postgres
+;; user=postgres
+;; password=CHANGEME
+(use-package sql
+  :ensure nil
+  :defer t
+  :config
+  (setq sql-product 'postgres)
+  ;; Plain params: the default database entry shells out to psql just to
+  ;; build a completion table.
+  (setq sql-postgres-login-params '(user database server port))
+  (setq sql-input-ring-file-name "~/.config/emacs/sql-history"))
+
+(defun my/pg-service-file ()
+  "Path of the libpq connection service file."
+  (or (getenv "PGSERVICEFILE") (expand-file-name "~/.pg_service.conf")))
+
+(defun my/pg-service-names ()
+  "Return the service names defined in `my/pg-service-file'."
+  (let ((file (my/pg-service-file))
+        names)
+    (when (file-readable-p file)
+      (with-temp-buffer
+        (insert-file-contents file)
+        (goto-char (point-min))
+        (while (re-search-forward "^[ \t]*\\[\\(.+?\\)\\][ \t]*$" nil t)
+          (push (match-string 1) names))))
+    (nreverse names)))
+
+(defun my/sql-connect ()
+  "Pick a service from `my/pg-service-file' and open psql on it.
+Reuses a live session for the same service instead of starting a second psql."
+  (interactive)
+  (require 'sql)
+  (let ((names (my/pg-service-names)))
+    (unless names
+      (user-error "No services defined in %s" (my/pg-service-file)))
+    ;; Rebuilt on each call so a new service needs no restart.  Every login
+    ;; param is listed, otherwise `sql-connect' prompts for the ones it
+    ;; cannot find; psql resolves them all from the service entry.
+    (setq sql-connection-alist
+          (mapcar (lambda (name)
+                    `(,name (sql-product 'postgres)
+                            (sql-user "")
+                            (sql-server "")
+                            (sql-port 0)
+                            (sql-database ,(concat "service=" name))))
+                  names))
+    (call-interactively #'sql-connect)))
 ;; sync buffers with file system
 ;; (global-auto-revert-mode t)
 ;; (setq global-auto-revert-non-file-buffers t)
