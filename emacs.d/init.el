@@ -94,12 +94,10 @@
 
 ;; (use-package mode-line-idle :ensure t :commands (mode-line-idle))
 
+;; `uniquify-min-dir-content' already puts the parent directory in %b, so no
+;; prefix here: it would render as services/services/documents.py.
 (defvar my/modeline-filename
-  '(:eval (list (if (eq buffer-file-name nil) ""
-                  (concat (file-name-nondirectory
-                           (directory-file-name
-                            (file-name-directory (buffer-file-name)))) "/"))
-                (propertize "%b"
+  '(:eval (list (propertize "%b"
                             'face (if (buffer-modified-p)
                                       'font-lock-string-face
                                     'font-lock-builtin-face)
@@ -129,6 +127,9 @@
 ;; e.g. foo/index.ts and bar/index.ts.
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
+;; Always keep one directory component, not just on a name clash, so buffers
+;; read as services/documents.py everywhere.
+(setq uniquify-min-dir-content 1)
 
 ;;; Automatically insert closing parens
 (electric-pair-mode t)
