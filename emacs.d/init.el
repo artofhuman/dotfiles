@@ -761,7 +761,14 @@ in another window, jumping to the line and optional column."
   (fringe-mode '(8 . 8))  ;; fixed width to prevent shifting from code action icons
   (add-hook 'dired-mode-hook 'diff-hl-dired-mode-unless-remote)
   (add-hook 'magit-pre-refresh-hook 'diff-hl-magit-pre-refresh)
-  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh))
+  (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+
+  ;; Thin gutter bar, as in Sublime. `diff-hl-define-bitmaps' draws the middle
+  ;; of a hunk 1px wide but caps its top and bottom rows at the full fringe
+  ;; width, so a run of one-line hunks reads as a solid band. Own bitmap
+  ;; symbol: diff-hl redefines only its own on text-scale changes.
+  (define-fringe-bitmap 'my/diff-hl-bmp-thin [192] nil nil '(center t))
+  (setq diff-hl-fringe-bmp-function (lambda (_type _pos) 'my/diff-hl-bmp-thin)))
 
 (setq magit-blame-echo-style 'headings) ;; in echo mode show git message under each line
 
