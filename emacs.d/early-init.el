@@ -1,3 +1,15 @@
+;; macOS: libgccjit invokes the linker without the current SDK on its search
+;; path, so native compilation dies with "ld: library 'System' not found".
+(when (eq system-type 'darwin)
+  (let ((sdk (seq-find #'file-directory-p
+                       '("/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib"
+                         "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib"))))
+    (when sdk
+      (setenv "LIBRARY_PATH"
+              (if (getenv "LIBRARY_PATH")
+                  (concat (getenv "LIBRARY_PATH") ":" sdk)
+                sdk)))))
+
 ;; UI
 (setq inhibit-startup-message t)
 
