@@ -1,0 +1,3 @@
+# emacs-plus build config. Icons moved here from --with-*-icon options in @31.
+# Registry: community/icons in the d12frosted/emacs-plus tap.
+icon: liquid-glass
