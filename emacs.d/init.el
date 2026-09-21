@@ -313,7 +313,7 @@ Do so buffer-locally."
 This uses `project-current' to find the root directory of
 the project and assumes that's the root for the compile command.
 If `project-current' cannot find a project, returns the `default-directory'."
-  (if-let ((project (project-current)))
+  (if-let* ((project (project-current)))
       (project-root project)
     default-directory))
 
@@ -629,7 +629,7 @@ Searches backward tracking indentation like vim-test does."
   "Reads a line containing FILENAME:LINE[:COL] and opens that file
 in another window, jumping to the line and optional column."
   (interactive)
-  (let ((line (buffer-substring-no-properties (point-at-bol) (point-at-eol))))
+  (let ((line (buffer-substring-no-properties (pos-bol) (pos-eol))))
     (when (or (string-match "\\([^ \t:]+\\):\\([0-9]+\\):\\([0-9]+\\)" line)
               (string-match "\\([^ \t:]+\\):\\([0-9]+\\)" line))
       (let ((file (match-string 1 line))
@@ -853,7 +853,7 @@ Runs once per project."
 
       (let ((venv-candidates (list (concat root ".venv")
                                    (concat root "venv"))))
-        (when-let ((venv-path (seq-find #'file-directory-p venv-candidates)))
+        (when-let* ((venv-path (seq-find #'file-directory-p venv-candidates)))
           (pyvenv-activate venv-path)
           (message "Activated venv: %s" venv-path))))
 
