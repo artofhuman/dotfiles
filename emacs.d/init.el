@@ -283,7 +283,36 @@
   :config
   (setq evil-collection-magit-want-horizontal-movement t)
   (setq evil-collection-magit-use-y-for-yank t)
-  (evil-collection-init))
+  (evil-collection-init)
+
+  ;; evil-collection leaves word motions on magit's own commands, so `w' opened
+  ;; the am transient and `B' the bisect one. Every displaced command is still
+  ;; in `magit-dispatch' (`H' here) under the same letter.
+  (with-eval-after-load 'magit
+    (evil-collection-define-key '(normal visual) 'magit-mode-map
+      "w" 'evil-forward-word-begin
+      "W" 'evil-forward-WORD-begin
+      "b" 'evil-backward-word-begin
+      "B" 'evil-backward-WORD-begin
+      "e" 'evil-forward-word-end
+      "E" 'evil-forward-WORD-end)
+
+    ;; `evil-collection-magit-want-horizontal-movement' parks `magit-log-refresh'
+    ;; on C-l, which is the window-right key. It stays in `magit-dispatch' on the
+    ;; same C-l. C-j and C-k are left alone: they are the only binding for plain
+    ;; `magit-section-forward'/`-backward' (gj and gk are the sibling variants).
+    (evil-collection-define-key '(normal visual) 'magit-mode-map
+      (kbd "C-l") 'evil-window-right)
+
+    ;; RET visits in the current window, which buries magit. Send it to the
+    ;; other window instead. These two maps, not their parent
+    ;; `magit-diff-section-map': `evil-collection-magit-adjust-section-bindings'
+    ;; writes RET into the children, and they shadow the parent. Both
+    ;; spellings because a GUI sends `<return>' and a terminal sends `RET'.
+    ;; S-<return> is left alone as the visit-here escape hatch.
+    (dolist (map (list magit-file-section-map magit-hunk-section-map))
+      (define-key map (kbd "RET") #'magit-diff-visit-worktree-file-other-window)
+      (define-key map (kbd "<return>") #'magit-diff-visit-worktree-file-other-window))))
 
 
 ;; allow to use gg for comment lines
