@@ -82,13 +82,121 @@
         doom-themes-enable-italic nil) ; if nil, italics is universally disabled
 )
 
+;; Upstream Alabaster leaves builtins, variable names and imports plain; the
+;; Emacs port paints them red and blue. Must be set before `load-theme'.
+(setq alabaster-themes-light-bg-palette-overrides
+      '((builtin      fg-main)
+        (variable     fg-main)
+        (preprocessor fg-main)))
+
+;; Blue plate only under light-bg; elsewhere a class name looks like any type.
+(defface alabaster-definition
+  '((t :inherit font-lock-type-face))
+  "Definition names, matching the upstream Alabaster `entity.name' rule.")
+
+(defface alabaster-operator
+  '((t :inherit font-lock-keyword-face))
+  "Word operators, which upstream Alabaster greys out as `keyword.operator'.
+Emacs gives `not' and `and' the same face as `if' and `return'.")
+
+(defun my/alabaster-light-bg-tweaks (&rest _)
+  "Bring `alabaster-themes-light-bg' in line with upstream Alabaster.
+Constants are purple text there, not black on a magenta plate."
+  (when (memq 'alabaster-themes-light-bg custom-enabled-themes)
+    (custom-theme-set-faces
+     'alabaster-themes-light-bg
+     '(font-lock-constant-face ((t (:foreground "#7A3E9D" :background unspecified))))
+     '(font-lock-number-face ((t (:inherit font-lock-constant-face))))
+     ;; Escapes sit on a darker green than the string around them. Drop the
+     ;; inherited regexp-backslash face, which is bold.
+     '(font-lock-escape-face ((t (:inherit unspecified :background "#DBECB6" :foreground "#000000"))))
+     ;; Brackets are underlined, not recoloured: in the sublime scheme
+     ;; `brackets_foreground' is the underline colour when options say underline.
+     '(show-paren-match ((t (:inherit unspecified :background unspecified :foreground unspecified :underline "#007ACC"))))
+     ;; Punctuation, brackets and operators: #00000090 over white.
+     '(font-lock-bracket-face ((t (:foreground "#6f6f6f"))))
+     '(font-lock-delimiter-face ((t (:inherit unspecified :foreground "#6f6f6f"))))
+     '(font-lock-punctuation-face ((t (:foreground "#6f6f6f"))))
+     '(font-lock-misc-punctuation-face ((t (:inherit unspecified :foreground "#6f6f6f"))))
+     '(font-lock-operator-face ((t (:foreground "#6f6f6f"))))
+     '(alabaster-operator ((t (:inherit unspecified :foreground "#6f6f6f"))))
+     ;; The blue plate marks definitions only, never call sites.
+     '(font-lock-function-call-face ((t (:inherit unspecified :background unspecified :foreground "#000000"))))
+     ;; The "Mistakes" rule. Inherits bold `error' otherwise.
+     '(font-lock-warning-face ((t (:inherit unspecified :foreground "#cc3333" :background "#FFE0E0"))))
+     '(alabaster-definition ((t (:background "#DBF1FF" :foreground "#000000"))))
+     ;; A fringe bitmap paints set bits with the face foreground and the rest
+     ;; with its background, so the 2px diff-hl bar left six pixels of
+     ;; `#ddddff' (and of `diff-added'/`diff-removed') beside it.
+     ;; Added and modified sampled off a Sublime gutter running Alabaster: the
+     ;; scheme sets no `line_diff_*', so these are Sublime's own defaults.
+     ;; Deleted was not on screen there, so it stays at Zed Alabaster's
+     ;; `version_control.deleted'.
+     '(diff-hl-insert ((t (:inherit unspecified :background unspecified :foreground "#6abf40"))))
+     '(diff-hl-change ((t (:inherit unspecified :background unspecified :foreground "#ec8013"))))
+     '(diff-hl-delete ((t (:inherit unspecified :background unspecified :foreground "#dd3f2e")))))
+    ;; Faces the theme never touched are only recorded, not applied, until it
+    ;; is re-enabled.
+    (enable-theme 'alabaster-themes-light-bg)))
+
+;; `load-theme' re-reads the theme file, which wipes anything added afterwards,
+;; so re-apply on every theme switch instead of once at startup.
+(advice-add 'load-theme :after #'my/alabaster-light-bg-tweaks)
+
 (load-theme 'alabaster-themes-light-bg)
+
+;; Upstream Alabaster plates every definition: `entity.name' in the sublime
+;; scheme, `*.definition' in the zed theme. Emacs has no such notion -- a class
+;; name and a type reference share `font-lock-type-face' -- so match the
+;; definition nodes in the parse tree instead.
+;; Brackets, delimiters and operators live on level 4; the default is 3.
+(setq treesit-font-lock-level 4)
+
+(defvar my/alabaster-definition-queries
+  '((python . ((class_definition name: (identifier) @alabaster-definition)
+               ["not" "and" "or" "in" "is"] @alabaster-operator))
+    (ruby . ((class name: (constant) @alabaster-definition)
+             (module name: (constant) @alabaster-definition)
+             ["not" "and" "or"] @alabaster-operator))
+    (typescript . ((class_declaration name: (type_identifier) @alabaster-definition)
+                   (interface_declaration name: (type_identifier) @alabaster-definition)
+                   (type_alias_declaration name: (type_identifier) @alabaster-definition)))
+    (tsx . ((class_declaration name: (type_identifier) @alabaster-definition)
+            (interface_declaration name: (type_identifier) @alabaster-definition)
+            (type_alias_declaration name: (type_identifier) @alabaster-definition))))
+  "Nodes to plate as definitions, per tree-sitter language.")
+
+(defun my/alabaster-plate-definitions ()
+  "Give class, module and type definitions the Alabaster blue plate."
+  (when-let* ((lang (treesit-language-at (point-min)))
+              (query (alist-get lang my/alabaster-definition-queries))
+              ;; A grammar missing one of these nodes errors out here.
+              ;; Emacs 31 has `treesit-query-with-optional' for this.
+              (rules (ignore-errors
+                       (treesit-font-lock-rules
+                        :language lang
+                        :feature 'alabaster-definition
+                        :override t
+                        query))))
+    (setq-local treesit-font-lock-settings
+                (append treesit-font-lock-settings rules))
+    ;; Level 1, so the feature is on at any `treesit-font-lock-level'; the rule
+    ;; still wins because it is last in `treesit-font-lock-settings'.
+    (setq-local treesit-font-lock-feature-list
+                (let ((levels (copy-tree treesit-font-lock-feature-list)))
+                  (setcar levels (append (car levels) '(alabaster-definition)))
+                  levels))
+    (treesit-font-lock-recompute-features)))
+
+(dolist (hook '(python-ts-mode-hook ruby-ts-mode-hook
+                typescript-ts-mode-hook tsx-ts-mode-hook))
+  (add-hook hook #'my/alabaster-plate-definitions))
 
 (set-face-attribute 'default nil :font "Iosevka" :height 160)
 (set-face-attribute 'fixed-pitch nil :family "Iosevka")
 
 ;; (set-face-attribute 'default nil :font "Victor Mono" :height 150 :weight 'medium)
-;; (set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
+(set-face-attribute 'default nil :font "PragmataPro Mono Liga" :height 160)
 ;; (set-face-attribute 'default nil :font "Terminess Nerd Font" :height 170 :weight 'medium)
 ;; (set-face-attribute 'default nil :font "JetBrains Mono" :height 155);; :weight 'light)
 
@@ -134,6 +242,58 @@
 ;;; Automatically insert closing parens
 (electric-pair-mode t)
 
+;; Sublime highlights the enclosing brackets whenever point sits inside the
+;; form (its `bracket_contents' rule), not only when point is on a bracket.
+;; Emacs has no option for that, so fall back to the enclosing pair.
+(setq show-paren-when-point-inside-paren t)
+;; Sublime highlights instantly; the default waits 125ms of idle time. Needs
+;; `setopt': the option restarts the timer from its setter.
+(setopt show-paren-delay 0)
+
+(defvar my/show-paren-max-span 100000
+  "Give up on the enclosing pair once the form is longer than this.
+Finding the closing bracket scans the whole form, and with no delay that
+runs on every cursor move. Nothing is visible that far away anyway.")
+
+(defun my/show-paren-enclosing ()
+  "Return the pair `show-paren--default' found, else the enclosing pair."
+  (or (show-paren--default)
+      (when-let* ((open (nth 1 (syntax-ppss)))
+                  (close (save-restriction
+                           (narrow-to-region
+                            open (min (point-max) (+ open my/show-paren-max-span)))
+                           (ignore-errors (scan-sexps open 1)))))
+        (list open (1+ open) (1- close) close nil))))
+
+(setq show-paren-data-function #'my/show-paren-enclosing)
+
+;; Emacs 31: `treesit-major-mode-setup' sets `show-paren-data-function'
+;; buffer-locally in every mode that defines a `list' thing, which shadows the
+;; setq above. Ruby counts `module'/`class'/`def' blocks as lists, so point on
+;; `module' highlighted the block keywords while point inside `()' highlighted
+;; nothing. Take the variable back once the major mode is done.
+(defun my/show-paren-reclaim ()
+  "Re-take `show-paren-data-function' after a major mode claims it."
+  (setq-local show-paren-data-function #'my/show-paren-enclosing))
+
+(add-hook 'after-change-major-mode-hook #'my/show-paren-reclaim)
+
+(defun my/show-paren-bypass-evil (orig &rest args)
+  "Let the enclosing-pair fallback run when point is not on a bracket.
+Evil swaps in its own `show-paren-data-function' in normal state, and that
+one returns nil unless point is on a bracket, so the fallback never runs.
+On a bracket evil still wins: its block cursor sits on the closing paren
+rather than after it, and only evil gets that case right."
+  (if (memq (syntax-class (syntax-after (point))) '(4 5))
+      (apply orig args)
+    (let ((evil-highlight-closing-paren-at-point-states nil))
+      (apply orig args))))
+
+;; Depth -100 keeps this outermost: evil installs its own advice when
+;; `evil-mode' turns on, which is later than any load-order hook here.
+(advice-add 'show-paren-function :around #'my/show-paren-bypass-evil
+            '((depth . -100)))
+
 ;;; Prefer spaces to tabs
 (setq-default indent-tabs-mode nil)
 
@@ -164,6 +324,8 @@
 ;; (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 
 (require 'package)
+;; let package.el upgrade built-ins (magit needs transient >= 0.13)
+(setq package-install-upgrade-built-in t)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; Comment/uncomment this line to enable MELPA Stable if desired.  See `package-archive-priorities`
 ;; and `package-pinned-packages`. Most users will not need or want to do this.
@@ -779,9 +941,10 @@ in another window, jumping to the line and optional column."
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
-;; Enable python-ts-mode by default for tree-sitter support
+;; Prefer the tree-sitter modes for tree-sitter support
 (setq major-mode-remap-alist
-      '((python-mode . python-ts-mode)))
+      '((python-mode . python-ts-mode)
+        (ruby-mode . ruby-ts-mode)))
 
  ;; active virtualenv for cur dir
 (use-package pyvenv
@@ -839,10 +1002,9 @@ in another window, jumping to the line and optional column."
   :ensure t
   :config
   (add-to-list 'browse-at-remote-remote-type-regexps '(:host "^git\\.skbkontur\\.ru.*$" :type "gitlab"))
-  :general
-  (:states '(normal visual)
-   :keymaps 'override
-   "SPC o r" 'browse-at-remote))
+  :init
+  (define-key evil-normal-state-map (kbd "<leader>o r") #'browse-at-remote)
+  (define-key evil-visual-state-map (kbd "<leader>o r") #'browse-at-remote))
 
 (use-package consult
   :ensure t
@@ -865,7 +1027,8 @@ in another window, jumping to the line and optional column."
   :config
   (global-set-key (kbd "C-'")  'embark-act)
   (global-set-key (kbd "C-q")  'embark-export)
-  (global-set-key (kbd "C-h B")  'embark-bindings))
+  ;; not C-h B: C-h is taken by evil-window-left, so it cannot be a prefix
+  (global-set-key (kbd "C-c B")  'embark-bindings))
 
 (use-package embark-consult
   :ensure t
@@ -976,8 +1139,8 @@ Giving it a name so that I can target it in vertico mode and make it use buffer.
   :init
   :ensure t
   :config
-  (global-set-key (kbd "C-SPC")  'zoom-window-zoom)
-  )
+  (global-set-key (kbd "C-SPC")  'zoom-window-zoom))
+
 ;; SQL: connections live in ~/.pg_service.conf, libpq's own named-connection
 ;; file, so Emacs and psql in the terminal share one list and one set of
 ;; credentials.  `<leader>c' prompts with the service names. Example:
@@ -1034,6 +1197,13 @@ Reuses a live session for the same service instead of starting a second psql."
                             (sql-database ,(concat "service=" name))))
                   names))
     (call-interactively #'sql-connect)))
+
+;; support kitty term keyboard protocol
+(use-package kkp
+  :ensure t
+  :config
+  (global-kkp-mode +1))
+
 ;; sync buffers with file system
 ;; (global-auto-revert-mode t)
 ;; (setq global-auto-revert-non-file-buffers t)
