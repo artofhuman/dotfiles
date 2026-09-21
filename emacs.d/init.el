@@ -683,6 +683,17 @@ in another window, jumping to the line and optional column."
 ;; emacs redo
 (setq evil-undo-system 'undo-redo)
 
+;; Emacs 31 draws non-selected header lines with `header-line-inactive'.
+;; spacious-padding sets that face through `custom-set-faces', which drops the
+;; built-in `:inherit header-line', so it loses its background and its box
+;; falls back to `:color nil' -- a box with no colour is drawn in the
+;; foreground, hence a black rectangle. Clone the active face back onto it.
+(defun my/header-line-inactive-match (&rest _)
+  "Keep `header-line-inactive' looking like `header-line'."
+  (set-face-attribute 'header-line-inactive nil
+                      :inherit 'header-line
+                      :box (face-attribute 'header-line :box nil t)))
+
 ;; Add paddings 
 (use-package spacious-padding
  :ensure t
@@ -695,7 +706,11 @@ in another window, jumping to the line and optional column."
          :tab-width 0
          :right-divider-width 7
          :scroll-bar-width 0))
- (spacious-padding-mode))
+ (spacious-padding-mode)
+ ;; Depth 90 puts this after `spacious-padding-set-faces', which sits on the
+ ;; same hook and would otherwise overwrite it on every theme switch.
+ (add-hook 'enable-theme-functions #'my/header-line-inactive-match 90)
+ (my/header-line-inactive-match))
 
 (use-package ghostel
   :ensure t
