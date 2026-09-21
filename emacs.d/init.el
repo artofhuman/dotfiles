@@ -714,6 +714,10 @@ in another window, jumping to the line and optional column."
 
 (use-package ghostel
   :ensure t
+  ;; Default 5MB gets evicted fast: cost scales with column count and
+  ;; Claude Code churns rows on every repaint. Read by `ghostel--new',
+  ;; so it only applies to terminals created after the change.
+  :custom (ghostel-max-scrollback (* 40 1024 1024))
   :bind (:map ghostel-mode-map
               ("C-SPC" . zoom-window-zoom)))
 
