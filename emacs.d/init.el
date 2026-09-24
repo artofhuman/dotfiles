@@ -906,20 +906,44 @@ in another window, jumping to the line and optional column."
 ;; Project-scoped terminal toggle, replacing `vterm-toggle' with scope
 ;; `project': `s-j' pops the project terminal in a split to the right,
 ;; `s-j' again hides that window (like the old `vterm-toggle').
+(defun my/ghostel--window ()
+  "Return the window showing a ghostel terminal, if any."
+  (seq-find (lambda (w)
+              (with-current-buffer (window-buffer w)
+                (derived-mode-p 'ghostel-mode)))
+            (window-list nil 'no-minibuf)))
+
 (defun my/ghostel-toggle ()
-  "Toggle the current project's ghostel terminal in a right split."
+  "Toggle the current project's ghostel terminal in the rightmost window.
+Take that window over rather than adding one, remembering the buffer it
+held so toggling off puts it back and the layout never changes. With a
+single window there is nothing to take over, so split first and drop the
+split again on the way out.
+
+`display-buffer-in-direction' is deliberately not used: its reference
+window is the selected one and it prefers splitting to reusing, so the
+terminal landed beside the cursor and the layout depended on where point
+happened to be."
   (interactive)
   (require 'ghostel)
-  (let ((win (seq-find (lambda (w)
-                         (with-current-buffer (window-buffer w)
-                           (derived-mode-p 'ghostel-mode)))
-                       (window-list))))
-    (if win
-        (delete-window win)
+  (if-let* ((win (my/ghostel--window)))
+      (let ((prev (window-parameter win 'my/ghostel-prev-buffer)))
+        (set-window-parameter win 'my/ghostel-prev-buffer nil)
+        (if (buffer-live-p prev)
+            (set-window-buffer win prev)
+          (delete-window win)))
+    (let* ((alone (null (cdr (window-list nil 'no-minibuf))))
+           (target (if alone
+                       (split-window (selected-window) nil 'right)
+                     (car (window-at-side-list nil 'right)))))
+      ;; No parameter on a window we made ourselves: nothing to put back,
+      ;; so toggling off deletes it instead.
+      (unless alone
+        (set-window-parameter target 'my/ghostel-prev-buffer
+                              (window-buffer target)))
+      (select-window target)
       (let ((display-buffer-overriding-action
-             '((display-buffer-in-direction)
-               (direction . right)
-               (window-width . 0.5))))
+             '((display-buffer-same-window) (inhibit-same-window . nil))))
         (if (project-current) (ghostel-project) (ghostel))))))
 
 (global-set-key (kbd "s-j") 'my/ghostel-toggle)
