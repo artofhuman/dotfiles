@@ -82,115 +82,10 @@
         doom-themes-enable-italic nil) ; if nil, italics is universally disabled
 )
 
-;; Upstream Alabaster leaves builtins, variable names and imports plain; the
-;; Emacs port paints them red and blue. Must be set before `load-theme'.
-(setq alabaster-themes-light-bg-palette-overrides
-      '((builtin      fg-main)
-        (variable     fg-main)
-        (preprocessor fg-main)))
-
-;; Blue plate only under light-bg; elsewhere a class name looks like any type.
-(defface alabaster-definition
-  '((t :inherit font-lock-type-face))
-  "Definition names, matching the upstream Alabaster `entity.name' rule.")
-
-(defface alabaster-operator
-  '((t :inherit font-lock-keyword-face))
-  "Word operators, which upstream Alabaster greys out as `keyword.operator'.
-Emacs gives `not' and `and' the same face as `if' and `return'.")
-
-(defun my/alabaster-light-bg-tweaks (&rest _)
-  "Bring `alabaster-themes-light-bg' in line with upstream Alabaster.
-Constants are purple text there, not black on a magenta plate."
-  (when (memq 'alabaster-themes-light-bg custom-enabled-themes)
-    (custom-theme-set-faces
-     'alabaster-themes-light-bg
-     '(font-lock-constant-face ((t (:foreground "#7A3E9D" :background unspecified))))
-     '(font-lock-number-face ((t (:inherit font-lock-constant-face))))
-     ;; Escapes sit on a darker green than the string around them. Drop the
-     ;; inherited regexp-backslash face, which is bold.
-     '(font-lock-escape-face ((t (:inherit unspecified :background "#DBECB6" :foreground "#000000"))))
-     ;; Brackets are underlined, not recoloured: in the sublime scheme
-     ;; `brackets_foreground' is the underline colour when options say underline.
-     '(show-paren-match ((t (:inherit unspecified :background unspecified :foreground unspecified :underline "#007ACC"))))
-     ;; Punctuation, brackets and operators: #00000090 over white.
-     '(font-lock-bracket-face ((t (:foreground "#6f6f6f"))))
-     '(font-lock-delimiter-face ((t (:inherit unspecified :foreground "#6f6f6f"))))
-     '(font-lock-punctuation-face ((t (:foreground "#6f6f6f"))))
-     '(font-lock-misc-punctuation-face ((t (:inherit unspecified :foreground "#6f6f6f"))))
-     '(font-lock-operator-face ((t (:foreground "#6f6f6f"))))
-     '(alabaster-operator ((t (:inherit unspecified :foreground "#6f6f6f"))))
-     ;; The blue plate marks definitions only, never call sites.
-     '(font-lock-function-call-face ((t (:inherit unspecified :background unspecified :foreground "#000000"))))
-     ;; The "Mistakes" rule. Inherits bold `error' otherwise.
-     '(font-lock-warning-face ((t (:inherit unspecified :foreground "#cc3333" :background "#FFE0E0"))))
-     '(alabaster-definition ((t (:background "#DBF1FF" :foreground "#000000"))))
-     ;; A fringe bitmap paints set bits with the face foreground and the rest
-     ;; with its background, so the 2px diff-hl bar left six pixels of
-     ;; `#ddddff' (and of `diff-added'/`diff-removed') beside it.
-     ;; Added and modified sampled off a Sublime gutter running Alabaster: the
-     ;; scheme sets no `line_diff_*', so these are Sublime's own defaults.
-     ;; Deleted was not on screen there, so it stays at Zed Alabaster's
-     ;; `version_control.deleted'.
-     '(diff-hl-insert ((t (:inherit unspecified :background unspecified :foreground "#6abf40"))))
-     '(diff-hl-change ((t (:inherit unspecified :background unspecified :foreground "#ec8013"))))
-     '(diff-hl-delete ((t (:inherit unspecified :background unspecified :foreground "#dd3f2e")))))
-    ;; Faces the theme never touched are only recorded, not applied, until it
-    ;; is re-enabled.
-    (enable-theme 'alabaster-themes-light-bg)))
-
-;; `load-theme' re-reads the theme file, which wipes anything added afterwards,
-;; so re-apply on every theme switch instead of once at startup.
-(advice-add 'load-theme :after #'my/alabaster-light-bg-tweaks)
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(require 'alabaster-patch)
 
 (load-theme 'alabaster-themes-light-bg)
-
-;; Upstream Alabaster plates every definition: `entity.name' in the sublime
-;; scheme, `*.definition' in the zed theme. Emacs has no such notion -- a class
-;; name and a type reference share `font-lock-type-face' -- so match the
-;; definition nodes in the parse tree instead.
-;; Brackets, delimiters and operators live on level 4; the default is 3.
-(setq treesit-font-lock-level 4)
-
-(defvar my/alabaster-definition-queries
-  '((python . ((class_definition name: (identifier) @alabaster-definition)
-               ["not" "and" "or" "in" "is"] @alabaster-operator))
-    (ruby . ((class name: (constant) @alabaster-definition)
-             (module name: (constant) @alabaster-definition)
-             ["not" "and" "or"] @alabaster-operator))
-    (typescript . ((class_declaration name: (type_identifier) @alabaster-definition)
-                   (interface_declaration name: (type_identifier) @alabaster-definition)
-                   (type_alias_declaration name: (type_identifier) @alabaster-definition)))
-    (tsx . ((class_declaration name: (type_identifier) @alabaster-definition)
-            (interface_declaration name: (type_identifier) @alabaster-definition)
-            (type_alias_declaration name: (type_identifier) @alabaster-definition))))
-  "Nodes to plate as definitions, per tree-sitter language.")
-
-(defun my/alabaster-plate-definitions ()
-  "Give class, module and type definitions the Alabaster blue plate."
-  (when-let* ((lang (treesit-language-at (point-min)))
-              (query (alist-get lang my/alabaster-definition-queries))
-              ;; A grammar missing one of these nodes errors out here.
-              ;; Emacs 31 has `treesit-query-with-optional' for this.
-              (rules (ignore-errors
-                       (treesit-font-lock-rules
-                        :language lang
-                        :feature 'alabaster-definition
-                        :override t
-                        query))))
-    (setq-local treesit-font-lock-settings
-                (append treesit-font-lock-settings rules))
-    ;; Level 1, so the feature is on at any `treesit-font-lock-level'; the rule
-    ;; still wins because it is last in `treesit-font-lock-settings'.
-    (setq-local treesit-font-lock-feature-list
-                (let ((levels (copy-tree treesit-font-lock-feature-list)))
-                  (setcar levels (append (car levels) '(alabaster-definition)))
-                  levels))
-    (treesit-font-lock-recompute-features)))
-
-(dolist (hook '(python-ts-mode-hook ruby-ts-mode-hook
-                typescript-ts-mode-hook tsx-ts-mode-hook))
-  (add-hook hook #'my/alabaster-plate-definitions))
 
 (set-face-attribute 'default nil :font "Iosevka" :height 160)
 (set-face-attribute 'fixed-pitch nil :family "Iosevka")
@@ -1003,7 +898,18 @@ happened to be."
   ;; width, so a run of one-line hunks reads as a solid band. Own bitmap
   ;; symbol: diff-hl redefines only its own on text-scale changes.
   (define-fringe-bitmap 'my/diff-hl-bmp-thin [192] nil nil '(center t))
-  (setq diff-hl-fringe-bmp-function (lambda (_type _pos) 'my/diff-hl-bmp-thin)))
+  (setq diff-hl-fringe-bmp-function (lambda (_type _pos) 'my/diff-hl-bmp-thin))
+
+  ;; No fringe in a terminal: draw the same bar in the margin instead of the
+  ;; default +/-/! letters. A quarter block is about as wide as the 2px
+  ;; bitmap above, and the margin faces inherit the diff-hl colours.
+  ;; `setopt' because the option's setter clears the rendering cache.
+  (unless (display-graphic-p)
+    (require 'diff-hl-margin)
+    (setopt diff-hl-margin-symbols-alist
+            '((insert . "\u258e") (delete . "\u258e") (change . "\u258e")
+              (unknown . "\u258e") (ignored . "\u258e") (reference . " ")))
+    (diff-hl-margin-mode 1)))
 
 (setq magit-blame-echo-style 'headings) ;; in echo mode show git message under each line
 
