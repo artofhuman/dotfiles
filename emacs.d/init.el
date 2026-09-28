@@ -34,6 +34,27 @@
 ;; Quicker yes or no
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; System clipboard in -nw frames via pbcopy/pbpaste
+(defun my/clipboard-cut (text)
+  (if (display-graphic-p)
+      (gui-select-text text)
+    (let* ((process-connection-type nil)
+           (proc (start-process "pbcopy" nil "pbcopy")))
+      (process-send-string proc text)
+      (process-send-eof proc))))
+
+(defun my/clipboard-paste ()
+  (if (display-graphic-p)
+      (gui-selection-value)
+    (let ((text (shell-command-to-string "pbpaste")))
+      (unless (or (string-empty-p text)
+                  (equal text (car kill-ring)))
+        text))))
+
+(when (executable-find "pbcopy")
+  (setq interprogram-cut-function #'my/clipboard-cut
+        interprogram-paste-function #'my/clipboard-paste))
+
 ;; Unbind some default keybindings
 (global-unset-key (kbd "C-x C-z"))
 (global-unset-key (kbd "C-<wheel-up>"))
@@ -277,6 +298,37 @@ rather than after it, and only evil gets that case right."
   (tab-always-indent 'complete)
   (read-extended-command-predicate #'command-completion-default-include-p))
 
+;; Pane of this tty frame inside tmux, or nil
+(defun my/tmux-pane ()
+  (and (not (display-graphic-p))
+       (getenv "TMUX" (selected-frame))
+       (getenv "TMUX_PANE" (selected-frame))))
+
+(defun my/tmux (&rest args)
+  "Run tmux with ARGS for the selected frame, return trimmed stdout."
+  (let ((process-environment
+         (cons (concat "TMUX=" (getenv "TMUX" (selected-frame))) process-environment)))
+    (with-temp-buffer
+      (when (zerop (apply #'call-process "tmux" nil t nil args))
+        (string-trim (buffer-string))))))
+
+;; C-hjkl: move between Emacs windows, fall through to tmux panes at the edge
+(defun my/window-move (dir tmux-flag)
+  (require 'windmove)
+  (let ((win (windmove-find-other-window dir))
+        (pane (my/tmux-pane)))
+    (cond
+     ((and win (not (and (window-minibuffer-p win)
+                         (not (minibuffer-window-active-p win)))))
+      (select-window win))
+     (pane (my/tmux "select-pane" "-t" pane tmux-flag))
+     (t (user-error "No window %s from selected window" dir)))))
+
+(defun my/window-left ()  (interactive) (my/window-move 'left "-L"))
+(defun my/window-right () (interactive) (my/window-move 'right "-R"))
+(defun my/window-up ()    (interactive) (my/window-move 'up "-U"))
+(defun my/window-down ()  (interactive) (my/window-move 'down "-D"))
+
 ;;; EVIL section
 (unless (package-installed-p 'evil)
   (package-install 'evil))
@@ -299,10 +351,10 @@ rather than after it, and only evil gets that case right."
   (setq evil-symbol-word-search t)  ;; More vim-like behavior
 
   :bind (
-    ("C-l" . evil-window-right)
-    ("C-h" . evil-window-left)
-    ("C-j" . evil-window-down)
-    ("C-k" . evil-window-up)
+    ("C-l" . my/window-right)
+    ("C-h" . my/window-left)
+    ("C-j" . my/window-down)
+    ("C-k" . my/window-up)
   )
   :config
   (evil-set-undo-system 'undo-fu)
@@ -356,10 +408,15 @@ rather than after it, and only evil gets that case right."
 
     ;; `evil-collection-magit-want-horizontal-movement' parks `magit-log-refresh'
     ;; on C-l, which is the window-right key. It stays in `magit-dispatch' on the
-    ;; same C-l. C-j and C-k are left alone: they are the only binding for plain
-    ;; `magit-section-forward'/`-backward' (gj and gk are the sibling variants).
+    ;; same C-l. C-j and C-k go to window moves too, so plain
+    ;; `magit-section-forward'/`-backward' move to gJ/gK (gj/gk are siblings).
     (evil-collection-define-key '(normal visual) 'magit-mode-map
-      (kbd "C-l") 'evil-window-right)
+      (kbd "C-h") 'my/window-left
+      (kbd "C-l") 'my/window-right
+      (kbd "C-j") 'my/window-down
+      (kbd "C-k") 'my/window-up
+      "gJ" 'magit-section-forward
+      "gK" 'magit-section-backward)
 
     ;; RET visits in the current window, which buries magit. Send it to the
     ;; other window instead. These two maps, not their parent
@@ -407,10 +464,55 @@ If `project-current' cannot find a project, returns the `default-directory'."
   "Get the buffer filename relative to the compilation root."
   (file-relative-name buffer-file-name (testrun-core--root)))
 
+(defvar my/tmux-runner-pane nil
+  "Tmux pane that last ran a test command.")
+
+(defun my/tmux-shell-pane-p (cmd)
+  (member cmd '("zsh" "bash" "fish" "sh")))
+
+(defun my/tmux-runner-pane (root)
+  "Return an idle shell pane next to Emacs, splitting a new one at ROOT if none."
+  (let* ((self (my/tmux-pane))
+         (panes (mapcar #'split-string
+                        (split-string
+                         (or (my/tmux "list-panes" "-t" self
+                                      "-F" "#{pane_id} #{pane_current_command}")
+                             "")
+                         "\n" t)))
+         (idle (seq-filter (lambda (p)
+                             (and (not (equal (car p) self))
+                                  (my/tmux-shell-pane-p (cadr p))))
+                           panes)))
+    (or (car (assoc my/tmux-runner-pane idle))
+        (caar idle)
+        (my/tmux "split-window" "-d" "-v" "-l" "30%" "-t" self
+                 "-c" root "-P" "-F" "#{pane_id}"))))
+
+(defun my/tmux-run-command (command)
+  "Run COMMAND from the project root in a tmux pane next to Emacs."
+  (let* ((root (expand-file-name (testrun-core--root)))
+         (pane (my/tmux-runner-pane root)))
+    (setq my/tmux-runner-pane pane)
+    (message command)
+    (my/tmux "send-keys" "-t" pane "-l"
+             (concat "cd " (shell-quote-argument root) " && " command))
+    (my/tmux "send-keys" "-t" pane "Enter")))
+
+(defun my/ghostel-visible-p ()
+  (seq-some (lambda (w)
+              (eq (buffer-local-value 'major-mode (window-buffer w)) 'ghostel-mode))
+            (window-list)))
+
 (defun my/ghostel-run-command (command)
   "Run COMMAND in the current project's ghostel terminal.
+Inside tmux with no ghostel window shown, run it in a tmux pane instead.
 Shows the terminal in another window and keeps point in the current buffer."
   (interactive)
+  (if (and (my/tmux-pane) (not (my/ghostel-visible-p)))
+      (my/tmux-run-command command)
+    (my/ghostel-run-command-1 command)))
+
+(defun my/ghostel-run-command-1 (command)
   (require 'ghostel)
   (let* ((origin (selected-window))
          (display-buffer-overriding-action
@@ -957,7 +1059,7 @@ happened to be."
   :config
   (global-set-key (kbd "C-'")  'embark-act)
   (global-set-key (kbd "C-q")  'embark-export)
-  ;; not C-h B: C-h is taken by evil-window-left, so it cannot be a prefix
+  ;; not C-h B: C-h is taken by my/window-left, so it cannot be a prefix
   (global-set-key (kbd "C-c B")  'embark-bindings))
 
 (use-package embark-consult
