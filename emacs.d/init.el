@@ -55,6 +55,9 @@
   (setq interprogram-cut-function #'my/clipboard-cut
         interprogram-paste-function #'my/clipboard-paste))
 
+;; Mouse in -nw frames: wheel scrolls the buffer, not the terminal
+(xterm-mouse-mode 1)
+
 ;; Unbind some default keybindings
 (global-unset-key (kbd "C-x C-z"))
 (global-unset-key (kbd "C-<wheel-up>"))
