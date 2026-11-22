@@ -14,7 +14,12 @@ set-option -g default-shell /bin/zsh
 setw -g mode-keys vi
 # Setup 'v' to begin selection as in Vim
 bind-key -T copy-mode-vi v send -X begin-selection
-bind-key -T copy-mode-vi y send -X copy-pipe-and-cancel "reattach-to-user-namespace pbcopy"
+# y: copy and stay in copy mode, Y: copy and exit
+bind-key -T copy-mode-vi y send -X copy-pipe "pbcopy"
+bind-key -T copy-mode-vi Y send -X copy-pipe-and-cancel "pbcopy"
+# scroll 2 lines per wheel step
+bind-key -T copy-mode-vi WheelUpPane select-pane \; send -X -N 2 scroll-up
+bind-key -T copy-mode-vi WheelDownPane select-pane \; send -X -N 2 scroll-down
 
 bind-key [ copy-mode
 bind-key ] paste-buffer
@@ -23,6 +28,9 @@ set -g mouse on
 set -g escape-time 10
 set -g focus-events on
 set -g set-clipboard on
+# Modified Enter keys (Shift+Enter etc.) for pi
+set -g extended-keys on
+set -g extended-keys-format csi-u
 
 set -g set-titles on
 set -g set-titles-string "#W #{command} #T #{session_path}"
