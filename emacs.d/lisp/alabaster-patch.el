@@ -4,7 +4,7 @@
 
 ;; The `alabaster-themes' port drifts from tonsky's originals: it colours what
 ;; the schemes leave plain, and skips the font-lock faces Emacs 29 added.
-;; This restores the upstream look for both light variants.
+;; This restores the upstream look for both light variants and the dark one.
 ;;
 ;; Upstream:
 ;;   https://github.com/tonsky/sublime-scheme-alabaster
@@ -34,7 +34,7 @@
   '((builtin      fg-main)
     (variable     fg-main)
     (preprocessor fg-main))
-  "Palette entries both light variants share.")
+  "Palette entries all patched variants share.")
 
 (setq alabaster-themes-light-palette-overrides
       alabaster-patch-palette-overrides)
@@ -43,6 +43,13 @@
 (setq alabaster-themes-light-bg-palette-overrides
       (cons '(bg-hl-line "#f0f0f0") alabaster-patch-palette-overrides))
 
+;; Dark maps builtin to `red', which is #DFDF8E there. Upstream definitions
+;; are #71ADE7; line_highlight is #ffffff10 over #0E1415.
+(setq alabaster-themes-dark-palette-overrides
+      (append '((fnname "#71ADE7")
+                (bg-hl-line "#1D2324"))
+              alabaster-patch-palette-overrides))
+
 ;;;; Face specs
 
 ;; Gutter bars: added and modified sampled off a Sublime gutter running
@@ -50,19 +57,23 @@
 ;; Alabaster's `version_control.deleted'.
 (defconst alabaster-patch-common-faces
   '((font-lock-number-face (:inherit font-lock-constant-face))
-    ;; Definitions only, never call sites.
-    (font-lock-function-call-face
-     (:inherit unspecified :background unspecified :foreground "#000000"))
     (diff-hl-insert (:inherit unspecified :background unspecified :foreground "#6abf40"))
     (diff-hl-change (:inherit unspecified :background unspecified :foreground "#ec8013"))
     (diff-hl-delete (:inherit unspecified :background unspecified :foreground "#dd3f2e")))
-  "Specs shared by both light variants.")
+  "Specs shared by all patched variants.")
+
+;; Definitions only, never call sites.
+(defun alabaster-patch--plain-calls (fg)
+  "Spec that leaves function calls in FG."
+  `(font-lock-function-call-face
+    (:inherit unspecified :background unspecified :foreground ,fg)))
 
 ;; "Alabaster BG": syntax gets backgrounds, constants stay foreground-only.
 ;; Punctuation is #00000090 over white; `brackets_options' is underline alone,
 ;; so `brackets_foreground' colours the underline, not the bracket.
 (defconst alabaster-patch-light-bg-faces
-  '((font-lock-constant-face (:foreground "#7A3E9D" :background unspecified))
+  `(,(alabaster-patch--plain-calls "#000000")
+    (font-lock-constant-face (:foreground "#7A3E9D" :background unspecified))
     (font-lock-escape-face
      (:inherit unspecified :background "#DBECB6" :foreground "#000000"))
     (font-lock-bracket-face (:foreground "#6f6f6f"))
@@ -83,7 +94,8 @@
 ;; plain `punctuation' only, so operators stay black. Mistakes are red on red
 ;; at 20% over #F7F7F7. `brackets_options' is foreground and underline here.
 (defconst alabaster-patch-light-faces
-  '((font-lock-escape-face (:inherit unspecified :foreground "#777777"))
+  `(,(alabaster-patch--plain-calls "#000000")
+    (font-lock-escape-face (:inherit unspecified :foreground "#777777"))
     (font-lock-bracket-face (:foreground "#777777"))
     (font-lock-delimiter-face (:inherit unspecified :foreground "#777777"))
     (font-lock-punctuation-face (:foreground "#777777"))
@@ -97,9 +109,32 @@
       :underline "#007ACC")))
   "Specs for `alabaster-themes-light'.")
 
+;; "Alabaster Dark": Punctuation covers `keyword.operator' too, but not
+;; `punctuation.section', so brackets stay plain. Escapes get a background
+;; only and keep the string colour. Brackets: underline alone, in `active'.
+(defconst alabaster-patch-dark-faces
+  `(,(alabaster-patch--plain-calls "#CECECE")
+    (font-lock-escape-face
+     (:inherit unspecified :background "#1D2324" :foreground "#95CB82"))
+    (font-lock-bracket-face (:inherit unspecified :foreground "#CECECE"))
+    (font-lock-delimiter-face (:inherit unspecified :foreground "#708B8D"))
+    (font-lock-punctuation-face (:foreground "#708B8D"))
+    (font-lock-misc-punctuation-face (:inherit unspecified :foreground "#708B8D"))
+    (font-lock-operator-face (:foreground "#708B8D"))
+    (alabaster-operator (:inherit unspecified :foreground "#708B8D"))
+    (font-lock-warning-face
+     (:inherit unspecified :foreground "#cc3333" :background "#2B1D1E"))
+    (alabaster-definition
+     (:inherit unspecified :foreground "#71ADE7" :background unspecified))
+    (show-paren-match
+     (:inherit unspecified :background unspecified :foreground unspecified
+      :underline "#CD974B")))
+  "Specs for `alabaster-themes-dark'.")
+
 (defconst alabaster-patch-themes
   '((alabaster-themes-light-bg . alabaster-patch-light-bg-faces)
-    (alabaster-themes-light    . alabaster-patch-light-faces))
+    (alabaster-themes-light    . alabaster-patch-light-faces)
+    (alabaster-themes-dark     . alabaster-patch-dark-faces))
   "Theme to face-spec table.")
 
 ;;;; Applying

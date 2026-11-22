@@ -1,6 +1,7 @@
 # ---- Aliases
 alias reload='source ~/.zshrc'
 alias e='nvim'
+alias em='emacs -nw .'
 alias c='cd ~/code'
 alias tls='tmux ls'
 alias td='tmux detach'
@@ -28,6 +29,8 @@ alias rebase='git rebase -i HEAD~2'
 alias rebase3='git rebase -i HEAD~3'
 alias rebase4='git rebase -i HEAD~4'
 alias rebase5='git rebase -i HEAD~5'
+
+alias cc-work='CLAUDE_CONFIG_DIR=$HOME/.claude-work claude'
 # ---- End Aliases
 
 ## Command history configuration
@@ -109,7 +112,7 @@ export PATH="$HOME/.poetry/bin:$PATH"
 export PATH="/Users/semyonpupkov/.local/bin:$PATH"
 export PATH="/Users/semyonpupkov/.rbenv/shims:$PATH"
 
-source /Users/semyonpupkov/.docker/init-zsh.sh || true # Added by Docker Desktop
+# source /Users/semyonpupkov/.docker/init-zsh.sh || true # Added by Docker Desktop
 
 PATH="/Users/semyonpupkov/perl5/bin${PATH:+:${PATH}}";
 PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH";
@@ -128,3 +131,5 @@ export PATH=/Users/semyonpupkov/.opencode/bin:$PATH
 
 # Amp CLI
 export PATH="/Users/semyonpupkov/.amp/bin:$PATH"
+
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
