@@ -210,6 +210,41 @@ require("lazy").setup({
       -- this is equivalent to setup({}) function
     },
 
+    {
+      "lewis6991/gitsigns.nvim",
+      event = "BufRead",
+      opts = {
+        signs = {
+          add = { text = "┃" },
+          change = { text = "┃" },
+          delete = { text = "_" },
+          topdelete = { text = "‾" },
+          changedelete = { text = "~" },
+          untracked = { text = "┆" },
+        },
+        on_attach = function(bufnr)
+          local gitsigns = require "gitsigns"
+          local function gsmap(mode, l, r, opts)
+            opts = opts or {}
+            opts.buffer = bufnr
+            vim.keymap.set(mode, l, r, opts)
+          end
+
+          gsmap("n", "[<Home>", function()
+            gitsigns.nav_hunk "prev"
+          end, { remap = true, desc = "[G]o to [P]revious Hunk" })
+          gsmap("n", "]<End>", function()
+            gitsigns.nav_hunk "next"
+          end, { remap = true, desc = "[G]it go to [N]ext Hunk" })
+          gsmap("n", "<leader>th", gitsigns.preview_hunk, { desc = "[G]it [D]iff Hunk" })
+          gsmap("n", "<leader>gr", gitsigns.reset_hunk, { desc = "[G]it [R]eset hunk" })
+          gsmap("n", "<leader>gu", gitsigns.undo_stage_hunk, { desc = "[G]it [U]nstage hunk" })
+          gsmap("n", "<leader>gs", gitsigns.stage_hunk, { desc = "[G]it [S]tage hunk" })
+          gsmap("n", "<leader>gl", gitsigns.toggle_current_line_blame, { desc = "[G]it [B]lame" })
+        end,
+      },
+    },
+
       -- fuzzy finder framework
     {
       "nvim-telescope/telescope.nvim", 
@@ -337,7 +372,7 @@ require("lazy").setup({
           renderer = {
             highlight_git = true,
             icons = {
-              padding = "  ",  -- for Iosevka font
+              padding = " ",  -- for Iosevka font (needed 2 spaces)
             },
           },
           on_attach = function(bufnr)
@@ -554,7 +589,7 @@ vim.opt.laststatus = 3
 -- Settings
 vim.g.mapleader = " "
 vim.opt.termguicolors = true -- Enable 24-bit RGB colors
-vim.opt.number = true        -- Show line numbers
+vim.opt.number = false       -- Do not show line numbers
 vim.opt.splitright = true    -- Split windows right to the current windows
 vim.opt.splitbelow = true    -- Split windows below to the current windows
 vim.opt.autochdir = false -- Change CWD when I open a file
@@ -658,6 +693,7 @@ vim.keymap.set('n', '<leader>g', builtin.lsp_document_symbols, {})
 vim.keymap.set('n', '<leader>r', builtin.lsp_references, {})
 vim.keymap.set('n', '<leader>s', builtin.grep_string, {})
 vim.keymap.set('n', '<leader>f', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {})
+vim.keymap.set('n', '<leader>/', builtin.current_buffer_fuzzy_find, {})
 -- vim.keymap.set('n', '<leader>s', builtin.lsp_document_symbols, {})
 
 -- File-tree mappings
