@@ -13,3 +13,5 @@ tags
 _projectnotes.txt
 Makefile.local
 .venv/
+
+**/.claude/settings.local.json

@@ -29,6 +29,9 @@ fail () {
 install_configs () {
   #link_files "$DOTFILES_ROOT/.config/nvim" "$HOME/.config/nvim"
   link_files "$DOTFILES_ROOT/.config/kitty" "$HOME/.config/kitty"
+  if [ ! -e "$HOME/.config/rex" ] && [ ! -L "$HOME/.config/rex" ]; then
+    link_files "$DOTFILES_ROOT/.config/rex" "$HOME/.config/rex"
+  fi
 }
 
 install_emacs () {

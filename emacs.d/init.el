@@ -317,7 +317,18 @@ rather than after it, and only evil gets that case right."
       (when (zerop (apply #'call-process "tmux" nil t nil args))
         (string-trim (buffer-string))))))
 
-;; C-hjkl: move between Emacs windows, fall through to tmux panes at the edge
+(defun my/rex-focus (dir)
+  "Move focus in the selected terminal frame's Rex session toward DIR."
+  (unless (display-graphic-p)
+    (when-let* ((session (getenv "REX_SESSION" (selected-frame)))
+                (frame-path (getenv "PATH" (selected-frame)))
+                (exec-path (append (parse-colon-path frame-path) exec-path))
+                (rex (executable-find "rex")))
+      (let ((default-directory (expand-file-name "~/")))
+        (zerop (call-process rex nil nil nil "do" "-s" session "focus_adjacent"
+                             (concat "direction=" (symbol-name dir))))))))
+
+;; C-hjkl: move between Emacs windows, then between tmux or Rex panes.
 (defun my/window-move (dir tmux-flag)
   (require 'windmove)
   (let ((win (windmove-find-other-window dir))
@@ -327,6 +338,7 @@ rather than after it, and only evil gets that case right."
                          (not (minibuffer-window-active-p win)))))
       (select-window win))
      (pane (my/tmux "select-pane" "-t" pane tmux-flag))
+     ((my/rex-focus dir))
      (t (user-error "No window %s from selected window" dir)))))
 
 (defun my/window-left ()  (interactive) (my/window-move 'left "-L"))
