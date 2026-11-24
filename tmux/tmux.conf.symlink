@@ -12,6 +12,8 @@ bind-key C-a send-prefix
 set-option -g default-shell /bin/zsh
 
 setw -g mode-keys vi
+# Match the selection colors in Rex's Alabaster BG theme.
+setw -g copy-mode-selection-style "fg=#000000,bg=#b4d8fd"
 # Setup 'v' to begin selection as in Vim
 bind-key -T copy-mode-vi v send -X begin-selection
 # y: copy and stay in copy mode, Y: copy and exit
