@@ -1,3 +1,4 @@
 playbook.retry
 vim/black
 vim/sessions/
+.config/kitty/theme.conf

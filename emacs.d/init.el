@@ -110,6 +110,8 @@
 (require 'alabaster-patch)
 
 (load-theme 'alabaster-themes-light-bg)
+;; In a terminal, switch light/dark together with kitty
+(require 'theme-sync)
 
 (set-face-attribute 'default nil :font "Iosevka" :height 160)
 (set-face-attribute 'fixed-pitch nil :family "Iosevka")

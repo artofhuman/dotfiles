@@ -774,8 +774,12 @@ vim.keymap.set({'n', 'v'}, '<leader>rs', "<cmd>TestNearest<CR>", {})
 vim.keymap.set({'n', 'v'}, '<leader>rt', "<cmd>TestFile<CR>", {})
 vim.keymap.set({'n', 'v'}, '<leader>rl', "<cmd>TestLast<CR>", {})
 
-vim.cmd("colorscheme alabaster")
+-- Re-applied on every reload: 'background' follows kitty (DEC 2031) and re-sources the scheme
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "alabaster",
+  callback = function()
+    vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3b4252", underline = false, bold = false })
+  end,
+})
 
-if (vim.g.colors_name == 'alabaster') then
-  vim.api.nvim_set_hl(0, "WinSeparator", { fg = "#3b4252", underline = false, bold = false })
-end
+vim.cmd("colorscheme alabaster")
