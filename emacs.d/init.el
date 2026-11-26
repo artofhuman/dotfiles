@@ -55,7 +55,9 @@
   (setq interprogram-cut-function #'my/clipboard-cut
         interprogram-paste-function #'my/clipboard-paste))
 
-;; Mouse in -nw frames: wheel scrolls the buffer, not the terminal
+;; Scroll in small steps without wheel acceleration or recentering.
+(setq mouse-wheel-progressive-speed nil
+      scroll-conservatively 101)
 (xterm-mouse-mode 1)
 
 ;; Unbind some default keybindings
@@ -217,10 +219,6 @@ rather than after it, and only evil gets that case right."
 
 ;;; Prefer spaces to tabs
 (setq-default indent-tabs-mode nil)
-
-;; Scrol like in vim
-;; (setq scroll-step 1)
-;; (setq scroll-margin 15)
 
 ;; Automatically save your place in files
 (save-place-mode 1)
@@ -1043,15 +1041,6 @@ Runs once per project."
   :config
   (setq eglot-booster-io-only t)
   (eglot-booster-mode))
-
-(use-package ultra-scroll
-  :ensure t
-  ;:vc (:url "https://github.com/jdtsmith/ultra-scroll") ; if desired (emacs>=v30)
-  :init
-  ;; (setq scroll-conservatively 3 ; or whatever value you prefer, since v0.4
-  ;;       scroll-margin 0)        ; important: scroll-margin>0 not yet supported
-  :config
-  (ultra-scroll-mode 1))
 
 ;; consult-eglot
 (use-package consult-eglot
