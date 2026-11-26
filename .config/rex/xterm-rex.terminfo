@@ -1,0 +1,3 @@
+xterm-rex|Rex terminal with styled and colored underlines,
+	Su, Smulx=\E[4\:%p1%dm,
+	use=xterm-256color,
