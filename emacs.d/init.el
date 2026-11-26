@@ -520,37 +520,18 @@ If `project-current' cannot find a project, returns the `default-directory'."
              (concat "cd " (shell-quote-argument root) " && " command))
     (my/tmux "send-keys" "-t" pane "Enter")))
 
-(defun my/ghostel-visible-p ()
-  (seq-some (lambda (w)
-              (eq (buffer-local-value 'major-mode (window-buffer w)) 'ghostel-mode))
-            (window-list)))
-
-(defun my/ghostel-run-command (command)
-  "Run COMMAND in the current project's ghostel terminal.
-Inside tmux with no ghostel window shown, run it in a tmux pane instead.
-Shows the terminal in another window and keeps point in the current buffer."
-  (interactive)
-  (if (and (my/tmux-pane) (not (my/ghostel-visible-p)))
+(defun testrun-run-command (command)
+  "Run COMMAND from the project root in tmux or a compilation buffer."
+  (if (my/tmux-pane)
       (my/tmux-run-command command)
-    (my/ghostel-run-command-1 command)))
+    (let ((default-directory (testrun-core--root)))
+      (compile command))))
 
-(defun my/ghostel-run-command-1 (command)
-  (require 'ghostel)
-  (let* ((origin (selected-window))
-         (display-buffer-overriding-action
-          '(display-buffer-use-some-window (inhibit-same-window . t)))
-         (term (if (project-current) (ghostel-project) (ghostel))))
-    (with-current-buffer term
-      (message command)
-      (ghostel-send-string command)
-      (ghostel-send-key "return"))
-    (when (window-live-p origin)
-      (select-window origin))))
-
-(defun my/ghostel-run-pytest-current-file ()
-  "Run pytest for the current file in the project terminal."
+(defun testrun-pytest-current-file ()
+  "Run pytest for the current file."
   (interactive)
-  (my/ghostel-run-command (concat "pytest " (testrun-core--file-name))))
+  (testrun-run-command
+   (concat "pytest " (shell-quote-argument (testrun-core--file-name)))))
 
 ;; Tree-sitter based test running functions
 (defun testrun--treesit-available-p ()
@@ -687,11 +668,11 @@ describe blocks. Returns e.g. 'file.py::describe_x::describe_y::test_z'."
         (mapconcat #'identity (cons file-name segments) "::")
       file-name)))
 
-(defun my/ghostel-run-pytest-current-test ()
-  "Run pytest for the test function at cursor position in the project terminal."
+(defun testrun-pytest-current-test ()
+  "Run pytest for the test at point."
   (interactive)
   (let ((test-path (testrun-python--construct-test-path)))
-    (my/ghostel-run-command (concat "pytest " test-path))
+    (testrun-run-command (concat "pytest " (shell-quote-argument test-path)))
     (message "Running pytest: %s" test-path)))
 
 ;; Jest test runner functions
@@ -738,24 +719,25 @@ Searches backward tracking indentation like vim-test does."
         (cons 'describe (mapconcat #'identity describes " ")))
        (t nil)))))
 
-(defun my/ghostel-run-jest-current-test ()
+(defun testrun-jest-current-test ()
   "Run Jest test at cursor. it/test > describe > whole file."
   (interactive)
   (let* ((file-name (testrun-core--file-name))
          (nearest (testrun-jest--nearest-test))
          (pattern (cdr nearest)))
     (if pattern
-        (let ((cmd (format "npx jest %s -t '%s'" file-name pattern)))
-          (my/ghostel-run-command cmd)
+        (let ((cmd (format "npx jest %s -t %s"
+                           (shell-quote-argument file-name)
+                           (shell-quote-argument pattern))))
+          (testrun-run-command cmd)
           (message "Running jest: %s" cmd))
-      (my/ghostel-run-command (concat "npx jest " file-name))
-      (message "Running jest file: %s" file-name))))
+      (testrun-jest-current-file))))
 
-(defun my/ghostel-run-jest-current-file ()
-  "Run Jest for the current file in the project terminal."
+(defun testrun-jest-current-file ()
+  "Run Jest for the current file."
   (interactive)
   (let ((file-name (testrun-core--file-name)))
-    (my/ghostel-run-command (concat "npx jest " file-name))
+    (testrun-run-command (concat "npx jest " (shell-quote-argument file-name)))
     (message "Running jest file: %s" file-name)))
 
 ;; Dispatch test commands based on major mode
@@ -764,9 +746,9 @@ Searches backward tracking indentation like vim-test does."
   (interactive)
   (cond
    ((derived-mode-p 'typescript-ts-mode 'typescript-mode 'tsx-ts-mode)
-    (my/ghostel-run-jest-current-test))
+    (testrun-jest-current-test))
    ((derived-mode-p 'python-ts-mode 'python-mode)
-    (my/ghostel-run-pytest-current-test))
+    (testrun-pytest-current-test))
    (t (message "No test runner configured for %s" major-mode))))
 
 (defun my/run-test-file ()
@@ -774,9 +756,9 @@ Searches backward tracking indentation like vim-test does."
   (interactive)
   (cond
    ((derived-mode-p 'typescript-ts-mode 'typescript-mode 'tsx-ts-mode)
-    (my/ghostel-run-jest-current-file))
+    (testrun-jest-current-file))
    ((derived-mode-p 'python-ts-mode 'python-mode)
-    (my/ghostel-run-pytest-current-file))
+    (testrun-pytest-current-file))
    (t (message "No test runner configured for %s" major-mode))))
 
 (global-set-key (kbd "C-c t t") 'my/run-test-at-cursor)  ; test at cursor
@@ -892,92 +874,6 @@ in another window, jumping to the line and optional column."
  ;; same hook and would otherwise overwrite it on every theme switch.
  (add-hook 'enable-theme-functions #'my/header-line-inactive-match 90)
  (my/header-line-inactive-match))
-
-(use-package ghostel
-  :ensure t
-  ;; Default 5MB gets evicted fast: cost scales with column count and
-  ;; Claude Code churns rows on every repaint. Read by `ghostel--new',
-  ;; so it only applies to terminals created after the change.
-  :custom (ghostel-max-scrollback (* 40 1024 1024))
-  :bind (:map ghostel-mode-map
-              ("C-SPC" . zoom-window-zoom)))
-
-(use-package evil-ghostel
-  :ensure t
-  :after (ghostel evil)
-  :hook (ghostel-mode . evil-ghostel-mode))
-
-;; TODO: check if color scheme is alabaster
-(with-eval-after-load 'ghostel
-  (set-face-attribute 'ghostel-color-red nil :foreground "#aa3731") ;; color1
-  (set-face-attribute 'ghostel-color-bright-red nil :foreground "#f05050") ;; color9
-  (set-face-attribute 'ghostel-color-yellow nil :foreground "#cb9000") ;; color3
-  (set-face-attribute 'ghostel-color-blue nil :foreground "#325cc0") ;; color4
-  (set-face-attribute 'ghostel-color-bright-blue nil :foreground "#007acc") ;; color12
-  (set-face-attribute 'ghostel-color-cyan nil :foreground "#0083b2") ;; color6
-  (set-face-attribute 'ghostel-color-white nil :foreground "#000000") ;; color7
-  (set-face-attribute 'ghostel-color-bright-white nil :foreground "#000000") ;; color15
-  (set-face-attribute 'ghostel-color-green nil :foreground "#448c37") ;; color2
-  (set-face-attribute 'ghostel-color-bright-green nil :foreground "#60cb00") ;; color10
-  (set-face-attribute 'ghostel-color-magenta nil :foreground "#7a3e9d") ;; color5
-  (set-face-attribute 'ghostel-color-bright-magenta nil :foreground "#e64ce6")) ;; color13
-
-;; Project-scoped terminal toggle, replacing `vterm-toggle' with scope
-;; `project': `s-j' pops the project terminal in a split to the right,
-;; `s-j' again hides that window (like the old `vterm-toggle').
-(defun my/ghostel--window ()
-  "Return the window showing a ghostel terminal, if any."
-  (seq-find (lambda (w)
-              (with-current-buffer (window-buffer w)
-                (derived-mode-p 'ghostel-mode)))
-            (window-list nil 'no-minibuf)))
-
-(defun my/ghostel-toggle ()
-  "Toggle the current project's ghostel terminal in the rightmost window.
-Take that window over rather than adding one, remembering the buffer it
-held so toggling off puts it back and the layout never changes. With a
-single window there is nothing to take over, so split first and drop the
-split again on the way out.
-
-`display-buffer-in-direction' is deliberately not used: its reference
-window is the selected one and it prefers splitting to reusing, so the
-terminal landed beside the cursor and the layout depended on where point
-happened to be."
-  (interactive)
-  (require 'ghostel)
-  (if-let* ((win (my/ghostel--window)))
-      (let ((prev (window-parameter win 'my/ghostel-prev-buffer)))
-        (set-window-parameter win 'my/ghostel-prev-buffer nil)
-        (if (buffer-live-p prev)
-            (set-window-buffer win prev)
-          (delete-window win)))
-    (let* ((alone (null (cdr (window-list nil 'no-minibuf))))
-           (target (if alone
-                       (split-window (selected-window) nil 'right)
-                     (car (window-at-side-list nil 'right)))))
-      ;; No parameter on a window we made ourselves: nothing to put back,
-      ;; so toggling off deletes it instead.
-      (unless alone
-        (set-window-parameter target 'my/ghostel-prev-buffer
-                              (window-buffer target)))
-      (select-window target)
-      (let ((display-buffer-overriding-action
-             '((display-buffer-same-window) (inhibit-same-window . nil))))
-        (if (project-current) (ghostel-project) (ghostel))))))
-
-(global-set-key (kbd "s-j") 'my/ghostel-toggle)
-
-(defun my/ghostel-new ()
-  "Open an additional ghostel terminal rooted at the current project."
-  (interactive)
-  (if (project-current) (ghostel-project '(4)) (ghostel '(4))))
-
-;; Ghostel scopes buffers to the project itself (`ghostel-project-buffer-scope'
-;; defaults to `both': current directory or creation-time project).
-(with-eval-after-load 'ghostel
-  (evil-define-key 'normal ghostel-mode-map (kbd "C-n") #'ghostel-project-next)
-  (evil-define-key 'normal ghostel-mode-map (kbd "C-p") #'ghostel-project-previous)
-  (evil-define-key 'normal ghostel-mode-map (kbd "C-t") #'my/ghostel-new))
 
 ;; set PATH from env to emacs
 (use-package exec-path-from-shell :ensure t)
