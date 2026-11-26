@@ -320,13 +320,18 @@ rather than after it, and only evil gets that case right."
 (defun my/rex-focus (dir)
   "Move focus in the selected terminal frame's Rex session toward DIR."
   (unless (display-graphic-p)
-    (when-let* ((session (getenv "REX_SESSION" (selected-frame)))
-                (frame-path (getenv "PATH" (selected-frame)))
-                (exec-path (append (parse-colon-path frame-path) exec-path))
-                (rex (executable-find "rex")))
-      (let ((default-directory (expand-file-name "~/")))
-        (zerop (call-process rex nil nil nil "do" "-s" session "focus_adjacent"
-                             (concat "direction=" (symbol-name dir))))))))
+    (let* ((frame (selected-frame))
+           (block (getenv "REX_BLOCK" frame))
+           (session (getenv "REX_SESSION" frame))
+           (server (getenv "REX_SERVER" frame))
+           (exec-path (append (parse-colon-path (getenv "PATH" frame)) exec-path)))
+      (when-let* ((target (or block session))
+                  (rex (executable-find "rex")))
+        (let ((default-directory (expand-file-name "~/")))
+          (eq 0 (apply #'call-process rex nil nil nil
+                       (append (when server (list "--server" server))
+                               (list "do" (if block "-b" "-s") target "focus_adjacent"
+                                     (concat "direction=" (symbol-name dir)))))))))))
 
 ;; C-hjkl: move between Emacs windows, then between tmux or Rex panes.
 (defun my/window-move (dir tmux-flag)

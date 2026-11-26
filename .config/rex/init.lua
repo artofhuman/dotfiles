@@ -98,6 +98,10 @@ rex.bind("ctrl+[KeyK]", focus_pane("up"))
 rex.bind("ctrl+[KeyL]", focus_pane("right"))
 rex.bind("ctrl+space", "pane.zoom")
 
+-- Toggle the floating pane with Cmd+J instead of Option+Cmd+M.
+rex.unbind("cmd+alt+m")
+rex.bind("cmd+j", "pane.minimize_floating")
+
 -- Use a physical Ctrl+A prefix for all tmux-style shortcuts.
 rex.bind("ctrl+[KeyA]>shift+[Backslash]", "pane.split", { direction = "right" })
 rex.bind("ctrl+[KeyA]>-", "pane.split", { direction = "down" })
